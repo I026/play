@@ -79,4 +79,5 @@ body{
     height: .5em;
     opacity: .1;
     font-size: .75em;
+    user-select: none;
 }
