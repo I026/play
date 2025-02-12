@@ -26,7 +26,7 @@ function articleUpdate() {
     if (!(stage == 0)) {
         article += inputText.value;
     } else {
-        article += `${inputText.value}<br>`;
+        article += `${inputText.value}<br><br>`;
     }
     if (!(season == lastSeason && stage == lastStage)) {
         inputText.placeholder = `${words[stage]}?`;
@@ -139,7 +139,7 @@ displaySeason.addEventListener("click", () => {
 });
 
 function nextStage() {
-    if (!inputText.value == "" || inputText.disabled == true) {
+    if ((!(inputText.value == "") || inputText.disabled == true) && !(inputText.value.includes("<") || inputText.value.includes(">"))) {
         displaySeason.classList.remove("opacityMinRoopAnimetion");
         stageUp();
         articleUpdate();
@@ -152,6 +152,10 @@ function nextStage() {
         console.log(
             ` article: ${article} \n season: ${season} \n stage: ${stage}`
         );
+    } else if (inputText.value.includes("<")) {
+        blinkText("< は使用できません…","入力を終了");
+    } else if (inputText.value.includes(">")) {
+        blinkText("> は使用できません…","入力を終了");
     } else {
         blinkText("入力してください…","入力を終了");
     }
