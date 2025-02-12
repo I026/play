@@ -41,6 +41,8 @@
 const inputTextForm = document.getElementById("inputTextForm");
 const inputText = inputTextForm.querySelector("input");
 const outputText = document.getElementById("outputText");
+const displaySeason = document.getElementById("displaySeason");
+const displayStage = document.getElementById("displayStage");
 const nextBtn = document.getElementById("nextBtn");
 const nextBtnText = nextBtn.querySelector("span");
 
@@ -48,8 +50,10 @@ let article = "";
 let season = 0;
 let stage = 0;
 const words = ["いつ","どこで","誰が","誰と","何をした"]
-const lastSeason = 5 - 1;
+let lastSeason = 1 - 1;
 const lastStage = words.length;
+
+
 
 function inputValueNone() {
     nextBtnText.classList.add("blinkAnimetion");
@@ -100,7 +104,19 @@ function last() {
 function result() {
     nextBtn.addEventListener("click", () => {
         nextBtnText.innerText = "もう一度…";
-        outputText.innerHTML = article;
+        displaySeason.innerText = "";
+        displayStage.innerHTML = article;
+        nextBtn.addEventListener("click", () => {
+            season = 0;
+            stage = 0;
+            nextBtn.classList.remove("lastAnimetion");
+            inputText.classList.remove("opacityMinAnimetion");
+            inputText.disabled = false;
+            nowLast = false;
+            nextBtnText.innerText = "入力を終了";
+            inputText.placeholder = `${words[stage]}?`;
+            stageProgressUpdate();
+        });
     });
     // outputText.innerHTML = article.split(",").map(part => `<span>${part}</span>`).join("､ ");
     // alert(outputText);
@@ -122,13 +138,23 @@ function stageUp() {
 }
 
 function stageProgressUpdate() {
-    outputText.innerHTML = `
-    シーズン : ${season + 1} / ${lastSeason + 1}<br>
-    ステージ : ${stage + 1} / ${lastStage}
-    `
+    displaySeason.innerHTML = `ラウンド : ${season + 1} / ${lastSeason + 1}`
+    displayStage.innerHTML = `ステージ : ${stage + 1} / ${lastStage}`
 }
 
-stageProgressUpdate()
+stageProgressUpdate();
+
+displaySeason.addEventListener("click", () => {
+    if (stage == 0 && season == 0) {
+        lastSeason += 1;
+        if (lastSeason > 4) {
+            lastSeason = 0;
+        }
+        console.log(stage,season);
+    }
+    stageProgressUpdate();
+});
+
 function nextStage() {
     if (!inputText.value == "" || inputText.disabled == true) {
         stageUp();
