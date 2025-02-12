@@ -1,3 +1,6 @@
+body{
+    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+}
 #inputTextForm input, #nextBtn{
     text-align: center;
     border: 2px solid black;
@@ -6,7 +9,7 @@
     height: 3em;
     width: 300px;
     background-color: transparent;
-    left: calc(50vw - 300px / 2);
+    left: calc(50vw - 300px / 2 - 10px);
     position: fixed;
 }
 #inputTextForm input{
@@ -14,6 +17,7 @@
 }
 #nextBtn{
     bottom: 50px;
+    height: 6em;
 }
 #outputText{
     bottom: 60vh;
@@ -38,11 +42,11 @@
 @keyframes last {
     0%{
         transform: translateY(0);
-        height: 3em;
+        height: 6em;
     }
     100%{
-        transform: translateY(calc(-50vh + 6em));
-        height: 6em;
+        transform: translateY(calc(-50vh + 8em));
+        height: 8em;
     }
 }
 .lastAnimetion{
