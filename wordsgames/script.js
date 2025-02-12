@@ -109,7 +109,7 @@ function stageUp() {
 
 function stageProgressUpdate() {
     displaySeason.innerHTML = `
-    <span style="font-size: .75em; opacity: .75;" id="tapToChange">タップで変更</span>
+    <span style="font-size: .75em; opacity: 0;" id="tapToChange">タップで変更</span>
     <br>
     ラウンド : ${season + 1} / ${lastSeason + 1}`
 
@@ -120,6 +120,7 @@ function stageProgressUpdate() {
 stageProgressUpdate();
 
 const tapToChange = document.getElementById("tapToChange");
+tapToChange.style.opacity = .75;
 setTimeout(() => {    
     tapToChange.style.display = "none";
 }, 3000);
