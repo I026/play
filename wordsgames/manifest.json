@@ -1,0 +1,9 @@
+{
+    "name": "WordsGames",
+    "short_name": "Words",
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "display": "fullscreen",
+    "orientation": "natural",
+    "start_url": "https://i026.github.io/play/wordsgames/"
+  }
