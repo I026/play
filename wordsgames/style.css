@@ -1,0 +1,50 @@
+#inputTextForm input, #nextBtn{
+    text-align: center;
+    border: 2px solid black;
+    margin: 10px;
+    border-radius: 50px;
+    height: 3em;
+    width: 300px;
+    background-color: transparent;
+    left: calc(50vw - 300px / 2);
+    position: fixed;
+}
+#inputTextForm input{
+    top: calc(50vh - 3em);
+}
+#nextBtn{
+    bottom: 50px;
+}
+#outputText{
+    bottom: 60vh;
+    position: fixed;
+    width: 100vw;
+    text-align: center;
+}
+@keyframes opacityMin {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+.blinkAnimetion{
+    animation: opacityMin 1s ease-in-out 2 both;
+}
+.opacityMinAnimetion{
+    animation: opacityMin 1s ease-in-out both;
+}
+@keyframes last {
+    0%{
+        transform: translateY(0);
+        height: 3em;
+    }
+    100%{
+        transform: translateY(calc(-50vh + 6em));
+        height: 6em;
+    }
+}
+.lastAnimetion{
+    animation: last 1s ease-in-out both;
+}
