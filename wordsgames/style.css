@@ -72,3 +72,11 @@ body{
         color: white;
     }
 }
+.credit{
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    height: .5em;
+    opacity: .1;
+    font-size: .75em;
+}
