@@ -109,7 +109,7 @@ function stageUp() {
 
 function stageProgressUpdate() {
     displaySeason.innerHTML = `
-    <span style="font-size: .75em; opacity: .75;" class="blinkAnimetion">タップで変更</span>
+    <span style="font-size: .75em; opacity: .75;" id="tapToChange">タップで変更</span>
     <br>
     ラウンド : ${season + 1} / ${lastSeason + 1}`
 
@@ -118,6 +118,11 @@ function stageProgressUpdate() {
 }
 
 stageProgressUpdate();
+
+const tapToChange = document.getElementById("tapToChange");
+setTimeout(() => {    
+    tapToChange.style.display = "none";
+}, 3000);
 
 displaySeason.classList.add("opacityMinRoopAnimetion");
 
