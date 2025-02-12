@@ -1,43 +1,3 @@
-// const inputText = document.getElementById("inputText");
-// const outputText = document.getElementById("outputText");
-// const stageDisplay = document.getElementById("stageDisplay");
-// const nextBtn = document.getElementById("nextBtn");
-
-// let when; // いつ
-// let where; // どこで
-// let who; // 誰が
-// let withWhom; // 誰と
-// let what; // 何をした
-// let stage = 0;
-
-// nextBtn.addEventListener("click", () => {
-//     if (! inputText.value == "") {
-//         stage += 1;
-//         if (stage == 1) {
-//             when = inputText.value;
-//         }
-//         if (stage == 2) {
-//             where = inputText.value;
-//         }
-//         if (stage == 3) {
-//             who = inputText.value;
-//         }
-//         if (stage == 4) {
-//             withWhom = inputText.value;
-//         }
-//         if (stage == 5) {
-//             what = inputText.value;
-//         }
-//         if (stage >= 6) {
-//             stageDisplay.innerText = when,where,who,withWhom,what;
-//         } else {
-//             stageDisplay.innerText = stage;
-//             inputText.value = "";
-//         }
-//         console.log(when,where,who,withWhom,what);
-//     }
-// });
-
 const inputTextForm = document.getElementById("inputTextForm");
 const inputText = inputTextForm.querySelector("input");
 const outputText = document.getElementById("outputText");
@@ -50,28 +10,15 @@ let article = "";
 let season = 0;
 let stage = 0;
 const words = ["いつ","どこで","誰が","誰と","何をした"]
-let lastSeason = 1 - 1;
+let lastSeason = 0;
 const lastStage = words.length;
 
-
-
-function inputValueNone() {
+function blinkText(newtext,text) {
     nextBtnText.classList.add("blinkAnimetion");
-    nextBtnText.innerText = "入力してください…";
+    nextBtnText.innerText = newtext;
     setTimeout(() => {
-        nextBtnText.innerText = "入力を終了";
+        nextBtnText.innerText = text;
         nextBtnText.classList.remove("blinkAnimetion");
-    }, 2000);
-}
-
-function nextPerson() {
-    nextBtnText.innerText = "デバイスを次の人へ手渡します…";
-    nextBtnText.classList.add("blinkAnimetion");
-    setTimeout(() => {
-        if (!nowLast) {    
-            nextBtnText.innerText = "入力を終了";
-            nextBtnText.classList.remove("blinkAnimetion");
-        }
     }, 2000);
 }
 
@@ -89,35 +36,58 @@ function articleUpdate() {
 let nowLast = false
 
 function last() {
+    // alert(resultPage);
     nowLast = true;
     inputText.classList.add("opacityMinAnimetion");
     inputText.disabled = true;
     nextBtn.classList.add("lastAnimetion");
-    nextBtnText.innerText = "すべての言葉が揃いました…";
-    nextBtnText.classList.add("blinkAnimetion");
-    setTimeout(() => {
-        nextBtnText.innerText = "タップして文章を表示します…";
-        nextBtnText.classList.remove("blinkAnimetion");
-    }, 2000);
+    blinkText("すべての言葉が揃いました…","タップして文章を表示します…");
 }
 
+let resultPage = 0;
+
 function result() {
-    nextBtn.addEventListener("click", () => {
+    resultPage += 1;
+    console.log(resultPage);
+    if (resultPage == 2) {
         nextBtnText.innerText = "もう一度…";
         displaySeason.innerText = "";
         displayStage.innerHTML = article;
-        nextBtn.addEventListener("click", () => {
-            season = 0;
-            stage = 0;
-            nextBtn.classList.remove("lastAnimetion");
-            inputText.classList.remove("opacityMinAnimetion");
-            inputText.disabled = false;
-            nowLast = false;
-            nextBtnText.innerText = "入力を終了";
-            inputText.placeholder = `${words[stage]}?`;
-            stageProgressUpdate();
-        });
-    });
+    }
+    if (resultPage == 3) {
+        season = 0;
+        stage = 0;
+        inputText.classList.remove("opacityMinAnimetion");
+        nextBtn.classList.remove("lastAnimetion");
+        inputText.disabled = false;
+        nowLast = false;
+        nextBtnText.innerText = "入力を終了";
+        inputText.placeholder = `${words[stage]}?`;
+        stageProgressUpdate();
+        setTimeout(() => {
+            article = "";
+        }, 10);
+        resultPage = 0;
+    }
+    // nextBtn.addEventListener("click", () => {
+    //     nextBtnText.innerText = "もう一度…";
+    //     displaySeason.innerText = "";
+    //     displayStage.innerHTML = article;
+    //     nextBtn.addEventListener("click", () => {
+    //         season = 0;
+    //         stage = 0;
+    //         inputText.classList.remove("opacityMinAnimetion");
+    //         nextBtn.classList.remove("lastAnimetion");
+    //         inputText.disabled = false;
+    //         nowLast = false;
+    //         nextBtnText.innerText = "入力を終了";
+    //         inputText.placeholder = `${words[stage]}?`;
+    //         stageProgressUpdate();
+    //         setTimeout(() => {
+    //             article = "";
+    //         }, 10);
+    //     }, { once: true });
+    // }, { once: true });
     // outputText.innerHTML = article.split(",").map(part => `<span>${part}</span>`).join("､ ");
     // alert(outputText);
 }
@@ -144,32 +114,35 @@ function stageProgressUpdate() {
 
 stageProgressUpdate();
 
+displaySeason.classList.add("opacityMinRoopAnimetion");
+
 displaySeason.addEventListener("click", () => {
     if (stage == 0 && season == 0) {
         lastSeason += 1;
         if (lastSeason > 4) {
             lastSeason = 0;
         }
+        stageProgressUpdate();
         console.log(stage,season);
     }
-    stageProgressUpdate();
 });
 
 function nextStage() {
     if (!inputText.value == "" || inputText.disabled == true) {
+        displaySeason.classList.remove("opacityMinRoopAnimetion");
         stageUp();
         articleUpdate();
         inputText.value = "";
         if (inputText.disabled == true) {
             result();
         } else {
-            nextPerson();
+            blinkText("デバイスを次の人へ手渡します…","入力を終了");
         }
         console.log(
             ` article: ${article} \n season: ${season} \n stage: ${stage}`
         );
     } else {
-        inputValueNone();
+        blinkText("入力してください…","入力を終了");
     }
 }
 
@@ -181,3 +154,7 @@ inputTextForm.addEventListener("submit", (event) => {
     event.preventDefault();
     nextStage();
 });
+
+// setInterval(() => {
+//     console.log(article);
+// }, 1000);

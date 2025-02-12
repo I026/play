@@ -1,11 +1,12 @@
 body{
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    transition: 1s;
 }
 #inputTextForm input, #nextBtn{
     text-align: center;
     border: 2px solid black;
     margin: 0;
-    border-radius: 50px;
+    border-radius: 8em;
     height: 3em;
     width: 300px;
     background-color: transparent;
@@ -16,15 +17,16 @@ body{
     top: calc(50vh - 3em);
 }
 #nextBtn{
-    bottom: 50px;
+    top: 55vh;
     height: 6em;
 }
 #outputText{
     margin: 0;
-    bottom: 60vh;
+    top: 25vh;
     position: fixed;
     width: 100vw;
     text-align: center;
+    user-select: none;
 }
 @keyframes opacityMin {
     0%{
@@ -40,16 +42,29 @@ body{
 .opacityMinAnimetion{
     animation: opacityMin 1s ease-in-out both;
 }
+.opacityMinRoopAnimetion{
+    animation: opacityMin 1s ease-in-out both infinite;
+}
 @keyframes last {
     0%{
         transform: translateY(0);
         height: 6em;
     }
     100%{
-        transform: translateY(calc(-50vh + 8em));
+        transform: translateY(calc(-20vh + 8em));
         height: 8em;
     }
 }
 .lastAnimetion{
     animation: last 1s ease-in-out both;
+}
+@media (prefers-color-scheme: dark) {
+    body{
+        background-color: black;
+        color: white;
+    }
+    #inputTextForm input, #nextBtn{
+        border-color: white;
+        color: white;
+    }
 }
