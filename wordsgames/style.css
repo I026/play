@@ -1,20 +1,24 @@
 body{
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    margin: 0;
     transition: 1s;
 }
 #inputTextForm input, #nextBtn{
     text-align: center;
     border: 2px solid black;
-    margin: 0;
     border-radius: 8em;
+    outline-offset: -2px;
+    outline-offset: 2px;
+    margin: 0;
     height: 3em;
     width: 300px;
+    left: calc(50vw - (300px / 2));
     background-color: transparent;
-    left: calc(50vw - 300px / 2);
     position: fixed;
 }
 #inputTextForm input{
-    top: calc(50vh - 3em);
+    left: calc(50vw - (300px / 2) - 4px);
+    bottom: calc(50vh + 3em);
 }
 #nextBtn{
     top: 55vh;
@@ -22,7 +26,7 @@ body{
 }
 #outputText{
     margin: 0;
-    top: 25vh;
+    bottom: 75vh;
     position: fixed;
     width: 100vw;
     text-align: center;

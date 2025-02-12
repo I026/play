@@ -108,8 +108,13 @@ function stageUp() {
 }
 
 function stageProgressUpdate() {
-    displaySeason.innerHTML = `ラウンド : ${season + 1} / ${lastSeason + 1}`
-    displayStage.innerHTML = `ステージ : ${stage + 1} / ${lastStage}`
+    displaySeason.innerHTML = `
+    <span style="font-size: .75em; opacity: .75;" class="blinkAnimetion">タップで変更</span>
+    <br>
+    ラウンド : ${season + 1} / ${lastSeason + 1}`
+
+    displayStage.innerHTML = `
+    ステージ : ${stage + 1} / ${lastStage}`
 }
 
 stageProgressUpdate();
