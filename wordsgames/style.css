@@ -2,6 +2,7 @@ body{
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     margin: 0;
     transition: 1s;
+    font-size: 2em;
 }
 #inputTextForm input, #nextBtn{
     text-align: center;

@@ -53,6 +53,7 @@ function result() {
         nextBtnText.innerText = "もう一度…";
         displaySeason.innerText = "";
         displayStage.innerHTML = article;
+        displayStage.style.fontSize = ".5em";
     }
     if (resultPage == 3) {
         season = 0;
@@ -61,6 +62,7 @@ function result() {
         nextBtn.classList.remove("lastAnimetion");
         inputText.disabled = false;
         nowLast = false;
+        displayStage.style.fontSize = "";
         nextBtnText.innerText = "入力を終了";
         inputText.placeholder = `${words[stage]}?`;
         stageProgressUpdate();
