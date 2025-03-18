@@ -1,0 +1,90 @@
+:root {
+    --Color: rgb(0, 0, 0);
+    --BackgroundColor: rgb(255, 255, 255);
+}
+body {
+    color: var(--Color);
+    background-color: var(--BackgorundColor);
+    margin: 0;
+    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+}
+#TopContents {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+}
+#StartStopBtn {
+    opacity: .75;
+    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    position: fixed;
+    font-size: 1.5em;
+    height: 50px;
+    width: 250px;
+    bottom: 80px;
+    left: calc(50vw - 250px / 2);
+    border: transparent 0 solid;
+    background-color: rgb(255, 170, 170);
+    border-radius: 25px;
+    user-select: none;
+    outline: none;
+}
+#OutputText {
+    position: relative;
+    top: 30vh;
+    left: 5vw;
+    width: 90vw;
+    font-size: 2.8em;
+    text-align: center;
+}
+@keyframes OpacityHalfStart {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .5;
+    }
+}
+@keyframes OpacityHalfStop {
+    0% {
+        opacity: .5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.OpacityHalfStartAnimetion {
+    animation: OpacityHalfStart .2s ease-in-out both;
+}
+.OpacityHalfStopAnimetion {
+    animation: OpacityHalfStop .2s ease-in-out both;
+}
+.ItemsInputs{
+    position: absolute;
+    width: calc(100vw - 50px);
+    height: 80vh;
+    top: 0;
+}
+.ItemsInput {
+    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    position: absolute;
+    font-size: 1.3em;
+    background-color: transparent;
+    border: 0;
+    padding: 10px;
+    user-select: none;
+    height: 100%;
+    width: calc(100vw - 50px);
+    left: 15px;
+    top: calc(100vh + 10px);
+    resize: none;
+    overflow: visible;
+    outline: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+div.ItemsInput {
+    position: absolute;
+    border: 0;
+    background-color: rgb(200, 200, 200);
+    opacity: .75;
+}
