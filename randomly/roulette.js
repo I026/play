@@ -114,3 +114,12 @@ window.addEventListener("scroll", () => {
     StartStopBtn.style.left = `calc(${GetScrollRatio() * 50 + 50}vw - 250px / 2)`;
     StartStopBtn.style.width = `${-GetScrollRatio() * 150 + 250}px`;
 });
+
+if (navigator.maxTouchPoints > 0) {
+    ItemsInput.addEventListener("focus", () => {
+        StartStopBtn.style.bottom = "500px";
+    });
+    ItemsInput.addEventListener("blur", () => {
+        StartStopBtn.style.bottom = "80px";
+    });
+}
