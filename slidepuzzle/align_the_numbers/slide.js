@@ -19,31 +19,33 @@ function swipe() {
         `);
 }
 
+function swipeAnimetion(block,animetion) {
+    block.classList.add(animetion);
+    setTimeout(() => {
+        block.classList.remove(animetion);
+    }, parseFloat((getComputedStyle(document.documentElement).getPropertyValue("--swipeAnimetionDuration").trim())) * 1000);
+    // parseFloat(getComputedStyle(block).animationDuration)
+}
+
 function leftSwipe() {
     if (!((targetBlock % 4) == 0)) {
         steps += 1;
         targetBlock -= 1;
+        swipeAnimetion(block[targetBlock], "leftSwipeAnimetion");
         console.log("Left");
         const temp = document.createElement("div");
         air.replaceWith(temp);
         block[targetBlock].replaceWith(air);
         temp.replaceWith(block[targetBlock]);
         swipe();
-        // if (block[targetBlock - 1] == air) {
-        // }
-        // if (!(block[targetBlock - 1])){
-        // }
     }
 }
 
 function rightSwipe() {
-    // if (steps == 0) {
-    //     targetBlock = 18;
-    // }
     if (!((targetBlock + 1) % 4 == 0)) {
-        // alert("S");
         steps += 1;
         targetBlock += 1;
+        swipeAnimetion(block[targetBlock], "rightSwipeAnimetion");
         console.log("Right");
         const temp = document.createElement("div");
         air.replaceWith(temp);
@@ -51,33 +53,27 @@ function rightSwipe() {
         temp.replaceWith(block[targetBlock]);
         swipe();
     }
-    // if (block[targetBlock + 1] == air) {
-    // }
-    // if (!(block[targetBlock + 1])){
-    // }
 }
 
 function upSwipe() {
     if (!(targetBlock <= 3)) {
         steps += 1;
         targetBlock -= 4;
+        swipeAnimetion(block[targetBlock], "upSwipeAnimetion");
         console.log("Up");
         const temp = document.createElement("div");
         air.replaceWith(temp);
         block[targetBlock].replaceWith(air);
         temp.replaceWith(block[targetBlock]);
         swipe();
-        // if (!(block[targetBlock - blockCaseWidth])){
-        // }
     }
-    // if (block[targetBlock - blockCaseWidth] < 0 || block[targetBlock - blockCaseWidth] > blockCaseWidth) {
-    // }
 }
 
 function downSwipe() {
     if (!(targetBlock >= 16)) {
         steps += 1;
         targetBlock += 4;
+        swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
         console.log("Down");
         const temp = document.createElement("div");
         air.replaceWith(temp);
@@ -85,10 +81,6 @@ function downSwipe() {
         temp.replaceWith(block[targetBlock])
         swipe();
     }
-    // if (!(block[targetBlock + blockCaseWidth])){
-    // }
-    // if (block[targetBlock + blockCaseWidth] < 0 || block[targetBlock + blockCaseWidth] > blockCaseWidth) {
-    // }
 }
 
 let startX, startY, endX, endY;
@@ -120,12 +112,47 @@ function swipeEnd(e) {
     }
 }
 
+function blockShuffle() {
+    document.documentElement.style.setProperty("--swipeAnimetionDuration", ".01s");
+    blocks.classList.add("opacityMitigationAnimtion");
+    setTimeout(() => {
+        const shuffleRoop = setInterval(() => {
+            const random = Math.random();
+            if (random < .25) {
+                leftSwipe();
+            } else if (random < .5) {
+                rightSwipe();
+            } else if (random < .75) {
+                upSwipe();
+            } else {
+                downSwipe();
+            }
+            
+            if (steps >= 500) {
+                for (let i = 0; i < 5; i += 1) {
+                    downSwipe();
+                    rightSwipe();
+                }
+                clearInterval(shuffleRoop);
+                document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
+                steps = 0;
+                blocks.classList.add("opacityUndoAnimtion");
+                setTimeout(() => {
+                    blocks.classList.remove("opacityMitigationAnimtion");
+                }, 1000);
+            }
+        }, 1);
+    }, 500);
+};
+
+blockShuffle();
+
 document.addEventListener("mousedown", swipeStart);
 document.addEventListener("mouseup", swipeEnd);
 document.addEventListener("touchstart", swipeStart);
 document.addEventListener("touchend", swipeEnd);
 
-document.addEventListener("keyup",(event) => {
+document.addEventListener("keydown",(event) => {
     if (event.code === "KeyA" || event.code === "ArrowLeft") {
         rightSwipe();
     }

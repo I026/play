@@ -2,6 +2,8 @@
     --blockSide: calc(min(calc(100vw / 4), calc(100vh / 5)) - 4px);
     --blockColor: white;
     --blockBackgroundColor: black;
+    --swipeAnimetionDuration: .1s;
+    /* --swipeAnimetionDuration: .02s; */
 }
 body {
     margin: 0;
@@ -52,4 +54,70 @@ body {
 }
 #blocks div.A_1by2 {
     width: calc(var(--blockSide) * 2);
+}
+@keyframes leftSwipe {
+    0% {
+        transform: translateX(calc(var(--blockSide) * -1));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+@keyframes rightSwipe {
+    0% {
+        transform: translateX(calc(var(--blockSide) * 1));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+@keyframes upSwipe {
+    0% {
+        transform: translateY(calc(var(--blockSide) * -1));
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+@keyframes downSwipe {
+    0% {
+        transform: translateY(calc(var(--blockSide) * 1));
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+.leftSwipeAnimetion {
+    animation: leftSwipe var(--swipeAnimetionDuration) ease-in-out;
+}
+.rightSwipeAnimetion {
+    animation: rightSwipe var(--swipeAnimetionDuration) ease-in-out;
+}
+.upSwipeAnimetion {
+    animation: upSwipe var(--swipeAnimetionDuration) ease-in-out;
+}
+.downSwipeAnimetion {
+    animation: downSwipe var(--swipeAnimetionDuration) ease-in-out;
+}
+@keyframes opacityMitigation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .25;
+    }
+}
+@keyframes opacityUndo {
+    0% {
+        opacity: .25;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.opacityMitigationAnimtion {
+    animation: opacityMitigation 1s ease-in-out forwards;
+}
+.opacityUndoAnimtion {
+    animation: opacityUndo 1s ease-in-out forwards;
 }
