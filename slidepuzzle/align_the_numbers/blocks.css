@@ -1,0 +1,55 @@
+:root {
+    --blockSide: calc(min(calc(100vw / 4), calc(100vh / 5)) - 4px);
+    --blockColor: white;
+    --blockBackgroundColor: black;
+}
+body {
+    margin: 0;
+    margin-left: 3px;
+    color: var(--blockColor);
+    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    overflow: hidden;
+}
+#blocks {
+    padding: 0;
+    /* top: -5px;
+    left: 0; */
+    user-select: none;
+}
+#blocks div p {
+    position: relative;
+    color: var(--blockColor);
+    height: auto;
+    width: 100%;
+    /* top: calc(var(--blockSide) / 7.5); */
+    top: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--blockSide) * .3);
+    user-select: none;
+}
+#blocks div {
+    position: relative;
+    display: inline-block;
+    height: var(--blockSide);
+    width: var(--blockSide);
+    background-color: var(--blockBackgroundColor);
+    border-radius: calc(var(--blockSide) / 10);
+    /* margin: 5px; */
+    margin-top: 3px;
+}
+#blocks div.air {
+    background-color: transparent;
+    color: transparent;
+}
+#blocks div.A_2by1 {
+    height: calc(var(--blockSide) * 2);
+}
+#blocks div.A_2by2 {
+    height: calc(var(--blockSide) * 2);
+    width: calc(var(--blockSide) * 2);
+}
+#blocks div.A_1by2 {
+    width: calc(var(--blockSide) * 2);
+}
