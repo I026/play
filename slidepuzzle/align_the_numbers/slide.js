@@ -5,11 +5,20 @@ const air = blocks.querySelector(".air");
 
 const blockCaseWidth = 4;
 const blockCaseHeight = 5;
-const blockTotal = blockCaseWidth * blockCaseHeight;
+const blockTotal = 19;
 
 let targetBlock = 19;
-
 let steps = 0;
+
+let isOperated = true;
+
+let timer = 0;
+
+function timerStart() {
+    setInterval(() => {
+        timer += .01;
+    }, 10);
+}
 
 function swipe() {
     block = blocks.querySelectorAll("div");
@@ -17,6 +26,7 @@ function swipe() {
         Step : ${steps}
         Target : ${targetBlock}
         `);
+    gameClearJudge();
 }
 
 function swipeAnimetion(block,animetion) {
@@ -25,6 +35,23 @@ function swipeAnimetion(block,animetion) {
         block.classList.remove(animetion);
     }, parseFloat((getComputedStyle(document.documentElement).getPropertyValue("--swipeAnimetionDuration").trim())) * 1000);
     // parseFloat(getComputedStyle(block).animationDuration)
+}
+
+function gameClearJudge() {
+    let judgeIndex = 0;
+    let numberCleared = 0;
+    while (judgeIndex - 1 < blockTotal) {
+        if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
+            numberCleared += 1;
+            console.log(numberCleared, judgeIndex);
+        }
+        judgeIndex += 1;
+    }
+    if (numberCleared == judgeIndex - 1) {
+        setTimeout(() => {
+            alert("a");
+        }, 100);
+    }
 }
 
 function leftSwipe() {
@@ -70,7 +97,7 @@ function upSwipe() {
 }
 
 function downSwipe() {
-    if (!(targetBlock >= 16)) {
+    if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth + 1)) {
         steps += 1;
         targetBlock += 4;
         swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
@@ -96,23 +123,25 @@ function swipeEnd(e) {
 
     let difiX = endX - startX;
     let difiY = endY - startY;
-
-    if (Math.abs(difiX) > Math.abs(difiY)) {
-        if (difiX < 50) {
-            rightSwipe();
-        } else if (difiX > -50) {
-            leftSwipe();
-        }
-    } else if (Math.abs(difiX) < Math.abs(difiY)) {
-        if (difiY < 50) {
-            downSwipe();
-        } else if (difiY > -50) {
-            upSwipe();
+    if (isOperated) {
+        if (Math.abs(difiX) > Math.abs(difiY)) {
+            if (difiX < 50) {
+                rightSwipe();
+            } else if (difiX > -50) {
+                leftSwipe();
+            }
+        } else if (Math.abs(difiX) < Math.abs(difiY)) {
+            if (difiY < 50) {
+                downSwipe();
+            } else if (difiY > -50) {
+                upSwipe();
+            }
         }
     }
 }
 
 function blockShuffle() {
+    isOperated = false;
     document.documentElement.style.setProperty("--swipeAnimetionDuration", ".01s");
     blocks.classList.add("opacityMitigationAnimtion");
     setTimeout(() => {
@@ -133,6 +162,7 @@ function blockShuffle() {
                     downSwipe();
                     rightSwipe();
                 }
+                isOperated = true;
                 clearInterval(shuffleRoop);
                 document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
                 steps = 0;
