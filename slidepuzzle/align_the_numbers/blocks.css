@@ -58,7 +58,7 @@ body {
     }
     100% {
         rotate: 45deg;
-        top: calc(12.5px + 17.5px);
+        top: calc(12.5px + 15px);
         margin-bottom: -16px;
     }
 }
@@ -70,7 +70,7 @@ body {
     }
     100% {
         rotate: -45deg;
-        top: calc(12.5px + 17.5px);
+        top: calc(12.5px + 15px);
         margin-bottom: -16px;
     }
 }
@@ -96,7 +96,7 @@ body {
 @keyframes menuStickReverseRotate1 {
     0% {
         rotate: 45deg;
-        top: calc(12.5px + 17.5px);
+        top: calc(12.5px + 15px);
         margin-bottom: -16px;
     }
     100% {
@@ -108,7 +108,7 @@ body {
 @keyframes menuStickReverseRotate2 {
     0% {
         rotate: -45deg;
-        top: calc(12.5px + 17.5px);
+        top: calc(12.5px + 15px);
         margin-bottom: -16px;
     }
     100% {
@@ -142,6 +142,7 @@ body {
     padding: 0;
     user-select: none;
     text-align: center;
+    margin-top: 1.5px;
 }
 #blocks div p {
     position: relative;
@@ -163,7 +164,7 @@ body {
     width: var(--blockSide);
     background-color: var(--blockBackgroundColor);
     border-radius: calc(var(--blockSide) / 10);
-    margin-top: 3px;
+    margin: 1.5px;
 }
 #blocks div.air {
     /* background-color: rgb(242, 242, 242); */

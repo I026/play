@@ -7,10 +7,30 @@ let btns = document.querySelector(".btns");
 let retryBtn = document.getElementById("retryBtn");
 const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
 
-const blockCaseWidth = 4;
-const blockCaseHeight = 7;
+const blockCaseWidth = 5;
+const blockCaseHeight = 9;
 
-const blockTotal = substantialBlock.length;
+function blocksGenerate() {
+    let genNumber = 0;
+    while (blockCaseWidth * blockCaseHeight >= genNumber) {
+        genNumber += 1;
+        if (blockCaseWidth * blockCaseHeight > genNumber) {
+            blocks.innerHTML += `<div class="block${genNumber}"><p>${genNumber}</p></div>`
+        } else if (blockCaseWidth * blockCaseHeight == genNumber) {
+            blocks.innerHTML += `<div class="air"><p>&nbsp;</p></div>`
+        }
+        if (genNumber % blockCaseWidth == 0 && !(genNumber == blockCaseWidth * blockCaseHeight)) {
+            blocks.innerHTML += `<br>`
+        }
+    }
+}
+
+blocksGenerate();
+
+blocks = document.getElementById("blocks");
+block = blocks.querySelectorAll("div");
+substantialBlock = blocks.querySelectorAll("div:not(.air)");
+air = blocks.querySelector(".air");
 document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
 document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
 
@@ -133,9 +153,9 @@ function saveToLocalStorage() {
     (() => {
         storageArray = localStorage.getItem(storageData).split(",");
         if (!(localStorage.getItem(storageData)) || formattedHr + formattedMin + formattedSec < storageArray[0] * 1 + storageArray[1] * 1 + storageArray[2] * 1) {
-        localStorage.setItem(storageData, localStorageSaveContent);
-        const timeFastestDisplay = document.getElementById("timeFastestDisplay");
-        timeFastestDisplay.innerText = "(Fastest)";
+            localStorage.setItem(storageData, localStorageSaveContent);
+            const timeFastestDisplay = document.getElementById("timeFastestDisplay");
+            timeFastestDisplay.innerText = "(Fastest)";
         }
         if (!(localStorage.getItem(storageData)) || steps < storageArray[3] * 1) {
             localStorage.setItem(storageData, localStorageSaveContent);
@@ -194,10 +214,9 @@ function popupHidden() {
 function gameClearJudge() {
     let judgeIndex = 0;
     let secberCleared = 0;
-    while (judgeIndex - 1 < blockTotal) {
+    while (judgeIndex < blockCaseWidth * blockCaseHeight) {        
         if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
             secberCleared += 1;
-            // console.log(secberCleared, judgeIndex);
         }
         judgeIndex += 1;
     }
@@ -251,7 +270,7 @@ function swipeAnimetion(block,animetion) {
 }
 
 function leftSwipe() {
-    if (!((targetBlock % 4) == 0)) {
+    if (!((targetBlock % blockCaseWidth) == 0)) {
         targetBlock -= 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "leftSwipeAnimetion");
@@ -261,7 +280,7 @@ function leftSwipe() {
 }
 
 function rightSwipe() {
-    if (!((targetBlock + 1) % 4 == 0)) {
+    if (!((targetBlock + 1) % blockCaseWidth == 0)) {
         targetBlock += 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "rightSwipeAnimetion");
@@ -271,8 +290,8 @@ function rightSwipe() {
 }
 
 function upSwipe() {
-    if (!(targetBlock <= 3)) {
-        targetBlock -= 4;
+    if (!(targetBlock <= blockCaseWidth - 1)) {
+        targetBlock -= blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "upSwipeAnimetion");
         console.log("Up");
@@ -282,7 +301,7 @@ function upSwipe() {
 
 function downSwipe() {
     if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth)) {
-        targetBlock += 4;
+        targetBlock += blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
         console.log("Down");
@@ -312,7 +331,7 @@ function blockShuffle() {
             } else {
                 downSwipe();
             }
-            if (steps >= blockCaseWidth * blockCaseHeight * 35) {
+            if (steps >= blockCaseWidth * blockCaseHeight * 35 * 1) {
                 for (let i = 0; i < blockCaseWidth + blockCaseHeight; i += 1) {
                     downSwipe();
                     rightSwipe();
