@@ -1,0 +1,9 @@
+{
+    "name": "SlidePuzzle",
+    "short_name": "Puzzle",
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "display": "fullscreen",
+    "orientation": "natural",
+    "start_url": "https://i026.github.io/play/slidepuzzle/align_the_numbers/"
+  }
