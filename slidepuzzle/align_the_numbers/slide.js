@@ -186,7 +186,7 @@ function swipeEnd(e) {
     let difiX = endX - startX;
     let difiY = endY - startY;
     if (isOperated) {
-        const swipeRecognitionPx = 100;
+        const swipeRecognitionPx = 65;
         if (Math.abs(difiX) > Math.abs(difiY)) {
             if (difiX < swipeRecognitionPx) {
                 rightSwipe();
