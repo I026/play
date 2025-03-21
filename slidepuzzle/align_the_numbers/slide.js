@@ -104,7 +104,6 @@ function gameClearJudge() {
         judgeIndex += 1;
     }
     if (secberCleared == judgeIndex - 1) {
-        return true;
         setTimeout(() => {
             clearInterval(timerInterval);
             opacityMitigation();
@@ -186,7 +185,7 @@ function swipeEnd(e) {
     let difiX = endX - startX;
     let difiY = endY - startY;
     if (isOperated) {
-        const swipeRecognitionPx = 65;
+        const swipeRecognitionPx = 100;
         if (Math.abs(difiX) > Math.abs(difiY)) {
             if (difiX < swipeRecognitionPx) {
                 rightSwipe();
