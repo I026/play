@@ -7,16 +7,15 @@
 }
 body {
     margin: 0;
-    margin-left: 3px;
     color: var(--blockColor);
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     overflow: hidden;
 }
 #blocks {
+    position: relative;
     padding: 0;
-    /* top: -5px;
-    left: 0; */
     user-select: none;
+    text-align: center;
 }
 #blocks div p {
     position: relative;
@@ -38,7 +37,6 @@ body {
     width: var(--blockSide);
     background-color: var(--blockBackgroundColor);
     border-radius: calc(var(--blockSide) / 10);
-    /* margin: 5px; */
     margin-top: 3px;
 }
 #blocks div.air {
@@ -120,4 +118,85 @@ body {
 }
 .opacityUndoAnimtion {
     animation: opacityUndo 1s ease-in-out forwards;
+}
+.popup {
+    position: fixed;
+    background-color: rgba(128, 128, 128, .9);
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    bottom: 0;
+    bottom: -75vh;
+    height: 75vh;
+    width: calc(100vw - 50px);
+    left: 25px;
+}
+@keyframes popupDisplay {
+    0% {
+        bottom: -75vh;
+        opacity: 0;
+    }
+    100% {
+        bottom: 0;
+        opacity: 1;
+    }
+}
+.popupDisplayAnimtion {
+    animation: popupDisplay 1s ease-in-out forwards;
+}
+@keyframes popupHidden {
+    0% {
+        bottom: 0;
+        opacity: 1;
+    }
+    100% {
+        bottom: -75vh;
+        opacity: 0;
+    }
+}
+.popupHiddenAnimtion {
+    animation: popupHidden .5s ease-in-out forwards;
+}
+.popup div, .popup p {
+    font-size: 2.5em;
+    padding: 10px;
+    text-align: center;
+}
+.popup .topTitle {
+    font-size: 1.1em;
+}
+.popup .btns {
+    position: absolute;
+    height: 200px;
+    width: calc(200px + 5px * 2);
+    padding: 5px;
+    background-color: white;
+    border: 0;
+    border-radius: 40px;
+    text-align: center;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.popup .btns .partition {
+    position: absolute;
+    top: 30px;
+    width: 5px;
+    padding: 0;
+    height: 150px;
+    border-radius: 10px;
+    left: calc(200px + 5px);
+    background-color: black;
+}
+.popup button {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    background-color: transparent;
+    border: 0;
+    border-radius: 20px;
+}
+.popup button img {
+    height: 75%;
+    width: 75%;
 }

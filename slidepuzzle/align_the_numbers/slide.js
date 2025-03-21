@@ -2,6 +2,12 @@ const blocks = document.getElementById("blocks");
 let block = blocks.querySelectorAll("div");
 // const block = blocks.querySelectorAll("div:not(.air)");
 const air = blocks.querySelector(".air");
+const popup = document.querySelector(".popup");
+const timeDisplay = document.getElementById("timeDisplay");
+const stepsDisplay = document.getElementById("stepsDisplay");
+const btns = document.querySelector(".btns");
+const retryBtn = document.getElementById("retryBtn");
+const continueBtn = document.getElementById("continueBtn");
 
 const blockCaseWidth = 4;
 const blockCaseHeight = 5;
@@ -12,12 +18,40 @@ let steps = 0;
 
 let isOperated = true;
 
-let timer = 0;
+let sec = 0;
+let min = 0;
+let hr = 0;
 
-function timerStart() {
-    setInterval(() => {
-        timer += .01;
+let timerInterval;
+
+function timerStart(d = 0) {
+    sec = d;
+    timerInterval = setInterval(() => {
+        sec += .01;
+        if (sec >= 60) {
+            min += 1;
+            sec = 0;
+        }
+        if (min >= 60) {
+            hr += 1;
+            min = 0;
+        }
+        timeDisplay.innerHTML = `${
+            String(hr).padStart(2, "0")
+        }h ${
+            String(min).padStart(2, "0")
+        }m ${
+            (sec < 10 ? '0' + sec : String(sec)).substring(0, 5)
+        }s`;
+        stepsDisplay.innerText = `${steps}
+         steps`;
     }, 10);
+}
+
+function timerReset() {
+    sec = 0;
+    min = 0;
+    hr = 0;
 }
 
 function swipe() {
@@ -28,6 +62,9 @@ function swipe() {
         `);
         if (isOperated) {
             gameClearJudge();
+            if (steps == 1) {
+                timerStart();
+            }
         }
 }
 
@@ -39,19 +76,37 @@ function swipeAnimetion(block,animetion) {
     // parseFloat(getComputedStyle(block).animationDuration)
 }
 
+function opacityMitigation() {
+    blocks.classList.add("opacityMitigationAnimtion");
+    setTimeout(() => {
+        blocks.classList.remove("opacityUndoAnimtion");
+    }, 100);
+}
+function opacityUndo() {
+    blocks.classList.add("opacityUndoAnimtion");
+    setTimeout(() => {
+        blocks.classList.remove("opacityMitigationAnimtion");
+    }, 100);
+}
+
 function gameClearJudge() {
     let judgeIndex = 0;
-    let numberCleared = 0;
+    let secberCleared = 0;
     while (judgeIndex - 1 < blockTotal) {
         if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
-            numberCleared += 1;
-            console.log(numberCleared, judgeIndex);
+            secberCleared += 1;
+            console.log(secberCleared, judgeIndex);
         }
         judgeIndex += 1;
     }
-    if (numberCleared == judgeIndex - 1) {
+    if (secberCleared == judgeIndex - 1) {
         setTimeout(() => {
-            alert("a");
+            clearInterval(timerInterval);
+            opacityMitigation();
+            popup.classList.add("popupDisplayAnimtion");
+            setTimeout(() => {
+                popup.classList.remove("popupHiddenAnimtion");
+            }, 200);
         }, 100);
     }
 }
@@ -144,8 +199,8 @@ function swipeEnd(e) {
 
 function blockShuffle() {
     isOperated = false;
-    document.documentElement.style.setProperty("--swipeAnimetionDuration", ".01s");
-    blocks.classList.add("opacityMitigationAnimtion");
+    document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
+    opacityMitigation();
     setTimeout(() => {
         const shuffleRoop = setInterval(() => {
             const random = Math.random();
@@ -158,7 +213,6 @@ function blockShuffle() {
             } else {
                 downSwipe();
             }
-            
             if (steps >= 700) {
                 for (let i = 0; i < 5; i += 1) {
                     downSwipe();
@@ -168,16 +222,26 @@ function blockShuffle() {
                 clearInterval(shuffleRoop);
                 document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
                 steps = 0;
-                blocks.classList.add("opacityUndoAnimtion");
-                setTimeout(() => {
-                    blocks.classList.remove("opacityMitigationAnimtion");
-                }, 100);
+                opacityUndo();
             }
         }, 2);
     }, 500);
 };
 
 blockShuffle();
+
+retryBtn.addEventListener("click", () => {
+    retry();
+});
+
+function retry() {
+    blockShuffle();
+    timerReset();
+    popup.classList.add("popupHiddenAnimtion");
+    setTimeout(() => {
+        popup.classList.remove("popupDisplayAnimtion");
+    }, 100);
+}
 
 document.addEventListener("mousedown", swipeStart);
 document.addEventListener("mouseup", swipeEnd);
