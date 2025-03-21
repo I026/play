@@ -1,8 +1,9 @@
 const blocks = document.getElementById("blocks");
 let block = blocks.querySelectorAll("div");
-// const block = blocks.querySelectorAll("div:not(.air)");
+const substantialBlock = blocks.querySelectorAll("div:not(.air)");
 const air = blocks.querySelector(".air");
 const popup = document.querySelector(".popup");
+const topTitle = document.getElementById("topTitle");
 const timeDisplay = document.getElementById("timeDisplay");
 const stepsDisplay = document.getElementById("stepsDisplay");
 const btns = document.querySelector(".btns");
@@ -10,10 +11,13 @@ const retryBtn = document.getElementById("retryBtn");
 const continueBtn = document.getElementById("continueBtn");
 
 const blockCaseWidth = 4;
-const blockCaseHeight = 5;
-const blockTotal = 19;
+const blockCaseHeight = 7;
 
-let targetBlock = 19;
+const blockTotal = substantialBlock.length;
+document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
+document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
+
+let targetBlock = blockCaseWidth * blockCaseHeight - 1;
 let steps = 0;
 
 let isOperated = true;
@@ -36,15 +40,15 @@ function timerStart(d = 0) {
             hr += 1;
             min = 0;
         }
+        topTitle.innerText = `Result : ${blockCaseWidth} × ${blockCaseHeight}`;
         timeDisplay.innerHTML = `${
             String(hr).padStart(2, "0")
-        }h ${
+        } h ${
             String(min).padStart(2, "0")
-        }m ${
+        } m ${
             (sec < 10 ? '0' + sec : String(sec)).substring(0, 5)
-        }s`;
-        stepsDisplay.innerText = `${steps}
-         steps`;
+        } s`;
+        stepsDisplay.innerText = `${steps} steps`;
     }, 10);
 }
 
@@ -213,7 +217,7 @@ function blockShuffle() {
             } else {
                 downSwipe();
             }
-            if (steps >= 700) {
+            if (steps >= blockCaseWidth * blockCaseHeight * 35) {
                 for (let i = 0; i < 5; i += 1) {
                     downSwipe();
                     rightSwipe();
