@@ -1,7 +1,7 @@
 :root {
     --blockCaseWidth: 4;
     --blockCaseHeight: 7;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight))) - 4px);
+    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight) - 10px)) - 4px);
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -12,6 +12,130 @@ body {
     color: var(--blockColor);
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     overflow: hidden;
+}
+.topMenu {
+    position: absolute;
+    height: 70px;
+    font-size: 2em;
+    width: calc(var(--blockSide) * var(--blockCaseWidth));
+    left: calc(50vw - calc(var(--blockSide) * var(--blockCaseWidth) / 2));
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    bottom: 0;
+}
+.topMenu .menuTitle {
+    font-size: .9em;
+    transform: translateY(-5px);
+}
+.topMenu .expandableMenuBtn {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    right: 5px;
+    top: 3px;
+    /* left: calc(100% - var(--blockSide) + (var(--blockSide) / var(--blockCaseWidth) * 1.5)); */
+    background-color: transparent;
+}
+.topMenu .expandableMenuBtn div {
+    position: relative;
+    height: 3px;
+    width: 100%;
+    display: flex;
+    top: 12.5px;
+    margin-bottom: 10px;
+    /* rotate: 45deg; */
+    border-radius: 10px;
+    background-color: black;
+}
+@keyframes menuStickRotate1 {
+    0% {
+        rotate: 0deg;
+        top: 12.5px;
+        margin-bottom: 10px;
+    }
+    100% {
+        rotate: 45deg;
+        top: calc(12.5px + 17.5px);
+        margin-bottom: -16px;
+    }
+}
+@keyframes menuStickRotate2 {
+    0% {
+        rotate: 0deg;
+        top: 12.5px;
+        margin-bottom: 10px;
+    }
+    100% {
+        rotate: -45deg;
+        top: calc(12.5px + 17.5px);
+        margin-bottom: -16px;
+    }
+}
+@keyframes opacityErase {
+    0% {
+        opacity: 1;
+        width: 100%;
+    }
+    100% {
+        opacity: 0;
+        width: 0;
+    }
+}
+.menuStickRotate1Animation {
+    animation: menuStickRotate1 .5s ease-in-out both;
+}
+.menuStickRotate2Animation {
+    animation: menuStickRotate2 .5s ease-in-out both;
+}
+.menuStickEraseAnimation {
+    animation: opacityErase .25s ease-in-out both;
+}
+@keyframes menuStickReverseRotate1 {
+    0% {
+        rotate: 45deg;
+        top: calc(12.5px + 17.5px);
+        margin-bottom: -16px;
+    }
+    100% {
+        rotate: 0deg;
+        top: 12.5px;
+        margin-bottom: 10px;
+    }
+}
+@keyframes menuStickReverseRotate2 {
+    0% {
+        rotate: -45deg;
+        top: calc(12.5px + 17.5px);
+        margin-bottom: -16px;
+    }
+    100% {
+        rotate: 0deg;
+        top: 12.5px;
+        margin-bottom: 10px;
+    }
+}
+@keyframes opacityReverseErase {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        opacity: 1;
+        width: 100%;
+    }
+}
+.menuStickRotateReverse1Animation {
+    animation: menuStickReverseRotate1 .5s ease-in-out both;
+}
+.menuStickRotateReverse2Animation {
+    animation: menuStickReverseRotate2 .5s ease-in-out both;
+}
+.menuStickEraseReverseAnimation {
+    animation: opacityReverseErase .25s ease-in-out both;
+    animation-delay: .25s;
 }
 #blocks {
     position: relative;
@@ -116,23 +240,24 @@ body {
         opacity: 1;
     }
 }
-.opacityMitigationAnimtion {
-    animation: opacityMitigation 1s ease-in-out forwards;
+.opacityMitigationAnimation {
+    animation: opacityMitigation .5s ease-in-out forwards;
 }
-.opacityUndoAnimtion {
-    animation: opacityUndo 1s ease-in-out forwards;
+.opacityUndoAnimation {
+    animation: opacityUndo .5s ease-in-out forwards;
 }
 .popup {
     position: fixed;
-    background-color: rgba(128, 128, 128, .9);
+    color: black;
+    background-color: rgba(220, 220, 220, 0.75);
     border-radius: 20px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     bottom: 0;
     bottom: -75vh;
     height: 75vh;
-    width: calc(100vw - 50px);
-    left: 25px;
+    width: calc(100vw - 20px);
+    left: 10px;
 }
 @keyframes popupDisplay {
     0% {
@@ -144,8 +269,8 @@ body {
         opacity: 1;
     }
 }
-.popupDisplayAnimtion {
-    animation: popupDisplay 1s ease-in-out forwards;
+.popupDisplayAnimation {
+    animation: popupDisplay .4s ease-in-out forwards;
 }
 @keyframes popupHidden {
     0% {
@@ -157,15 +282,15 @@ body {
         opacity: 0;
     }
 }
-.popupHiddenAnimtion {
-    animation: popupHidden .5s ease-in-out forwards;
+.popupHiddenAnimation {
+    animation: popupHidden .4s ease-in-out forwards;
 }
 .popup div, .popup p {
-    font-size: 3.5vh;
+    font-size: 2em;
     padding: 10px;
     text-align: center;
 }
-.popup #topTitle {
+.popup div .topTitle {
     font-size: 1.1em;
 }
 .popup .btns {
@@ -173,13 +298,14 @@ body {
     height: 100px;
     width: 100px;
     padding: 5px;
-    background-color: white;
     border: 0;
     border-radius: 100px;
     text-align: center;
-    bottom: 5vh;
+    bottom: 10vh;
     left: 50%;
     transform: translateX(-50%);
+    background-color: transparent;
+    /* border: 4px black solid; */
 }
 .popup .btns .partition {
     position: absolute;
@@ -187,9 +313,8 @@ body {
     width: 5px;
     padding: 0;
     height: 150px;
-    border-radius: 10px;
     left: calc(200px + 5px);
-    background-color: black;
+    border-radius: 10px;
 }
 .popup button {
     position: relative;
@@ -200,6 +325,6 @@ body {
     border-radius: 20px;
 }
 .popup button img {
-    height: 75%;
-    width: 75%;
+    height: 90%;
+    width: 90%;
 }

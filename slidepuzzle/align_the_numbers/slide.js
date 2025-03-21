@@ -5,6 +5,7 @@ let air = blocks.querySelector(".air");
 let popup = document.querySelector(".popup");
 let btns = document.querySelector(".btns");
 let retryBtn = document.getElementById("retryBtn");
+const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
 
 const blockCaseWidth = 4;
 const blockCaseHeight = 7;
@@ -26,11 +27,14 @@ let formattedSec;
 let formattedMin;
 let formattedHr;
 
+let timerInterval;
+let autoSeveInterval;
+
 function timerStart(h = 0, m = 0, s = 0) {
     hr = h * 1;
     min = m * 1;
     sec = s * 1;
-    const timerInterval = setInterval(() => {
+    timerInterval = setInterval(() => {
         sec += .01;
         if (sec >= 60) {
             min += 1;
@@ -46,7 +50,7 @@ function timerStart(h = 0, m = 0, s = 0) {
         formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
         formattedMin = String(min).padStart(2, "0");
         formattedHr = String(hr).padStart(2, "0");
-        topTitle.innerText = `Result : ${blockCaseWidth} × ${blockCaseHeight}`;
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         timeDisplay.innerHTML = `${
             formattedHr
         } : ${
@@ -56,13 +60,13 @@ function timerStart(h = 0, m = 0, s = 0) {
         } <br><span id="timeFastestDisplay"></span>`;
         stepsDisplay.innerHTML = `${steps} steps<br><span id="stepsFastestDisplay"></span>`;
     }, 10);
-    const autoSeveInterval = setInterval(() => {
+    autoSeveInterval = setInterval(() => {
         if (isGameClear) {
             localStorage.removeItem("slidePuzzleProgressAutoSave");
         } else {
             localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec]);
         }
-    }, Math.floor(Math.random * 500) / 500 + 100);
+    },  Math.floor(Math.random(1) * 1000) / 10 + 100);
 }
 
 function timerStop() {
@@ -80,15 +84,19 @@ function timerReset() {
 }
 
 function opacityMitigation() {
-    blocks.classList.add("opacityMitigationAnimtion");
+    if (!(blocks.classList.contains("opacityMitigationAnimation"))) {
+        blocks.classList.add("opacityMitigationAnimation");
+    }
     setTimeout(() => {
-        blocks.classList.remove("opacityUndoAnimtion");
+        blocks.classList.remove("opacityUndoAnimation");
     }, 100);
 }
 function opacityUndo() {
-    blocks.classList.add("opacityUndoAnimtion");
+    if (!(blocks.classList.contains("opacityUndoAnimation"))) {
+        blocks.classList.add("opacityUndoAnimation");
+    }
     setTimeout(() => {
-        blocks.classList.remove("opacityMitigationAnimtion");
+        blocks.classList.remove("opacityMitigationAnimation");
     }, 100);
 }
 
@@ -139,6 +147,50 @@ function saveToLocalStorage() {
 
 let isGameClear = false;
 
+let isMenuDeployed = false
+
+function popupToggle() {
+    if (isMenuDeployed) {
+        popupHidden();
+        if (isOperated) {
+            opacityUndo();
+        }
+    } else {
+        popupDisplay();
+        opacityMitigation();
+    }
+}
+
+function popupDisplay() {
+    if (!(isMenuDeployed)) {
+        isMenuDeployed = true;
+        popup.classList.remove("popupHiddenAnimation");
+        popup.classList.add("popupDisplayAnimation");
+        const menuSticks =  expandableMenuBtn.querySelectorAll("div");
+        menuSticks[0].classList.remove("menuStickRotateReverse1Animation");
+        menuSticks[2].classList.remove("menuStickRotateReverse2Animation");
+        menuSticks[1].classList.remove("menuStickEraseReverseAnimation");
+        menuSticks[0].classList.add("menuStickRotate1Animation");
+        menuSticks[2].classList.add("menuStickRotate2Animation");
+        menuSticks[1].classList.add("menuStickEraseAnimation");
+    }
+}
+
+function popupHidden() {
+    if (isMenuDeployed) {
+        isMenuDeployed = false;
+        popup.classList.remove("popupDisplayAnimation");
+        popup.classList.add("popupHiddenAnimation");
+        const menuSticks =  expandableMenuBtn.querySelectorAll("div");
+        menuSticks[0].classList.remove("menuStickRotate1Animation");
+        menuSticks[2].classList.remove("menuStickRotate2Animation");
+        menuSticks[1].classList.remove("menuStickEraseAnimation");
+        menuSticks[0].classList.add("menuStickRotateReverse1Animation");
+        menuSticks[2].classList.add("menuStickRotateReverse2Animation");
+        menuSticks[1].classList.add("menuStickEraseReverseAnimation");
+    }
+}
+
 function gameClearJudge() {
     let judgeIndex = 0;
     let secberCleared = 0;
@@ -154,11 +206,8 @@ function gameClearJudge() {
             isGameClear = true;
             timerStop();
             saveToLocalStorage();
+            popupDisplay();
             opacityMitigation();
-            popup.classList.add("popupDisplayAnimtion");
-            setTimeout(() => {
-                popup.classList.remove("popupHiddenAnimtion");
-            }, 200);
         }, 100);
     }
 }
@@ -173,7 +222,13 @@ function swipe() {
     steps += 1;
     block = blocks.querySelectorAll("div");
         if (isOperated) {
-            gameClearJudge();
+            if ((isMenuDeployed)) {
+                opacityUndo();
+            }
+            popupHidden();
+            if (!(isGameClear)) {
+                gameClearJudge();
+            }
             if (steps == 1) {
                 timerStart();
             }
@@ -239,8 +294,12 @@ let startX, startY, endX, endY;
 
 function blockShuffle() {
     isOperated = false;
-    document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     opacityMitigation();
+    setTimeout(() => {
+        timeDisplay.innerHTML = "(Auto Shuffle)";
+        stepsDisplay.innerHTML = "";
+    }, 500);
+    document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {
         const shuffleRoop = setInterval(() => {
             const random = Math.random();
@@ -263,6 +322,8 @@ function blockShuffle() {
                 document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
                 steps = 0;
                 opacityUndo();
+                timeDisplay.innerHTML = "Move the blocks.";
+                stepsDisplay.innerHTML = "";
             }
         }, 2);
     }, 500);
@@ -283,6 +344,9 @@ if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
     blockShuffle();
 }
 
+expandableMenuBtn.addEventListener("click", () => {
+    popupToggle();
+});
 
 retryBtn.addEventListener("click", () => {
     retry();
@@ -292,10 +356,8 @@ function retry() {
     isGameClear = false;
     blockShuffle();
     timerReset();
-    popup.classList.add("popupHiddenAnimtion");
-    setTimeout(() => {
-        popup.classList.remove("popupDisplayAnimtion");
-    }, 100);
+    timerStop();
+    popupHidden();
 }
 
 function swipeStart(e) {
