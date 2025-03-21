@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="icon" href="../medias/favicon.ico" id="favicon">
-    <link rel="apple-touch-icon" sizes="180x180" href="../m/apple-touch-icon-180x180.png">
+    <link rel="manifest" href="manifest.json">
     <title>SlidePuzzle</title>
 </head>
 <body>
@@ -61,7 +61,7 @@
     <script src="slide.js"></script>
     <script>      
         if (navigator.serviceWorker) {
-          navigator.serviceWorker.register ("service-worker.js")
+          navigator.serviceWorker.register ("service-worker.js");
         }
     </script>
 </body>
