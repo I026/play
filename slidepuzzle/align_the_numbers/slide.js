@@ -312,16 +312,18 @@ function swipeEnd(e) {
     if (isOperated) {
         const swipeRecognitionPx = 50;
         if (Math.abs(difiX) > Math.abs(difiY)) {
-            if (difiX < swipeRecognitionPx) {
-                rightSwipe();
-            } else if (difiX > -swipeRecognitionPx) {
+            if (difiX > swipeRecognitionPx) {
                 leftSwipe();
             }
+            if (difiX < -swipeRecognitionPx) {
+                rightSwipe();
+            }
         } else if (Math.abs(difiX) < Math.abs(difiY)) {
-            if (difiY < swipeRecognitionPx) {
-                downSwipe();
-            } else if (difiY > -swipeRecognitionPx) {
+            if (difiY > swipeRecognitionPx) {
                 upSwipe();
+            }
+            if (difiY < -swipeRecognitionPx) {
+                downSwipe();
             }
         }
     }
