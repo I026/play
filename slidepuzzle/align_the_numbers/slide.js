@@ -104,6 +104,7 @@ function gameClearJudge() {
         judgeIndex += 1;
     }
     if (secberCleared == judgeIndex - 1) {
+        return true;
         setTimeout(() => {
             clearInterval(timerInterval);
             opacityMitigation();
@@ -185,16 +186,17 @@ function swipeEnd(e) {
     let difiX = endX - startX;
     let difiY = endY - startY;
     if (isOperated) {
+        const swipeRecognitionPx = 100;
         if (Math.abs(difiX) > Math.abs(difiY)) {
-            if (difiX < 50) {
+            if (difiX < swipeRecognitionPx) {
                 rightSwipe();
-            } else if (difiX > -50) {
+            } else if (difiX > -swipeRecognitionPx) {
                 leftSwipe();
             }
         } else if (Math.abs(difiX) < Math.abs(difiY)) {
-            if (difiY < 50) {
+            if (difiY < swipeRecognitionPx) {
                 downSwipe();
-            } else if (difiY > -50) {
+            } else if (difiY > -swipeRecognitionPx) {
                 upSwipe();
             }
         }
@@ -218,7 +220,7 @@ function blockShuffle() {
                 downSwipe();
             }
             if (steps >= blockCaseWidth * blockCaseHeight * 35) {
-                for (let i = 0; i < 5; i += 1) {
+                for (let i = 0; i < blockCaseWidth + blockCaseHeight; i += 1) {
                     downSwipe();
                     rightSwipe();
                 }
