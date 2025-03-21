@@ -26,7 +26,9 @@ function swipe() {
         Step : ${steps}
         Target : ${targetBlock}
         `);
-    gameClearJudge();
+        if (isOperated) {
+            gameClearJudge();
+        }
 }
 
 function swipeAnimetion(block,animetion) {
@@ -97,7 +99,7 @@ function upSwipe() {
 }
 
 function downSwipe() {
-    if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth + 1)) {
+    if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth)) {
         steps += 1;
         targetBlock += 4;
         swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
@@ -157,7 +159,7 @@ function blockShuffle() {
                 downSwipe();
             }
             
-            if (steps >= 500) {
+            if (steps >= 700) {
                 for (let i = 0; i < 5; i += 1) {
                     downSwipe();
                     rightSwipe();
@@ -169,9 +171,9 @@ function blockShuffle() {
                 blocks.classList.add("opacityUndoAnimtion");
                 setTimeout(() => {
                     blocks.classList.remove("opacityMitigationAnimtion");
-                }, 1000);
+                }, 100);
             }
-        }, 1);
+        }, 2);
     }, 500);
 };
 
