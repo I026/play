@@ -654,7 +654,7 @@ function swipeGetNowCoordinate(e) {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
-            const swipeRecognitionPx = 100;
+            const swipeRecognitionPx = block[0].offsetWidth;
             // if (Math.abs(difiX) > swipeRecognitionPx && Math.abs(difiX) > Math.abs(difiY)) {
             //     if (difiX > swipeRecognitionPx) {
             //         leftSwipe();
@@ -666,24 +666,31 @@ function swipeGetNowCoordinate(e) {
             //     }
             // }
             if (Math.abs(difiX) > swipeRecognitionPx) {
-                swipeRemoveEventListener();
+                // swipeRemoveEventListener();
+                let left = false, right = false, up = false, down = false;
+                console.log(difiX);
                 if (difiX > swipeRecognitionPx) {
+                    swipeStartReset(e);
                     leftSwipe();
-                    console.log("left");
+                    // alert(startX);
+                    // console.log("left");
                 }
                 if (difiX < -swipeRecognitionPx) {
+                    swipeStartReset(e);
                     rightSwipe();
-                    console.log("right");
+                    // console.log("right");
                 }
             } if (Math.abs(difiY) > swipeRecognitionPx) {
-                swipeRemoveEventListener();
+                // swipeRemoveEventListener();
                 if (difiY > swipeRecognitionPx) {
+                    swipeStartReset(e);
                     upSwipe();
-                    console.log("up");
+                    // console.log("up");
                 }
                 if (difiY < -swipeRecognitionPx) {
+                    swipeStartReset(e);
                     downSwipe();
-                    console.log("down");
+                    // console.log("down");
                 }
             }
         }
@@ -698,10 +705,13 @@ function swipeRemoveEventListener() {
     document.removeEventListener("touchmove",swipeGetNowCoordinate);
 }
 
-function swipeDetection(e) {
+function swipeStartReset(e) {
     startX = e.clientX ?? e.touches[0].clientX;
     startY = e.clientY ?? e.touches[0].clientY;
+}
 
+function swipeDetection(e) {
+    swipeStartReset(e);
     document.addEventListener("mousemove",swipeGetNowCoordinate);
     document.addEventListener("touchmove",swipeGetNowCoordinate);
 
