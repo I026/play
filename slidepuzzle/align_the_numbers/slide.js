@@ -1,15 +1,3 @@
-if (!(window.location.protocol === "file:")) {
-    const body = document.querySelector("body");
-    document.querySelector("head").innerHTML += '<link rel="manifest" href="manifest.json">';
-    body.innerHTML += `
-    <script>
-        if (navigator.serviceWorker) {
-          navigator.serviceWorker.register ("service-worker.js");
-        }
-    </script>`;
-} else {
-    console.log("LocalFile");
-}
 let blocks = document.getElementById("blocks");
 let block = blocks.querySelectorAll("div");
 let substantialBlock = blocks.querySelectorAll("div:not(.air)");
