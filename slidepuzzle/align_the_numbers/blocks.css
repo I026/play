@@ -1,7 +1,7 @@
 :root {
     --blockCaseWidth: 4;
     --blockCaseHeight: 5;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight) - 10px)) - 3.5px);
+    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight)) - 10px) - 1vh);
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -30,6 +30,10 @@ body {
     font-size: .9em;
     transform: translateY(5px);
     user-select: none;
+    position: absolute;
+    /* text-align: left;
+    bottom: 5px;
+    left: 5px; */
 }
 .topMenu .expandableMenuBtn {
     position: absolute;
