@@ -45,7 +45,7 @@ body {
     height: 40px;
     width: 40px;
     right: 15px;
-    top: 15px;
+    transform: translateY(5px);
     /* left: calc(100% - var(--blockSide) + (var(--blockSide) / var(--blockCaseWidth) * 1.5)); */
     background-color: transparent;
 }
