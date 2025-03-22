@@ -15,6 +15,11 @@ const heightUp = heightCtrl.querySelector(".up");
 const heightDown = heightCtrl.querySelector(".down");
 const widthNumber = widthCtrl.querySelector(".number");
 const heightNumber = heightCtrl.querySelector(".number");
+const topTitle = document.getElementById("topTitle");
+const timeDisplay = document.getElementById("timeDisplay");
+const timeInfoDisplay = document.getElementById("timeInfoDisplay");
+const stepsDisplay = document.getElementById("stepsDisplay");
+const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
 let steps = 0;
 let isOperated = true;
 
@@ -100,9 +105,6 @@ function timerStart(h = 0, m = 0, s = 0) {
             hr += 1;
             min = 0;
         }
-        const topTitle = document.getElementById("topTitle");
-        const timeDisplay = document.getElementById("timeDisplay");
-        const stepsDisplay = document.getElementById("stepsDisplay");
         formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
         formattedMin = String(min).padStart(2, "0");
         formattedHr = String(hr).padStart(2, "0");
@@ -173,46 +175,37 @@ function getDate() {
     return(`${year}, ${month}, ${day}, ${hours}, ${minutes}, ${seconds}`);
 }
 
-const localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`).split(",");
-const localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`).split(",");
+let localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+let localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
 
 function saveToLocalStorage() {
-    let localStorageKey1Array;
+    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
+    function save(key, threshold, saveContent, display, text) {
+        if (localStorage.getItem(key)) {
+            const keyArray = localStorage.getItem(key).split(",");
+            const combinedKey = keyArray.join("").replaceAll(" ","") * 1;
+            const combinedThreshold = threshold.join("") * 1;
+            // alert(`${combinedKey} <= ${combinedThreshold}`);
+            if (combinedKey * 1 <= combinedThreshold * 1) {
+                // alert("最速ではない");
+                display.innerHTML = "";
+            } else {
+                // alert("最速");
+                display.innerHTML = text;
+                localStorage.setItem(key, saveContent);
+            }
+        } else {
+            // alert("最速");
+            display.innerHTML = text;
+            localStorage.setItem(key, saveContent);
+        }
+    }
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
-    const localStorageKey2SaveContent = `${steps}`;
-    if (localStorage.getItem(localStorageKey1)){
-    } else {
-        localStorage.setItem(localStorageKey1, localStorageKey1SaveContent);
-        const timeFastestDisplay = document.getElementById("timeFastestDisplay");
-        timeFastestDisplay.innerText = "(Fastest)";
-    }
-    if (localStorage.getItem(localStorageKey2)){
-    } else {
-        localStorage.setItem(localStorageKey2, localStorageKey2SaveContent);
-        const stepsFastestDisplay = document.getElementById("stepsFastestDisplay");
-        stepsFastestDisplay.innerText = "(Least)";
-    }
-    (() => {
-        localStorageKey1Array = localStorage.getItem(localStorageKey1).split(",");
-        // localStorageKey1が存在しない or 今の記録の方が早い
-        if (!(localStorage.getItem(localStorageKey1)) || formattedHr + formattedMin + formattedSec < localStorageKey1Array[0] * 1 + localStorageKey1Array[1] * 1 + localStorageKey1Array[2] * 1) {
-            localStorage.setItem(localStorageKey1, localStorageKey1SaveContent);
-            const timeFastestDisplay = document.getElementById("timeFastestDisplay");
-            timeFastestDisplay.innerText = "(Fastest)";
-        }
-        localStorageKey2Array = localStorage.getItem(localStorageKey2).split(",");
-        // localStorageKey2が存在しない or 今の記録の方が少ない
-        if (!(localStorage.getItem(localStorageKey2)) || steps < localStorageKey2Array[0] * 1) {
-            localStorage.setItem(localStorageKey2, localStorageKey2SaveContent);
-            const stepsFastestDisplay = document.getElementById("stepsFastestDisplay");
-            stepsFastestDisplay.innerText = "(Least)";
-        }
-    })();
+    const localStorageKey2SaveContent = steps;
+    save(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, "(Fastest)");
+    save(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, "(Least)");
 }
-
-okBtn.addEventListener("click", () => {
-    blockNumberChange();
-});
 
 let isGameClear = false;
 
@@ -262,6 +255,7 @@ function popupDisplay(n = popup[0]) {
 }
 
 function blockNumberChange() {
+    recordDisplay();
     if (!(widthNumber.innerText * 1 == blockCaseWidth) || !(heightNumber.innerText * 1 == blockCaseHeight)) {
         clearInterval(timerInterval);
         localStorage.removeItem("slidePuzzleProgressAutoSave");
@@ -274,9 +268,16 @@ function blockNumberChange() {
     } else {
         opacityUndo();
     }
-    popupHidden(popup[0]);
     popupHidden(popup[1]);
+    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
+    timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+    stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
 }
+
+okBtn.addEventListener("click", () => {
+    blockNumberChange();
+});
 
 function popupHidden(n = popup[0]) {
     widthNumber.innerText = blockCaseWidth;
@@ -402,6 +403,19 @@ function downSwipe() {
 
 let startX, startY, endX, endY, shuffleRoop;
 
+function recordDisplay() {
+    topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+    if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
+        timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
+    } else {
+        timeDisplay.innerText = `( No record of ${blockCaseWidth} × ${blockCaseHeight})`;
+        stepsDisplay.innerText = "";
+        timeInfoDisplay.innerText = "";
+        stepsInfoDisplay.innerText = "";
+    }
+}
+
 function blockShuffle() {
     targetBlock = blockCaseWidth * blockCaseHeight - 1;
     clearInterval(shuffleRoop);
@@ -411,14 +425,7 @@ function blockShuffle() {
     opacityMitigation(retryBtn);
     // block = blocks.querySelectorAll("div");
     setTimeout(() => {
-        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-        if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-            timeDisplay.innerHTML = `FastestTime<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-            stepsDisplay.innerHTML = `LeastStep<br>${localStorage.getItem(localStorageKey2)} Step`;
-        } else {
-            timeDisplay.innerHTML = `(${blockCaseWidth} × ${blockCaseHeight} Not played)`;
-            stepsDisplay.innerHTML = "";
-        }
+        recordDisplay();
     }, 200);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {

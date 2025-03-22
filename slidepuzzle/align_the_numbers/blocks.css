@@ -305,9 +305,16 @@ body {
     font-size: 2em;
     padding: 10px;
     text-align: center;
+    user-select: none;
+}
+.popup div, .popup p:hover {
+    cursor: default;
 }
 .popup div .topTitle {
     font-size: 1.1em;
+}
+.popup div :hover {
+    cursor: pointer;
 }
 .popup .btns {
     position: absolute;
