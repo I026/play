@@ -311,6 +311,15 @@ function popupHidden(n = popup[0]) {
     }
 }
 
+blocks.addEventListener("click", () => {
+    // popupHidden();
+    // popupHidden(popup[1]);
+    // opacityUndo();
+    if (popup[0].classList.contains("popupDisplayAnimation")) {
+        menuBtnToggle();
+    }
+});
+
 function gameClearJudge() {
     let judgeIndex = 0;
     let secberCleared = 0;

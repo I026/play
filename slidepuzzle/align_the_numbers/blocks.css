@@ -34,7 +34,7 @@ body {
 }
 .topMenu .menuTitle {
     font-size: .9em;
-    transform: translateY(5px);
+    transform: translateY(12.5px);
     position: absolute;
     /* text-align: left;
     bottom: 5px;
@@ -45,7 +45,7 @@ body {
     height: 40px;
     width: 40px;
     right: 15px;
-    transform: translateY(5px);
+    transform: translateY(calc(12.5px - 10px));
     /* left: calc(100% - var(--blockSide) + (var(--blockSide) / var(--blockCaseWidth) * 1.5)); */
     background-color: transparent;
 }
@@ -332,6 +332,7 @@ body {
 }
 .popup .btns {
     position: absolute;
+    user-select: none;
     height: 100px;
     width: 100px;
     padding: 5px;
