@@ -1,8 +1,8 @@
-const body = document.querySelector("body");
 if (!(window.location.protocol === "file:")) {
-    body.querySelector("head").innerHTML += '<link rel="manifest" href="manifest.json">';
+    const body = document.querySelector("body");
+    document.querySelector("head").innerHTML += '<link rel="manifest" href="manifest.json">';
     body.innerHTML += `
-    <script>      
+    <script>
         if (navigator.serviceWorker) {
           navigator.serviceWorker.register ("service-worker.js");
         }
