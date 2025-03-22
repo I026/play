@@ -344,7 +344,8 @@ body {
     text-align: center;
     font-size: .8em;
     display: flex;
-    justify-self: center;
+    justify-content: center;
+    left: calc(50vw);
     margin-top: calc(10%);
 }
 .popup.n2 .consoles .down {
