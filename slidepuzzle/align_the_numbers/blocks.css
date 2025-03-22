@@ -386,6 +386,9 @@ body {
     height: .7em;
     user-select: none;
 }
+.popup.n2 .consoles img::selection {
+    background-color: transparent;
+}
 .popup.n2 .consoles .margin {
     width: 1em;
 }
