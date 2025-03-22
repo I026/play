@@ -403,6 +403,7 @@ function blockShuffle() {
     isOperated = false;
     blocksGenerate();
     opacityMitigation();
+    opacityMitigation(retryBtn);
     // block = blocks.querySelectorAll("div");
     setTimeout(() => {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
