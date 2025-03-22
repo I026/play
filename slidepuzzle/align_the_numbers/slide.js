@@ -654,7 +654,7 @@ function swipeGetNowCoordinate(e) {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
-            const swipeRecognitionPx = block[0].offsetWidth;
+            const swipeRecognitionPx = block[0].offsetWidth * .9;
             // if (Math.abs(difiX) > swipeRecognitionPx && Math.abs(difiX) > Math.abs(difiY)) {
             //     if (difiX > swipeRecognitionPx) {
             //         leftSwipe();
