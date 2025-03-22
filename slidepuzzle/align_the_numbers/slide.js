@@ -15,6 +15,7 @@ const heightUp = heightCtrl.querySelector(".up");
 const heightDown = heightCtrl.querySelector(".down");
 const widthNumber = widthCtrl.querySelector(".number");
 const heightNumber = heightCtrl.querySelector(".number");
+const menuTitle = document.querySelector(".menuTitle");
 const topTitle = document.getElementById("topTitle");
 const timeDisplay = document.getElementById("timeDisplay");
 const timeInfoDisplay = document.getElementById("timeInfoDisplay");
@@ -25,6 +26,20 @@ let isOperated = true;
 
 let blockCaseWidth = 4;
 let blockCaseHeight = 5;
+
+function selectionPrevention(o) {
+    let tentative;
+    tentative = o.innerHTML;
+    o.innerHTML = "";
+    o.innerHTML = tentative;
+}
+
+document.addEventListener("selectionchange", () => {
+    // alert("a");
+    selectionPrevention(blocks);
+    selectionPrevention(menuTitle);
+    selectionPrevention(expandableMenuBtn);
+});
 
 // function resize() {
 //     if (window.innerWidth < window.innerHeight) {
