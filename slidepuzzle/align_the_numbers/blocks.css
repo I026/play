@@ -25,11 +25,17 @@ body {
     align-items: center;
     color: black;
     bottom: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    pointer-events: none;
+}
+.topMenu::selection {
+    background-color: white;
 }
 .topMenu .menuTitle {
     font-size: .9em;
     transform: translateY(5px);
-    user-select: none;
     position: absolute;
     /* text-align: left;
     bottom: 5px;

@@ -61,13 +61,24 @@
         </div>
     </div>
     <div class="topMenu">
-        <span class="menuTitle">SlidePuzzle</span>
+        <span class="menuTitle">
+            SlidePuzzle
+        </span>
         <div class="expandableMenuBtn">
             <div></div>
             <div></div>
             <div></div>
         </div>
     </div>
+    <script>
+        const menuTitle = document.querySelector(".menuTitle");
+        setTimeout(() => {
+        }, 2000);
+        document.addEventListener("selectionchange", () => {
+            menuTitle.innerHTML = "";
+            menuTitle.innerHTML = "<span>SlidePuzzle</span>";
+        });
+    </script>
     <script src="slide.js"></script>
     <script>      
         if (navigator.serviceWorker) {
