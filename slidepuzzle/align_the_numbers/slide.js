@@ -487,14 +487,15 @@ heightDown.addEventListener("click", () => {
 });
 
 function recoverFromLocalStorage() {
-    const localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
-    if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {
-        blockCaseWidth = localStorageSaveContent[6] * 1;
-        blockCaseHeight = localStorageSaveContent[7] * 1;
-        document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
-        document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
-    }
+    let localStorageSaveContent;
     if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
+        localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
+        if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {
+            blockCaseWidth = localStorageSaveContent[6] * 1;
+            blockCaseHeight = localStorageSaveContent[7] * 1;
+            document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
+            document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
+        }
         if ((localStorageSaveContent[8]) == "false") {   
             blocks = document.getElementById("blocks");
             block = blocks.querySelectorAll("div");
