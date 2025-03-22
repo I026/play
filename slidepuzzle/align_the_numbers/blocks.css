@@ -1,7 +1,10 @@
 :root {
     --blockCaseWidth: 4;
     --blockCaseHeight: 5;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth) - 4px), calc(100dvh / var(--blockCaseHeight) - 12px)));
+    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth) - 4px), calc(100dvh / var(--blockCaseHeight) - 16px)));
+    --sampleBlockCaseWidth: 4;
+    --sampleBlockCaseHeight: 5;
+    --sampleBlockSide: calc(min(calc(100dvw / var(--sampleBlockCaseWidth) + 50px), calc(100dvh / var(--sampleBlockCaseHeight) - 50vh)));
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -150,7 +153,7 @@ body {
     animation: menuStickOpacityReverseErase .25s ease-in-out both;
     animation-delay: .25s;
 }
-#blocks {
+#blocks, .popup.n2 .consoles .sampleBlocks {
     position: relative;
     padding: 0;
     user-select: none;
@@ -158,6 +161,7 @@ body {
     -webkit-touch-callout: none;
     text-align: center;
     margin-top: 1.5px;
+    line-height: 0;
 }
 #blocks div p {
     position: relative;
@@ -165,18 +169,20 @@ body {
     height: auto;
     width: 100%;
     /* top: calc(var(--blockSide) / 7.5); */
-    top: 0%;
     display: flex;
     align-items: center;
     justify-content: center;
+    top: 17.5%;
     font-size: calc(var(--blockSide) * .3);
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
 }
-#blocks div {
+#blocks div, .popup.n2 .consoles .sampleBlocks div {
     position: relative;
     display: inline-block;
+}
+#blocks div {
     height: var(--blockSide);
     width: var(--blockSide);
     background-color: var(--blockBackgroundColor);
@@ -378,6 +384,30 @@ body {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
 }
+.popup.n2 .consoles #widthCtrl, .popup.n2 .consoles #heightCtrl {
+    position: absolute;
+}
+.popup.n2 .consoles .sampleBlocks {
+    transform: translateY(calc(-50% + 9.6vh));
+    position: absolute;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    text-align: center;
+    margin-top: 1.5px;
+    line-height: 0;
+    pointer-events: none;
+}
+.popup.n2 .consoles .sampleBlocks div {
+    height: var(--sampleBlockSide);
+    width: var(--sampleBlockSide);
+    background-color: var(--blockBackgroundColor);
+    border-radius: calc(.05em);
+    margin: 1.5px;
+    background-color: black;
+    opacity: .1;
+}
 .popup.n2 .consoles .down {
     rotate: 180deg;
 }
@@ -398,10 +428,16 @@ body {
 }
 .popup.n2 .consoles .operatorSymbols {
     position: relative;
-    top: 1.5em;
+    top: 1.6em;
 }
 .popup.n2 .consoles .number {
-    animation: changeAcceptance 1s forwards infinite;
+    text-shadow:
+    0px 0px 10px rgba(200, 200, 200, .975),
+    0px 0px 10px rgba(200, 200, 200, .975),
+    0px 0px 10px rgba(200, 200, 200, .975)
+    0px 0px 10px rgba(200, 200, 200, .975)
+    0px 0px 10px rgba(200, 200, 200, .975)
+    ;
 }
 @keyframes changeAcceptance {
     0% {
@@ -410,10 +446,49 @@ body {
     40% {
         opacity: 1;
     }
-    100% {
+    99% {
         opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 .changeAcceptanceAnimation {
-    animation: changeAcceptance 1s forwards infinite ease-in-out;
+    animation: changeAcceptance 1s ease-in-out 3 forwards;
+}
+@keyframes limit {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(100px);
+    }
+    75% {
+        transform: translateX(-100px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+.limitAnimation {
+    animation: limit 1s ease-in-out forwards infinite;
+}
+@keyframes sampleBlockDisplay {
+    0%{
+        transform: scale(.25);
+        opacity: 0;
+    }
+    50%{
+        opacity: .1;
+    }
+    75%{
+        transform: scale(1.05);
+    }
+    100%{
+        transform: scale(1);
+        opacity: .1;
+    }
+}
+.sampleBlockDisplayAnimation {
+    animation: sampleBlockDisplay .4s ease-in-out both;
 }

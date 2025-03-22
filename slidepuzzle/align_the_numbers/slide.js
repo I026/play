@@ -21,6 +21,8 @@ const timeDisplay = document.getElementById("timeDisplay");
 const timeInfoDisplay = document.getElementById("timeInfoDisplay");
 const stepsDisplay = document.getElementById("stepsDisplay");
 const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
+const sampleblocks = document.querySelector(".sampleBlocks");
+
 let steps = 0;
 let isOperated = true;
 
@@ -158,21 +160,27 @@ function timerReset() {
     formattedHr = 0;
 }
 
-function opacityMitigation(o = blocks) {
+function opacityMitigation(o = blocks, t = .5) {
     if (!(o.classList.contains("opacityMitigationAnimation"))) {
+        o.classList.remove("opacityUndoAnimation");
+        o.classList.remove("opacityMitigationAnimation");
+        o.style.setProperty("animation-duration", `${t}s`);
         o.classList.add("opacityMitigationAnimation");
     }
     setTimeout(() => {
         o.classList.remove("opacityUndoAnimation");
-    }, 100);
+    }, t * 1000);
 }
-function opacityUndo(o = blocks) {
+function opacityUndo(o = blocks, t = .5) {
     if (!(o.classList.contains("opacityUndoAnimation"))) {
+        o.classList.remove("opacityMitigationAnimation");
+        o.classList.remove("opacityUndoAnimation");
+        o.style.setProperty("animation-duration", `${t}s`);
         o.classList.add("opacityUndoAnimation");
     }
     setTimeout(() => {
         o.classList.remove("opacityMitigationAnimation");
-    }, 100);
+    }, t * 1000);
 }
 
 function getDate() {
@@ -250,23 +258,6 @@ function popupToggle(n = popup[0]) {
     }
 }
 
-function popupDisplay(n = popup[0]) {
-    if (!(n.classList.contains("popupDisplayAnimation"))) {
-        // isMenuDeployed = true;
-        n.classList.remove("popupHiddenAnimation");
-        n.classList.add("popupDisplayAnimation");
-        if (n == popup[0]) {
-            const menuSticks =  expandableMenuBtn.querySelectorAll("div");
-            menuSticks[0].classList.remove("menuStickRotateReverse1Animation");
-            menuSticks[2].classList.remove("menuStickRotateReverse2Animation");
-            menuSticks[1].classList.remove("menuStickEraseReverseAnimation");
-            menuSticks[0].classList.add("menuStickRotate1Animation");
-            menuSticks[2].classList.add("menuStickRotate2Animation");
-            menuSticks[1].classList.add("menuStickEraseAnimation");
-        }
-    }
-}
-
 function blockNumberChange() {
     recordDisplay();
     if (!(widthNumber.innerText * 1 == blockCaseWidth) || !(heightNumber.innerText * 1 == blockCaseHeight)) {
@@ -291,6 +282,30 @@ function blockNumberChange() {
 okBtn.addEventListener("click", () => {
     blockNumberChange();
 });
+
+function popupDisplay(n = popup[0]) {
+    opacityUndo(widthDown);
+    opacityUndo(widthUp);
+    opacityUndo(heightDown);
+    opacityUndo(heightUp);
+    if (!(n.classList.contains("popupDisplayAnimation"))) {
+        // isMenuDeployed = true;
+        n.classList.remove("popupHiddenAnimation");
+        n.classList.add("popupDisplayAnimation");
+        if (n == popup[0]) {
+            const menuSticks =  expandableMenuBtn.querySelectorAll("div");
+            menuSticks[0].classList.remove("menuStickRotateReverse1Animation");
+            menuSticks[2].classList.remove("menuStickRotateReverse2Animation");
+            menuSticks[1].classList.remove("menuStickEraseReverseAnimation");
+            menuSticks[0].classList.add("menuStickRotate1Animation");
+            menuSticks[2].classList.add("menuStickRotate2Animation");
+            menuSticks[1].classList.add("menuStickEraseAnimation");
+            sampleblocksGenerate();
+        }
+        widthNumber.classList.add("changeAcceptanceAnimation");
+        heightNumber.classList.add("changeAcceptanceAnimation");
+    }
+}
 
 function popupHidden(n = popup[0]) {
     widthNumber.innerText = blockCaseWidth;
@@ -500,28 +515,82 @@ function numberMatchCheck_Minus(n) {
     }
 }
 
-widthUp.addEventListener("click", () => {
+function sampleblocksGenerate(w = widthNumber.innerText * 1, h = heightNumber.innerText * 1) {
+    sampleblocks.innerHTML = "";
+    let genNumber = 0;
+    while (w * h >= genNumber) {
+        genNumber += 1;
+        if (w * h > genNumber) {
+            sampleblocks.innerHTML += `<div class="sampleBlockDisplayAnimation"></div>`
+        } else if (w * h == genNumber) {
+            sampleblocks.innerHTML += `<div style="opacity: 0;"></div>`
+        }
+        if (genNumber % w == 0 && !(genNumber == w * h)) {
+            sampleblocks.innerHTML += `<br>`
+        }
+    }
+    document.documentElement.style.setProperty("--sampleBlockCaseWidth", w);
+    document.documentElement.style.setProperty("--sampleBlockCaseHeight", h);
+}
+
+function widthUpCtrl() {
     if (numberMatchCheck_Plus(widthNumber.innerText * 1)) {
         widthNumber.innerText = widthNumber.innerText * 1 + 1;
+        sampleblocksGenerate();
+        opacityUndo(widthDown);
+        if (!(numberMatchCheck_Plus(widthNumber.innerText * 1))) {
+            opacityMitigation(widthUp, .25);
+        }
     }
+}
+
+function widthDownCtrl() {
+    if (numberMatchCheck_Minus(widthNumber.innerText * 1 + 1)) {
+        widthNumber.innerText = widthNumber.innerText * 1 - 1;
+        sampleblocksGenerate();
+        opacityUndo(widthUp);
+        if (!(numberMatchCheck_Minus(widthNumber.innerText * 1 + 1))) {
+            opacityMitigation(widthDown, .25);
+        }
+    }
+}
+
+function heightUpCtrl() {
+    if (numberMatchCheck_Plus(heightNumber.innerText * 1)) {
+        heightNumber.innerText = heightNumber.innerText * 1 + 1;
+        sampleblocksGenerate();
+        opacityUndo(heightDown);
+        if (!(numberMatchCheck_Plus(heightNumber.innerText * 1))) {
+            opacityMitigation(heightUp, .25);
+        }
+    }
+}
+
+function heightDownCtrl() {
+    if (numberMatchCheck_Minus(heightNumber.innerText * 1)) {
+        heightNumber.innerText = heightNumber.innerText * 1 - 1;
+        sampleblocksGenerate();
+        opacityUndo(heightUp);
+        if (!(numberMatchCheck_Minus(heightNumber.innerText * 1))) {
+            opacityMitigation(heightDown, .25);
+        }
+    }
+}
+
+widthUp.addEventListener("click", () => {
+    widthUpCtrl();
 });
 
 widthDown.addEventListener("click", () => {
-    if (numberMatchCheck_Minus(widthNumber.innerText * 1 + 1)) {
-        widthNumber.innerText = widthNumber.innerText * 1 - 1;
-    }
+    widthDownCtrl();
 });
 
 heightUp.addEventListener("click", () => {
-    if (numberMatchCheck_Plus(heightNumber.innerText * 1)) {
-        heightNumber.innerText = heightNumber.innerText * 1 + 1;
-    }
+    heightUpCtrl();
 });
 
 heightDown.addEventListener("click", () => {
-    if (numberMatchCheck_Minus(heightNumber.innerText * 1)) {
-        heightNumber.innerText = heightNumber.innerText * 1 - 1;
-    }
+    heightDownCtrl();
 });
 
 function recoverFromLocalStorage() {
@@ -618,17 +687,57 @@ document.addEventListener("keydown",(event) => {
     if (event.code === "KeyA" || event.code === "ArrowLeft") {
         rightSwipe();
     }
-    if (event.code === "KeyD" || event.code === "ArrowRight") {
+    if (event.code === "KeyE" || event.code === "ArrowRight") {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
+            heightUpCtrl();
+        }
+    }
+    if (event.code === "KeyD") {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
+            heightDownCtrl();
+        } else {   
+            leftSwipe();
+        }
+    }
+    if (event.code === "ArrowRight") {
         leftSwipe();
     }
-    if (event.code === "KeyW" || event.code === "ArrowUp") {
+    if (event.code === "KeyW") {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
+            widthUpCtrl();
+        } else {   
+            downSwipe();
+        }
+    }
+    if (event.code === "ArrowUp") {
         downSwipe();
     }
-    if (event.code === "KeyS" || event.code === "ArrowDown") {
+    if (event.code === "KeyS") {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
+            widthDownCtrl();
+        } else {   
+            upSwipe();
+        }
+    }
+    if (event.code === "ArrowDown") {
         upSwipe();
     }
-    if (event.code === "KeyM") {
+    if (event.code === "KeyF") {
         menuBtnToggle();
+    }
+    if (event.code === "KeyC") {
+        if (popup[0].classList.contains("popupDisplayAnimation")) {
+            popupToggle(popup[1]);
+        } else {
+            opacityMitigation();
+            popupDisplay(popup[0]);
+            popupDisplay(popup[1]);
+        }
+    }
+    if (event.code === "Escape") {
+        if (popup[0].classList.contains("popupDisplayAnimation")) {
+            menuBtnToggle();
+        }
     }
     if (event.code === "KeyR") {
         if (popup[0].classList.contains("popupDisplayAnimation")) {
