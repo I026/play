@@ -438,7 +438,7 @@ function downSwipe() {
     }
 }
 
-let startX, startY, endX, endY, shuffleRoop;
+let shuffleRoop;
 
 function recordDisplay() {
     topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
@@ -647,41 +647,103 @@ retryBtn.addEventListener("click", () => {
     }
 });
 
-function swipeStart(e) {
-    startX = e.clientX ?? e.touches[0].clientX;
-    startY = e.clientY ?? e.touches[0].clientY;
-}
+let startX, startY, endX, endY, nowX, nowY;
 
-function swipeEnd(e) {
-    endX = e.clientX ?? e.changedTouches[0].clientX;
-    endY = e.clientY ?? e.changedTouches[0].clientY;
-
-    let difiX = endX - startX;
-    let difiY = endY - startY;
-    if (isOperated) {
-        const swipeRecognitionPx = 50;
-        if (Math.abs(difiX) > Math.abs(difiY)) {
-            if (difiX > swipeRecognitionPx) {
-                leftSwipe();
-            }
-            if (difiX < -swipeRecognitionPx) {
-                rightSwipe();
-            }
-        } else if (Math.abs(difiX) < Math.abs(difiY)) {
-            if (difiY > swipeRecognitionPx) {
-                upSwipe();
-            }
-            if (difiY < -swipeRecognitionPx) {
-                downSwipe();
+function swipeGetNowCoordinate(e) {
+    function swipeDirectionJudge() {
+        let difiX = nowX - startX;
+        let difiY = nowY - startY;
+        if (isOperated) {
+            const swipeRecognitionPx = 100;
+            // if (Math.abs(difiX) > swipeRecognitionPx && Math.abs(difiX) > Math.abs(difiY)) {
+            //     if (difiX > swipeRecognitionPx) {
+            //         leftSwipe();
+            //         console.log("left");
+            //     }
+            //     if (difiX < -swipeRecognitionPx) {
+            //         rightSwipe();
+            //         console.log("right");
+            //     }
+            // }
+            if (Math.abs(difiX) > swipeRecognitionPx) {
+                swipeRemoveEventListener();
+                if (difiX > swipeRecognitionPx) {
+                    leftSwipe();
+                    console.log("left");
+                }
+                if (difiX < -swipeRecognitionPx) {
+                    rightSwipe();
+                    console.log("right");
+                }
+            } if (Math.abs(difiY) > swipeRecognitionPx) {
+                swipeRemoveEventListener();
+                if (difiY > swipeRecognitionPx) {
+                    upSwipe();
+                    console.log("up");
+                }
+                if (difiY < -swipeRecognitionPx) {
+                    downSwipe();
+                    console.log("down");
+                }
             }
         }
     }
+    nowX = e.clientX ?? e.touches[0].clientX;
+    nowY = e.clientY ?? e.touches[0].clientY;
+    swipeDirectionJudge();
 }
 
-document.addEventListener("mousedown", swipeStart);
-document.addEventListener("mouseup", swipeEnd);
-document.addEventListener("touchstart", swipeStart);
-document.addEventListener("touchend", swipeEnd);
+function swipeRemoveEventListener() {
+    document.removeEventListener("mousemove",swipeGetNowCoordinate);
+    document.removeEventListener("touchmove",swipeGetNowCoordinate);
+}
+
+function swipeDetection(e) {
+    startX = e.clientX ?? e.touches[0].clientX;
+    startY = e.clientY ?? e.touches[0].clientY;
+
+    document.addEventListener("mousemove",swipeGetNowCoordinate);
+    document.addEventListener("touchmove",swipeGetNowCoordinate);
+
+    document.addEventListener("mouseup",() => { 
+        swipeRemoveEventListener();
+    });
+
+    document.addEventListener("touchend",() => { 
+        swipeRemoveEventListener();
+    });
+}
+
+// function swipeEnd(e) {
+//     endX = e.clientX ?? e.changedTouches[0].clientX;
+//     endY = e.clientY ?? e.changedTouches[0].clientY;
+
+//     let difiX = endX - startX;
+//     let difiY = endY - startY;
+//     if (isOperated) {
+//         const swipeRecognitionPx = 50;
+//         if (Math.abs(difiX) > Math.abs(difiY)) {
+//             if (difiX > swipeRecognitionPx) {
+//                 leftSwipe();
+//             }
+//             if (difiX < -swipeRecognitionPx) {
+//                 rightSwipe();
+//             }
+//         } else if (Math.abs(difiX) < Math.abs(difiY)) {
+//             if (difiY > swipeRecognitionPx) {
+//                 upSwipe();
+//             }
+//             if (difiY < -swipeRecognitionPx) {
+//                 downSwipe();
+//             }
+//         }
+//     }
+// }
+
+document.addEventListener("mousedown", swipeDetection);
+// document.addEventListener("mouseup", swipeEnd);
+document.addEventListener("touchstart", swipeDetection);
+// document.addEventListener("touchend", swipeEnd);
 
 document.addEventListener("keydown",(event) => {
     if (event.code === "KeyA" || event.code === "ArrowLeft") {
