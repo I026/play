@@ -365,6 +365,7 @@ body {
 .popup button img {
     height: 90%;
     width: 90%;
+    user-select: none;
 }
 .popup.n2 .consoles {
     text-align: center;
@@ -383,6 +384,7 @@ body {
 .popup.n2 .consoles img {
     width: .7em;
     height: .7em;
+    user-select: none;
 }
 .popup.n2 .consoles .margin {
     width: 1em;
