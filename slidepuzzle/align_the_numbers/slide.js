@@ -359,6 +359,12 @@ function gameClearJudge() {
 }
 
 function swipe() {
+    swipeMovedBlock += 1;
+    if (swipeMovedBlock == 1) {
+        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .1;
+    } else {
+        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .04 * swipeMovedBlock;
+    }
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
@@ -649,12 +655,23 @@ retryBtn.addEventListener("click", () => {
 
 let startX, startY, endX, endY, nowX, nowY;
 
+const swipeRecognitionMagnificationDefault = .5;
+let swipeRecognitionMagnification = swipeRecognitionMagnificationDefault;
+
+function swipeStartReset(e) {
+    swipeMovedBlock = 0;
+    startX = e.clientX ?? e.touches[0].clientX;
+    startY = e.clientY ?? e.touches[0].clientY;
+}
+
+let swipeMovedBlock = 0;
+
 function swipeGetNowCoordinate(e) {
     function swipeDirectionJudge() {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
-            const swipeRecognitionPx = block[0].offsetWidth * .75;
+            const swipeRecognitionPx = block[0].offsetWidth * swipeRecognitionMagnification;
             // if (Math.abs(difiX) > swipeRecognitionPx && Math.abs(difiX) > Math.abs(difiY)) {
             //     if (difiX > swipeRecognitionPx) {
             //         leftSwipe();
@@ -666,33 +683,23 @@ function swipeGetNowCoordinate(e) {
             //     }
             // }
             if (Math.abs(difiX) > swipeRecognitionPx) {
-                // swipeRemoveEventListener();
-                let left = false, right = false, up = false, down = false;
-                console.log(difiX);
                 if (difiX > swipeRecognitionPx) {
-                    swipeStartReset(e);
                     leftSwipe();
-                    // alert(startX);
-                    // console.log("left");
                 }
                 if (difiX < -swipeRecognitionPx) {
-                    swipeStartReset(e);
                     rightSwipe();
-                    // console.log("right");
                 }
-            } if (Math.abs(difiY) > swipeRecognitionPx) {
-                // swipeRemoveEventListener();
+            } else if (Math.abs(difiY) > swipeRecognitionPx) {
                 if (difiY > swipeRecognitionPx) {
-                    swipeStartReset(e);
                     upSwipe();
-                    // console.log("up");
                 }
                 if (difiY < -swipeRecognitionPx) {
-                    swipeStartReset(e);
                     downSwipe();
-                    // console.log("down");
                 }
             }
+            // swipeStartReset(e);
+            console.log(swipeMovedBlock);
+            
         }
     }
     nowX = e.clientX ?? e.touches[0].clientX;
@@ -701,13 +708,9 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
+    swipeRecognitionMagnification = .5;
     document.removeEventListener("mousemove",swipeGetNowCoordinate);
     document.removeEventListener("touchmove",swipeGetNowCoordinate);
-}
-
-function swipeStartReset(e) {
-    startX = e.clientX ?? e.touches[0].clientX;
-    startY = e.clientY ?? e.touches[0].clientY;
 }
 
 function swipeDetection(e) {
@@ -812,7 +815,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyR") {
-        if (popup[0].classList.contains("popupDisplayAnimation")) {
+        if (popup[0].classList.contains("popupDisplayAnimation") && !(popup[1].classList.contains("popupDisplayAnimation"))) {
             retry();
         }
     }
