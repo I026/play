@@ -209,8 +209,6 @@ function saveToLocalStorage() {
 
 okBtn.addEventListener("click", () => {
     blockNumberChange();
-    popupHidden(popup[0]);
-    popupHidden(popup[1]);
 });
 
 let isGameClear = false;
@@ -273,6 +271,8 @@ function blockNumberChange() {
     } else {
         opacityUndo();
     }
+    popupHidden(popup[0]);
+    popupHidden(popup[1]);
 }
 
 function popupHidden(n = popup[0]) {
@@ -456,7 +456,7 @@ function numberMatchCheck_Plus(n) {
 }
 
 function numberMatchCheck_Minus(n) {
-    if (n > 2) {
+    if (n > 3) {
         return true;
     } else {
         return false;
@@ -470,7 +470,7 @@ widthUp.addEventListener("click", () => {
 });
 
 widthDown.addEventListener("click", () => {
-    if (numberMatchCheck_Minus(widthNumber.innerText * 1)) {
+    if (numberMatchCheck_Minus(widthNumber.innerText * 1 + 1)) {
         widthNumber.innerText = widthNumber.innerText * 1 - 1;
     }
 });
@@ -524,7 +524,6 @@ expandableMenuBtn.addEventListener("click", () => {
 retryBtn.addEventListener("click", () => {
     if (isOperated) {
         retry();
-        opacityMitigation(retryBtn);
     }
 });
 
@@ -536,6 +535,7 @@ function retry() {
     timerReset();
     timerStop();
     popupHidden();
+    opacityMitigation(retryBtn);
     isOperated = false;
 }
 
@@ -587,5 +587,18 @@ document.addEventListener("keydown",(event) => {
     }
     if (event.code === "KeyS" || event.code === "ArrowDown") {
         upSwipe();
+    }
+    if (event.code === "KeyM") {
+        menuBtnToggle();
+    }
+    if (event.code === "KeyR") {
+        if (popup[0].classList.contains("popupDisplayAnimation")) {
+            retry();
+        }
+    }
+    if (event.code === "Enter" || event.code === "Space") {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
+            blockNumberChange();
+        }
     }
 });

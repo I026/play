@@ -347,6 +347,7 @@ body {
     justify-content: center;
     left: calc(50vw);
     margin-top: calc(10%);
+    user-select: none;
 }
 .popup.n2 .consoles .down {
     rotate: 180deg;
