@@ -1,7 +1,7 @@
 :root {
     --blockCaseWidth: 4;
     --blockCaseHeight: 5;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight)) - 10px) - 1vh);
+    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth) - 4px), calc(100dvh / var(--blockCaseHeight) - 12px)));
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
