@@ -35,9 +35,8 @@ function selectionPrevention(o) {
 }
 
 document.addEventListener("selectionchange", () => {
-    // alert("a");
-    selectionPrevention(blocks);
-    selectionPrevention(menuTitle);
+    // selectionPrevention(blocks);
+    // selectionPrevention(menuTitle);
 });
 
 // function resize() {
