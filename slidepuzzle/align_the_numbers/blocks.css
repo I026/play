@@ -1,7 +1,7 @@
 :root {
     --blockCaseWidth: 4;
-    --blockCaseHeight: 7;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight) - 10px)) - 4px);
+    --blockCaseHeight: 5;
+    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth)), calc(100dvh / var(--blockCaseHeight) - 10px)) - 3.5px);
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -17,8 +17,8 @@ body {
     position: absolute;
     height: 70px;
     font-size: 2em;
-    width: calc(var(--blockSide) * var(--blockCaseWidth));
-    left: calc(50vw - calc(var(--blockSide) * var(--blockCaseWidth) / 2));
+    width: 100dvw;
+    left: 0;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -28,14 +28,15 @@ body {
 }
 .topMenu .menuTitle {
     font-size: .9em;
-    transform: translateY(-5px);
+    transform: translateY(5px);
+    user-select: none;
 }
 .topMenu .expandableMenuBtn {
     position: absolute;
     height: 40px;
     width: 40px;
-    right: 5px;
-    top: 3px;
+    right: 15px;
+    top: 15px;
     /* left: calc(100% - var(--blockSide) + (var(--blockSide) / var(--blockCaseWidth) * 1.5)); */
     background-color: transparent;
 }
@@ -74,7 +75,7 @@ body {
         margin-bottom: -16px;
     }
 }
-@keyframes opacityErase {
+@keyframes menuStickOpacityErase {
     0% {
         opacity: 1;
         width: 100%;
@@ -91,7 +92,7 @@ body {
     animation: menuStickRotate2 .5s ease-in-out both;
 }
 .menuStickEraseAnimation {
-    animation: opacityErase .25s ease-in-out both;
+    animation: menuStickOpacityErase .25s ease-in-out both;
 }
 @keyframes menuStickReverseRotate1 {
     0% {
@@ -117,7 +118,7 @@ body {
         margin-bottom: 10px;
     }
 }
-@keyframes opacityReverseErase {
+@keyframes menuStickOpacityReverseErase {
     0% {
         opacity: 0;
         width: 0;
@@ -134,7 +135,7 @@ body {
     animation: menuStickReverseRotate2 .5s ease-in-out both;
 }
 .menuStickEraseReverseAnimation {
-    animation: opacityReverseErase .25s ease-in-out both;
+    animation: menuStickOpacityReverseErase .25s ease-in-out both;
     animation-delay: .25s;
 }
 #blocks {
@@ -254,19 +255,27 @@ body {
     border-radius: 20px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    bottom: 0;
     bottom: -75vh;
     height: 75vh;
     width: calc(100vw - 20px);
     left: 10px;
 }
+.popup.n2 {
+    width: calc(100% - 35px);
+    left: calc(.5 * 35px);
+    bottom: calc(-75vh - (.25 * 30px));
+    /* bottom: 0; */
+    background-color: rgba(200, 200, 200, .975);
+}
 @keyframes popupDisplay {
     0% {
-        bottom: -75vh;
+        /* bottom: -75vh; */
+        transform: translateY(0);
         opacity: 0;
     }
     100% {
-        bottom: 0;
+        /* bottom: 0; */
+        transform: translateY(-75vh);
         opacity: 1;
     }
 }
@@ -275,11 +284,13 @@ body {
 }
 @keyframes popupHidden {
     0% {
-        bottom: 0;
+        /* bottom: 0; */
+        transform: translateY(-75vh);
         opacity: 1;
     }
     100% {
-        bottom: -75vh;
+        /* bottom: -75vh; */
+        transform: translateY(0);
         opacity: 0;
     }
 }
@@ -328,4 +339,46 @@ body {
 .popup button img {
     height: 90%;
     width: 90%;
+}
+.popup.n2 .consoles {
+    text-align: center;
+    font-size: .8em;
+    display: flex;
+    justify-self: center;
+    margin-top: calc(10%);
+}
+.popup.n2 .consoles .down {
+    rotate: 180deg;
+}
+.popup.n2 .consoles img {
+    width: .7em;
+    height: .7em;
+}
+.popup.n2 .consoles .margin {
+    width: 1em;
+}
+.popup.n2 .consoles span {
+    font-size: 2em;
+    width: 2em;
+}
+.popup.n2 .consoles .operatorSymbols {
+    position: relative;
+    top: 1.5em;
+}
+.popup.n2 .consoles .number {
+    animation: changeAcceptance 1s forwards infinite;
+}
+@keyframes changeAcceptance {
+    0% {
+        opacity: 1;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.changeAcceptanceAnimation {
+    animation: changeAcceptance 1s forwards infinite ease-in-out;
 }

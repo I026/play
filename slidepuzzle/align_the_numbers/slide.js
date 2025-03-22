@@ -2,15 +2,50 @@ let blocks = document.getElementById("blocks");
 let block = blocks.querySelectorAll("div");
 let substantialBlock = blocks.querySelectorAll("div:not(.air)");
 let air = blocks.querySelector(".air");
-let popup = document.querySelector(".popup");
+let popup = document.querySelectorAll(".popup");
 let btns = document.querySelector(".btns");
 let retryBtn = document.getElementById("retryBtn");
+let okBtn = document.getElementById("okBtn");
 const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
+const widthCtrl = popup[1].querySelector(".widthCtrl");
+const heightCtrl = popup[1].querySelector(".heightCtrl");
+const widthUp = widthCtrl.querySelector(".up");
+const widthDown = widthCtrl.querySelector(".down");
+const heightUp = heightCtrl.querySelector(".up");
+const heightDown = heightCtrl.querySelector(".down");
+const widthNumber = widthCtrl.querySelector(".number");
+const heightNumber = heightCtrl.querySelector(".number");
+let steps = 0;
+let isOperated = true;
 
-const blockCaseWidth = 5;
-const blockCaseHeight = 9;
+let blockCaseWidth = 4;
+let blockCaseHeight = 5;
+
+// function resize() {
+//     if (window.innerWidth < window.innerHeight) {
+//         blockCaseWidth = blockCaseWidthOriginal;
+//         blockCaseHeight = blockCaseHeightOriginal;
+//     } else {
+//         blockCaseHeight = blockCaseWidthOriginal;
+//         blockCaseWidth = blockCaseHeightOriginal;
+//     }
+// }
+
+// resize();
+
+widthNumber.innerText = blockCaseWidth;
+heightNumber.innerText = blockCaseHeight;
+
+function blockNumberCtrlUpdate() {
+    blockCaseWidth = widthNumber.innerText * 1;
+    blockCaseHeight = heightNumber.innerText * 1;
+    steps = 0;
+}
+
+blockNumberCtrlUpdate();
 
 function blocksGenerate() {
+    blocks.innerHTML = "";
     let genNumber = 0;
     while (blockCaseWidth * blockCaseHeight >= genNumber) {
         genNumber += 1;
@@ -23,6 +58,8 @@ function blocksGenerate() {
             blocks.innerHTML += `<br>`
         }
     }
+    document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
+    document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
 }
 
 blocksGenerate();
@@ -31,13 +68,8 @@ blocks = document.getElementById("blocks");
 block = blocks.querySelectorAll("div");
 substantialBlock = blocks.querySelectorAll("div:not(.air)");
 air = blocks.querySelector(".air");
-document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
-document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
 
 let targetBlock = blockCaseWidth * blockCaseHeight - 1;
-let steps = 0;
-
-let isOperated = true;
 
 let sec = 0;
 let min = 0;
@@ -48,7 +80,11 @@ let formattedMin;
 let formattedHr;
 
 let timerInterval;
-let autoSeveInterval;
+let autoSaveInterval;
+
+function autoSaveToLocalStorage() {
+    localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec, blockCaseWidth, blockCaseHeight, isGameClear]);
+}
 
 function timerStart(h = 0, m = 0, s = 0) {
     hr = h * 1;
@@ -80,18 +116,20 @@ function timerStart(h = 0, m = 0, s = 0) {
         } <br><span id="timeFastestDisplay"></span>`;
         stepsDisplay.innerHTML = `${steps} steps<br><span id="stepsFastestDisplay"></span>`;
     }, 10);
-    autoSeveInterval = setInterval(() => {
+    autoSaveInterval = setInterval(() => {
         if (isGameClear) {
             localStorage.removeItem("slidePuzzleProgressAutoSave");
         } else {
-            localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec]);
+            if (isOperated) {
+                autoSaveToLocalStorage();
+            }
         }
     },  Math.floor(Math.random(1) * 1000) / 10 + 100);
 }
 
 function timerStop() {
     clearInterval(timerInterval);
-    clearInterval(autoSeveInterval);
+    clearInterval(autoSaveInterval);
 }
 
 function timerReset() {
@@ -103,20 +141,20 @@ function timerReset() {
     formattedHr = 0;
 }
 
-function opacityMitigation() {
-    if (!(blocks.classList.contains("opacityMitigationAnimation"))) {
-        blocks.classList.add("opacityMitigationAnimation");
+function opacityMitigation(o = blocks) {
+    if (!(o.classList.contains("opacityMitigationAnimation"))) {
+        o.classList.add("opacityMitigationAnimation");
     }
     setTimeout(() => {
-        blocks.classList.remove("opacityUndoAnimation");
+        o.classList.remove("opacityUndoAnimation");
     }, 100);
 }
-function opacityUndo() {
-    if (!(blocks.classList.contains("opacityUndoAnimation"))) {
-        blocks.classList.add("opacityUndoAnimation");
+function opacityUndo(o = blocks) {
+    if (!(o.classList.contains("opacityUndoAnimation"))) {
+        o.classList.add("opacityUndoAnimation");
     }
     setTimeout(() => {
-        blocks.classList.remove("opacityMitigationAnimation");
+        o.classList.remove("opacityMitigationAnimation");
     }, 100);
 }
 
@@ -134,80 +172,125 @@ function getDate() {
 }
 
 function saveToLocalStorage() {
-    let storageData = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`);
-    let storageArray;
-    const localStorageSaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}, ${steps}`;
-    if (localStorage.getItem(storageData)){
-        storageArray = localStorage.getItem(storageData).split(",");
-        console.log("結果 : ");
-        console.log(formattedHr,formattedMin,formattedSec);
-        console.log("最速 : ");
-        console.log(storageArray[0],storageArray[1],storageArray[2],storageArray[3]);
+    let key1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`);
+    let key2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`);
+    let key1Array;
+    const key1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
+    const key2SaveContent = `${steps}`;
+    if (localStorage.getItem(key1)){
     } else {
-        localStorage.setItem(storageData, localStorageSaveContent);
-        const stepsFastestDisplay = document.getElementById("stepsFastestDisplay");
+        localStorage.setItem(key1, key1SaveContent);
         const timeFastestDisplay = document.getElementById("timeFastestDisplay");
         timeFastestDisplay.innerText = "(Fastest)";
+    }
+    if (localStorage.getItem(key2)){
+    } else {
+        localStorage.setItem(key2, key2SaveContent);
+        const stepsFastestDisplay = document.getElementById("stepsFastestDisplay");
         stepsFastestDisplay.innerText = "(Least)";
     }
     (() => {
-        storageArray = localStorage.getItem(storageData).split(",");
-        if (!(localStorage.getItem(storageData)) || formattedHr + formattedMin + formattedSec < storageArray[0] * 1 + storageArray[1] * 1 + storageArray[2] * 1) {
-            localStorage.setItem(storageData, localStorageSaveContent);
+        key1Array = localStorage.getItem(key1).split(",");
+        // key1が存在しない or 今の記録の方が早い
+        if (!(localStorage.getItem(key1)) || formattedHr + formattedMin + formattedSec < key1Array[0] * 1 + key1Array[1] * 1 + key1Array[2] * 1) {
+            localStorage.setItem(key1, key1SaveContent);
             const timeFastestDisplay = document.getElementById("timeFastestDisplay");
             timeFastestDisplay.innerText = "(Fastest)";
         }
-        if (!(localStorage.getItem(storageData)) || steps < storageArray[3] * 1) {
-            localStorage.setItem(storageData, localStorageSaveContent);
+        key2Array = localStorage.getItem(key2).split(",");
+        // key2が存在しない or 今の記録の方が少ない
+        if (!(localStorage.getItem(key2)) || steps < key2Array[0] * 1) {
+            localStorage.setItem(key2, key2SaveContent);
             const stepsFastestDisplay = document.getElementById("stepsFastestDisplay");
             stepsFastestDisplay.innerText = "(Least)";
         }
     })();
 }
 
+okBtn.addEventListener("click", () => {
+    blockNumberChange();
+    popupHidden(popup[0]);
+    popupHidden(popup[1]);
+});
+
 let isGameClear = false;
 
-let isMenuDeployed = false
+function menuBtnToggle(n = popup[0]) {
+    const deployedPopup = document.querySelectorAll(".popup.popupDisplayAnimation");
+    // alert(deployedPopup.length);
+    if (deployedPopup.length == 0) {
+        popupDisplay(n);
+        opacityMitigation();
+    } else {
+        popupHidden(popup[deployedPopup.length - 1]);
+        if (deployedPopup.length - 1 == 0 && isOperated) {
+            opacityUndo();
+        }
+    }
+}
 
-function popupToggle() {
-    if (isMenuDeployed) {
-        popupHidden();
-        if (isOperated) {
+function popupToggle(n = popup[0]) {
+    if (n.classList.contains("popupDisplayAnimation")) {
+        popupHidden(n);
+        if (isOperated && n == popup[0]) {
             opacityUndo();
         }
     } else {
-        popupDisplay();
-        opacityMitigation();
+        popupDisplay(n);
+        if (n == popup[0]) {
+            opacityMitigation();
+        }
     }
 }
 
-function popupDisplay() {
-    if (!(isMenuDeployed)) {
-        isMenuDeployed = true;
-        popup.classList.remove("popupHiddenAnimation");
-        popup.classList.add("popupDisplayAnimation");
-        const menuSticks =  expandableMenuBtn.querySelectorAll("div");
-        menuSticks[0].classList.remove("menuStickRotateReverse1Animation");
-        menuSticks[2].classList.remove("menuStickRotateReverse2Animation");
-        menuSticks[1].classList.remove("menuStickEraseReverseAnimation");
-        menuSticks[0].classList.add("menuStickRotate1Animation");
-        menuSticks[2].classList.add("menuStickRotate2Animation");
-        menuSticks[1].classList.add("menuStickEraseAnimation");
+function popupDisplay(n = popup[0]) {
+    if (!(n.classList.contains("popupDisplayAnimation"))) {
+        // isMenuDeployed = true;
+        n.classList.remove("popupHiddenAnimation");
+        n.classList.add("popupDisplayAnimation");
+        if (n == popup[0]) {
+            const menuSticks =  expandableMenuBtn.querySelectorAll("div");
+            menuSticks[0].classList.remove("menuStickRotateReverse1Animation");
+            menuSticks[2].classList.remove("menuStickRotateReverse2Animation");
+            menuSticks[1].classList.remove("menuStickEraseReverseAnimation");
+            menuSticks[0].classList.add("menuStickRotate1Animation");
+            menuSticks[2].classList.add("menuStickRotate2Animation");
+            menuSticks[1].classList.add("menuStickEraseAnimation");
+        }
     }
 }
 
-function popupHidden() {
-    if (isMenuDeployed) {
-        isMenuDeployed = false;
-        popup.classList.remove("popupDisplayAnimation");
-        popup.classList.add("popupHiddenAnimation");
-        const menuSticks =  expandableMenuBtn.querySelectorAll("div");
-        menuSticks[0].classList.remove("menuStickRotate1Animation");
-        menuSticks[2].classList.remove("menuStickRotate2Animation");
-        menuSticks[1].classList.remove("menuStickEraseAnimation");
-        menuSticks[0].classList.add("menuStickRotateReverse1Animation");
-        menuSticks[2].classList.add("menuStickRotateReverse2Animation");
-        menuSticks[1].classList.add("menuStickEraseReverseAnimation");
+function blockNumberChange() {
+    if (!(widthNumber.innerText * 1 == blockCaseWidth) || !(heightNumber.innerText * 1 == blockCaseHeight)) {
+        clearInterval(timerInterval);
+        localStorage.removeItem("slidePuzzleProgressAutoSave");
+        opacityMitigation(retryBtn);
+        blockNumberCtrlUpdate();
+        blocksGenerate();
+        isOperated = false;
+        blockShuffle();
+        block = blocks.querySelectorAll("div");
+    } else {
+        opacityUndo();
+    }
+}
+
+function popupHidden(n = popup[0]) {
+    widthNumber.innerText = blockCaseWidth;
+    heightNumber.innerText = blockCaseHeight;
+    if (n.classList.contains("popupDisplayAnimation")) {
+        // isMenuDeployed = false;
+        n.classList.remove("popupDisplayAnimation");
+        n.classList.add("popupHiddenAnimation");
+        if (n == popup[0]) {
+            const menuSticks =  expandableMenuBtn.querySelectorAll("div");
+            menuSticks[0].classList.remove("menuStickRotate1Animation");
+            menuSticks[2].classList.remove("menuStickRotate2Animation");
+            menuSticks[1].classList.remove("menuStickEraseAnimation");
+            menuSticks[0].classList.add("menuStickRotateReverse1Animation");
+            menuSticks[2].classList.add("menuStickRotateReverse2Animation");
+            menuSticks[1].classList.add("menuStickEraseReverseAnimation");
+        }
     }
 }
 
@@ -227,6 +310,7 @@ function gameClearJudge() {
             saveToLocalStorage();
             popupDisplay();
             opacityMitigation();
+            autoSaveToLocalStorage();
         }, 100);
     }
 }
@@ -241,10 +325,11 @@ function swipe() {
     steps += 1;
     block = blocks.querySelectorAll("div");
         if (isOperated) {
-            if ((isMenuDeployed)) {
+            if ((popup[0].classList.contains("popupDisplayAnimation"))) {
                 opacityUndo();
             }
             popupHidden();
+            popupHidden(popup[1]);
             if (!(isGameClear)) {
                 gameClearJudge();
             }
@@ -255,6 +340,7 @@ function swipe() {
     console.log(`
         Step : ${steps}
         Target : ${targetBlock}
+        ${formattedHr} : ${formattedMin} : ${formattedSec}
         `);
 }
 
@@ -309,18 +395,23 @@ function downSwipe() {
     }
 }
 
-let startX, startY, endX, endY;
+let startX, startY, endX, endY, shuffleRoop;
 
 function blockShuffle() {
+    targetBlock = blockCaseWidth * blockCaseHeight - 1;
+    clearInterval(shuffleRoop);
     isOperated = false;
+    blocksGenerate();
     opacityMitigation();
+    // block = blocks.querySelectorAll("div");
     setTimeout(() => {
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         timeDisplay.innerHTML = "(Auto Shuffle)";
         stepsDisplay.innerHTML = "";
-    }, 500);
+    }, 0);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {
-        const shuffleRoop = setInterval(() => {
+        shuffleRoop = setInterval(() => {
             const random = Math.random();
             if (random < .25) {
                 leftSwipe();
@@ -331,7 +422,7 @@ function blockShuffle() {
             } else {
                 downSwipe();
             }
-            if (steps >= blockCaseWidth * blockCaseHeight * 35 * 1) {
+            if (steps >= blockCaseWidth * blockCaseHeight * 35) {
                 for (let i = 0; i < blockCaseWidth + blockCaseHeight; i += 1) {
                     downSwipe();
                     rightSwipe();
@@ -340,43 +431,110 @@ function blockShuffle() {
                 clearInterval(shuffleRoop);
                 document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
                 steps = 0;
-                opacityUndo();
+                if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
+                    opacityUndo();
+                }
                 timeDisplay.innerHTML = "Move the blocks.";
                 stepsDisplay.innerHTML = "";
+                opacityUndo(retryBtn);
             }
         }, 2);
     }, 500);
 };
 
-if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
-    const localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
-    blocks = document.getElementById("blocks");
-    block = blocks.querySelectorAll("div");
-    popup = document.querySelector(".popup");
-    btns = document.querySelector(".btns");
-    retryBtn = document.getElementById("retryBtn");
-    blocks.innerHTML = localStorageSaveContent[0];
-    targetBlock = localStorageSaveContent[1] * 1;
-    steps = localStorageSaveContent[2] * 1;
-    timerStart(localStorageSaveContent[3], localStorageSaveContent[4], localStorageSaveContent[5]);
-} else {
-    blockShuffle();
+topTitle.addEventListener("click", () => {
+    popupToggle(popup[1]);
+});
+
+function numberMatchCheck_Plus(n) {
+    if (n < 20) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
+function numberMatchCheck_Minus(n) {
+    if (n > 2) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+widthUp.addEventListener("click", () => {
+    if (numberMatchCheck_Plus(widthNumber.innerText * 1)) {
+        widthNumber.innerText = widthNumber.innerText * 1 + 1;
+    }
+});
+
+widthDown.addEventListener("click", () => {
+    if (numberMatchCheck_Minus(widthNumber.innerText * 1)) {
+        widthNumber.innerText = widthNumber.innerText * 1 - 1;
+    }
+});
+
+heightUp.addEventListener("click", () => {
+    if (numberMatchCheck_Plus(heightNumber.innerText * 1)) {
+        heightNumber.innerText = heightNumber.innerText * 1 + 1;
+    }
+});
+
+heightDown.addEventListener("click", () => {
+    if (numberMatchCheck_Minus(heightNumber.innerText * 1)) {
+        heightNumber.innerText = heightNumber.innerText * 1 - 1;
+    }
+});
+
+function recoverFromLocalStorage() {
+    const localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
+    if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {
+        blockCaseWidth = localStorageSaveContent[6] * 1;
+        blockCaseHeight = localStorageSaveContent[7] * 1;
+        document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
+        document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
+    }
+    if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
+        if ((localStorageSaveContent[8]) == "false") {   
+            blocks = document.getElementById("blocks");
+            block = blocks.querySelectorAll("div");
+            popup = document.querySelectorAll(".popup");
+            btns = document.querySelector(".btns");
+            retryBtn = document.getElementById("retryBtn");
+            blocks.innerHTML = localStorageSaveContent[0];
+            targetBlock = localStorageSaveContent[1] * 1;
+            steps = localStorageSaveContent[2] * 1;
+            timerStart(localStorageSaveContent[3], localStorageSaveContent[4], localStorageSaveContent[5]);
+        } else {
+            blockShuffle();
+        }
+    } else {
+        blockShuffle();
+    }
+}
+
+recoverFromLocalStorage();
+
 expandableMenuBtn.addEventListener("click", () => {
-    popupToggle();
+    menuBtnToggle();
 });
 
 retryBtn.addEventListener("click", () => {
-    retry();
+    if (isOperated) {
+        retry();
+        opacityMitigation(retryBtn);
+    }
 });
 
 function retry() {
     isGameClear = false;
     blockShuffle();
+    topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+    blocksGenerate();
     timerReset();
     timerStop();
     popupHidden();
+    isOperated = false;
 }
 
 function swipeStart(e) {
