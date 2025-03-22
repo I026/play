@@ -38,7 +38,6 @@ document.addEventListener("selectionchange", () => {
     // alert("a");
     selectionPrevention(blocks);
     selectionPrevention(menuTitle);
-    selectionPrevention(expandableMenuBtn);
 });
 
 // function resize() {
