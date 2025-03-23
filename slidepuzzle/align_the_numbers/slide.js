@@ -376,7 +376,7 @@ function gameClearJudge() {
 
 function swipe() {
     swipeMovedBlock += 1;
-    swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight, 20) * swipeMovedBlock * .07;
+    swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight * swipeMovedBlock * .07, 1.5);
     console.log(swipeMovedBlock);
     // if (swipeMovedBlock == 1) {
     //     swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight, 20) * .1;
