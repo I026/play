@@ -378,13 +378,8 @@ function gameClearJudge() {
 
 function swipe() {
     swipeMovedBlock += 1;
-    swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight * swipeMovedBlock * .07, 1.5);
+    swipeRecognitionPx = Math.max(block[0].offsetWidth * blockCaseWidth * blockCaseHeight * swipeMovedBlock * .07, block[0].offsetWidth * 1.5, 280);
     console.log(swipeMovedBlock);
-    // if (swipeMovedBlock == 1) {
-    //     swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight, 20) * .1;
-    // } else {
-        
-    // }
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
@@ -472,7 +467,7 @@ function recordDisplay() {
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
         timeDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)} 手`;
+        stepsDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)}`;
     } else {
         timeDisplay.innerHTML = `(まだ記録がありません)`;
         stepsDisplay.innerText = "";
@@ -680,8 +675,8 @@ let startX, startY, endX, endY, nowX, nowY;
 
 let swipeMovedBlock;
 
-const swipeRecognitionMagnificationDefault = .5;
-let swipeRecognitionMagnification = swipeRecognitionMagnificationDefault;
+const swipeRecognitionPxDefault = 50
+let swipeRecognitionPx = swipeRecognitionPxDefault;
 
 function swipeStartReset(e) {
     swipeMovedBlock = 0;
@@ -694,7 +689,6 @@ function swipeGetNowCoordinate(e) {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
-            const swipeRecognitionPx = block[0].offsetWidth * swipeRecognitionMagnification;
             // console.log("a");
             
             if (Math.abs(difiX) > swipeRecognitionPx) {
@@ -723,7 +717,7 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
-    swipeRecognitionMagnification = .5;
+    swipeRecognitionPx = swipeRecognitionPxDefault;
     document.removeEventListener("mousemove",swipeGetNowCoordinate);
     document.removeEventListener("touchmove",swipeGetNowCoordinate);
 }
@@ -741,32 +735,6 @@ function swipeDetection(e) {
         swipeRemoveEventListener();
     });
 }
-
-// function swipeEnd(e) {
-//     endX = e.clientX ?? e.changedTouches[0].clientX;
-//     endY = e.clientY ?? e.changedTouches[0].clientY;
-
-//     let difiX = endX - startX;
-//     let difiY = endY - startY;
-//     if (isOperated) {
-//         const swipeRecognitionPx = 50;
-//         if (Math.abs(difiX) > Math.abs(difiY)) {
-//             if (difiX > swipeRecognitionPx) {
-//                 leftSwipe();
-//             }
-//             if (difiX < -swipeRecognitionPx) {
-//                 rightSwipe();
-//             }
-//         } else if (Math.abs(difiX) < Math.abs(difiY)) {
-//             if (difiY > swipeRecognitionPx) {
-//                 upSwipe();
-//             }
-//             if (difiY < -swipeRecognitionPx) {
-//                 downSwipe();
-//             }
-//         }
-//     }
-// }
 
 document.addEventListener("mousedown", swipeDetection);
 // document.addEventListener("mouseup", swipeEnd);
