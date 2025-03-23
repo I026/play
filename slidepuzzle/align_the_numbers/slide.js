@@ -1,37 +1,44 @@
-let blocks = document.getElementById("blocks");
-let block = blocks.querySelectorAll("div");
-let substantialBlock = blocks.querySelectorAll("div:not(.air)");
-let air = blocks.querySelector(".air");
-let popup = document.querySelectorAll(".popup");
-let btns = document.querySelector(".btns");
-let retryBtn = document.getElementById("retryBtn");
-let okBtn = document.getElementById("okBtn");
-const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
-const widthCtrl = popup[1].querySelector(".widthCtrl");
-const heightCtrl = popup[1].querySelector(".heightCtrl");
-const widthUp = widthCtrl.querySelector(".up");
-const widthDown = widthCtrl.querySelector(".down");
-const heightUp = heightCtrl.querySelector(".up");
-const heightDown = heightCtrl.querySelector(".down");
-const widthNumber = widthCtrl.querySelector(".number");
-const heightNumber = heightCtrl.querySelector(".number");
-const menuTitle = document.querySelector(".menuTitle");
-const topTitle = document.getElementById("topTitle");
-const timeDisplay = document.getElementById("timeDisplay");
-const timeInfoDisplay = document.getElementById("timeInfoDisplay");
-const stepsDisplay = document.getElementById("stepsDisplay");
-const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
-const sampleblocks = document.querySelector(".sampleBlocks");
+window.onerror = function (message, source, lineno, colno, error) {
+    alert(`エラーが発生 : ${message}
+        開発者にスクリーンショットを送ってくれると開発者が喜びます｡
+        `)
+};
 
-let steps = 0;
+
+let blocks = document.getElementById("blocks");
+              let block = blocks.querySelectorAll("div");
+   let substantialBlock = blocks.querySelectorAll("div:not(.air)");
+                let air = blocks.querySelector(".air");
+              let popup = document.querySelectorAll(".popup");
+               let btns = document.querySelector(".btns");
+           let retryBtn = document.getElementById("retryBtn");
+              let okBtn = document.getElementById("okBtn");
+const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
+        const widthCtrl = popup[1].querySelector(".widthCtrl");
+       const heightCtrl = popup[1].querySelector(".heightCtrl");
+          const widthUp = widthCtrl.querySelector(".up");
+        const widthDown = widthCtrl.querySelector(".down");
+         const heightUp = heightCtrl.querySelector(".up");
+       const heightDown = heightCtrl.querySelector(".down");
+      const widthNumber = widthCtrl.querySelector(".number");
+     const heightNumber = heightCtrl.querySelector(".number");
+        const menuTitle = document.querySelector(".menuTitle");
+         const topTitle = document.getElementById("topTitle");
+      const timeDisplay = document.getElementById("timeDisplay");
+ const  timeInfoDisplay = document.getElementById("timeInfoDisplay");
+     const stepsDisplay = document.getElementById("stepsDisplay");
+ const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
+     const sampleblocks = document.querySelector(".sampleBlocks");
+
+     let steps = 0;
 let isOperated = true;
 
-let blockCaseWidth = 4;
+ let blockCaseWidth = 4;
 let blockCaseHeight = 5;
 
 function selectionPrevention(o) {
     let tentative;
-    tentative = o.innerHTML;
+      tentative = o.innerHTML;
     o.innerHTML = "";
     o.innerHTML = tentative;
 }
@@ -275,8 +282,10 @@ function blockNumberChange() {
     popupHidden(popup[1]);
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-    stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
+    if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
+        timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
+    }
 }
 
 okBtn.addEventListener("click", () => {
@@ -284,6 +293,7 @@ okBtn.addEventListener("click", () => {
 });
 
 function popupDisplay(n = popup[0]) {
+    sampleblocksGenerate();
     opacityUndo(widthDown);
     opacityUndo(widthUp);
     opacityUndo(heightDown);
@@ -354,6 +364,10 @@ function gameClearJudge() {
             popupDisplay();
             opacityMitigation();
             autoSaveToLocalStorage();
+            // タイマー処理成功検証
+            while (!(timerInterval) && !(autoSaveInterval)) {
+                timerStop();
+            }
         }, 100);
     }
 }
@@ -522,6 +536,8 @@ function numberMatchCheck_Minus(n) {
 }
 
 function sampleblocksGenerate(w = widthNumber.innerText * 1, h = heightNumber.innerText * 1) {
+    document.documentElement.style.setProperty("--sampleBlockCaseWidth", w);
+    document.documentElement.style.setProperty("--sampleBlockCaseHeight", h);
     sampleblocks.innerHTML = "";
     let genNumber = 0;
     while (w * h >= genNumber) {
@@ -535,8 +551,6 @@ function sampleblocksGenerate(w = widthNumber.innerText * 1, h = heightNumber.in
             sampleblocks.innerHTML += `<br>`
         }
     }
-    document.documentElement.style.setProperty("--sampleBlockCaseWidth", w);
-    document.documentElement.style.setProperty("--sampleBlockCaseHeight", h);
 }
 
 function widthUpCtrl() {

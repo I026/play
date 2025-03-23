@@ -18,13 +18,13 @@
     calc(
         min(
             calc(
-                50dvw / var(--sampleBlockCaseWidth)
-                ),
+                (90vw - 10px) / var(--sampleBlockCaseWidth) - 4px
+            ),
             calc(
-                30dvh / var(--sampleBlockCaseHeight)
-                )
+                (75vh) / var(--sampleBlockCaseHeight) - 16px
             )
-        );
+        )
+    );
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -188,7 +188,7 @@ body {
     line-height: 0;
 }
 #blocks div p {
-    position: absolute;
+    position: relative;
     color: var(--blockColor);
     height: auto;
     width: 100%;
@@ -202,9 +202,9 @@ body {
     -webkit-touch-callout: none;
 }
 #blocks div, .popup.n2 .consoles .sampleBlocks div {
-    position: relative;
     display: inline-block;
     box-sizing: border-box;
+    margin: 0;
 }
 #blocks div {
     height: var(--blockSide);
@@ -413,7 +413,7 @@ body {
     position: absolute;
 }
 .popup.n2 .consoles .sampleBlocks {
-    transform: translateY(calc(-50% + 13dvh));
+    /* transform: translateY(calc(-50% + 13dvh)); */
     /* top: 10px; */
     position: absolute;
     padding: 0;
@@ -421,26 +421,32 @@ body {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     text-align: center;
-    margin-top: 1.5px;
     line-height: 0;
     pointer-events: none;
     margin: 1.5px;
     white-space: nowrap;
     overflow: visible;
-    width: max-content;
+    line-height: 0;
+    top: 8px;
+    align-items: center;
+    /* transform: translateY(-30px); */
 }
 .popup.n2 .consoles .sampleBlocks div {
-    /* transform: scale(var(--sampleblockSide)); */
-    border-radius: calc(var(--sampleblockSide) / 10);
+    /* all: unset; */
+    padding: 0;
+    box-sizing: border-box;
+    display: inline-block;
+    /* height: calc(100px / var(--sampleBlockCaseHeight));
+    width: calc(100px / var(--sampleBlockCaseWidth)); */
     background-color: var(--blockBackgroundColor);
     border-radius: calc(.05em);
-    margin: 1.5px;
     background-color: black;
     opacity: .1;
-    text-align: center;
     font-size: .8em;
-    height: calc(var(--sampleBlockSide));
-    width: calc(var(--sampleBlockSide));
+    margin: 1.5px;
+    height: var(--sampleBlockSide);
+    width: var(--sampleBlockSide);
+    border-radius: calc(var(--sampleBlockSide) / 10);
 }
 .popup.n2 .consoles .down {
     rotate: 180deg;
@@ -464,14 +470,16 @@ body {
     position: relative;
     top: 1.6em;
 }
-.popup.n2 .consoles .number {
+.popup.n2 .consoles .number,
+.popup.n2 .consoles .operatorSymbols,
+.popup.n2 .consoles .up,
+.popup.n2 .consoles .down {
     text-shadow:
     0px 0px 10px rgba(200, 200, 200, .975),
     0px 0px 10px rgba(200, 200, 200, .975),
-    0px 0px 10px rgba(200, 200, 200, .975)
-    0px 0px 10px rgba(200, 200, 200, .975)
-    0px 0px 10px rgba(200, 200, 200, .975)
-    ;
+    0px 0px 10px rgba(200, 200, 200, .975),
+    0px 0px 10px rgba(200, 200, 200, .975),
+    0px 0px 10px rgba(200, 200, 200, .975);
 }
 @keyframes changeAcceptance {
     0% {
@@ -516,7 +524,7 @@ body {
         opacity: .1;
     }
     75%{
-        transform: scale(1.05);
+        transform: scale(.95);
     }
     100%{
         transform: scale(1);
