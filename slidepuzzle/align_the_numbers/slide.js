@@ -348,7 +348,7 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClearJudge() {
-    if (!(isGameClear)) {
+    if (!(isGameClear) && isOperated) {
         let judgeIndex = 0;
         let secberCleared = 0;
         // 検証する番目がブロックの総数になるまで繰り返す
