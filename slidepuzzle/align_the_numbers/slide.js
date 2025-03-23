@@ -1,10 +1,3 @@
-// window.onerror = function (message, source, lineno, colno, error) {
-//     alert(`エラーが発生 : ${message}
-//         開発者にスクリーンショットを送ってくれると開発者が喜びます｡
-//         `)
-// };
-
-
              let blocks = document.getElementById("blocks");
               let block = blocks.querySelectorAll("div");
    let substantialBlock = blocks.querySelectorAll("div:not(.air)");
@@ -111,7 +104,7 @@ let timerInterval;
 let autoSaveInterval;
 
 function autoSaveToLocalStorage() {
-    console.log("autoSaveToLocalStorage");
+    // console.log("autoSaveToLocalStorage");
     localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec, blockCaseWidth, blockCaseHeight, isGameClear]);
 }
 
@@ -377,9 +370,7 @@ function gameClearJudge() {
 }
 
 function swipe() {
-    swipeMovedBlock += 1;
-    swipeRecognitionPx = Math.max(block[0].offsetWidth * blockCaseWidth * blockCaseHeight * swipeMovedBlock * .07, block[0].offsetWidth * 1.5, 280);
-    console.log(swipeMovedBlock);
+    swipeRecognitionPxDefault = block[0].offsetWidth;
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
@@ -401,11 +392,11 @@ function swipe() {
                 timerStart();
             }
         }
-    console.log(`
-        Step : ${steps}
-        Target : ${targetBlock}
-        ${formattedHr} : ${formattedMin} : ${formattedSec}
-        `);
+    // console.log(`
+    //     Step : ${steps}
+    //     Target : ${targetBlock}
+    //     ${formattedHr} : ${formattedMin} : ${formattedSec}
+    //     `);
 }
 
 function swipeAnimetion(block,animetion) {
@@ -424,7 +415,7 @@ function leftSwipe() {
         targetBlock -= 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "leftSwipeAnimetion");
-        console.log("Left");
+        // console.log("Left");
         swipe();
     }
 }
@@ -434,7 +425,7 @@ function rightSwipe() {
         targetBlock += 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "rightSwipeAnimetion");
-        console.log("Right");
+        // console.log("Right");
         swipe();
     }
 }
@@ -444,7 +435,7 @@ function upSwipe() {
         targetBlock -= blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "upSwipeAnimetion");
-        console.log("Up");
+        // console.log("Up");
         swipe();
     }
 }
@@ -454,7 +445,7 @@ function downSwipe() {
         targetBlock += blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
-        console.log("Down");
+        // console.log("Down");
         swipe();
     }
 }
@@ -671,26 +662,78 @@ retryBtn.addEventListener("click", () => {
     }
 });
 
+let lastX = 0, lastY = 0, lastTime = 0;
+let lastSpeed = 0;
+let active = false;
+
+document.addEventListener("mousedown", () => { active = true; });
+document.addEventListener("mouseup", () => { active = false; });
+document.addEventListener("touchstart", () => { active = true; });
+document.addEventListener("touchend", () => { active = false; });
+
+let swipeMouseSpeed;
+let swipeMouseAcceleration;
+
+function calculateAcceleration(event, x, y) {
+    if (!active) return;
+    let currentTime = event.timeStamp;
+    let dt = (currentTime - lastTime) / 1000;
+    if (dt === 0) return;
+
+    let dx = x - lastX;
+    let dy = y - lastY;
+    swipeMouseSpeed = Math.sqrt(dx * dx + dy * dy) / dt; // 速度
+    swipeMouseAcceleration = (swipeMouseSpeed - lastSpeed) / dt; // 加速度
+
+    lastX = x;
+    lastY = y;
+    lastSpeed = swipeMouseSpeed;
+    lastTime = currentTime;
+}
+
+document.addEventListener("mousemove", (event) => {
+    calculateAcceleration(event, event.clientX, event.clientY);
+});
+
+document.addEventListener("touchmove", (event) => {
+    let touch = event.touches[0];
+    calculateAcceleration(event, touch.clientX, touch.clientY);
+});
+
 let startX, startY, endX, endY, nowX, nowY;
 
-let swipeMovedBlock;
-
-const swipeRecognitionPxDefault = 50
+let swipeRecognitionPxDefault = block[0].offsetWidth;;
 let swipeRecognitionPx = swipeRecognitionPxDefault;
 
 function swipeStartReset(e) {
-    swipeMovedBlock = 0;
     startX = e.clientX ?? e.touches[0].clientX;
     startY = e.clientY ?? e.touches[0].clientY;
 }
 
+let swipeMovedBlock = 0;
+
 function swipeGetNowCoordinate(e) {
+    const formattedSwipeMA = Math.min(Math.abs(swipeMouseAcceleration * .0005),100);
+    // console.log(formattedSwipeMA);
+    
     function swipeDirectionJudge() {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
-            // console.log("a");
-            
+            if (swipeMovedBlock == 1) {
+                swipeRecognitionPx = swipeRecognitionPxDefault * 2;
+            }
+            if (swipeMovedBlock >= 3 && !(swipeRecognitionPx < 1)) {
+                if (!(swipeRecognitionPx < swipeMovedBlock)) {
+                    swipeRecognitionPx -= swipeMovedBlock;
+                    if (swipeRecognitionPx == 0) {
+                        swipeRecognitionPx = swipeRecognitionPxDefault;
+                    }
+                } else {
+                    swipeRecognitionPx = swipeRecognitionPxDefault;
+                }
+            }
+            console.log(swipeRecognitionPx);
             if (Math.abs(difiX) > swipeRecognitionPx) {
                 if (difiX > swipeRecognitionPx) {
                     leftSwipe();
@@ -698,6 +741,8 @@ function swipeGetNowCoordinate(e) {
                 if (difiX < -swipeRecognitionPx) {
                     rightSwipe();
                 }
+                swipeStartReset(e);
+                swipeMovedBlock += 1;
             } else if (Math.abs(difiY) > swipeRecognitionPx) {
                 if (difiY > swipeRecognitionPx) {
                     upSwipe();
@@ -705,10 +750,9 @@ function swipeGetNowCoordinate(e) {
                 if (difiY < -swipeRecognitionPx) {
                     downSwipe();
                 }
-            }
-            // swipeStartReset(e);
-            // console.log(swipeMovedBlock);
-            
+                swipeStartReset(e);
+                swipeMovedBlock += 1;
+            }            
         }
     }
     nowX = e.clientX ?? e.touches[0].clientX;
@@ -717,6 +761,7 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
+    swipeMovedBlock = 0;
     swipeRecognitionPx = swipeRecognitionPxDefault;
     document.removeEventListener("mousemove",swipeGetNowCoordinate);
     document.removeEventListener("touchmove",swipeGetNowCoordinate);
@@ -737,9 +782,7 @@ function swipeDetection(e) {
 }
 
 document.addEventListener("mousedown", swipeDetection);
-// document.addEventListener("mouseup", swipeEnd);
 document.addEventListener("touchstart", swipeDetection);
-// document.addEventListener("touchend", swipeEnd);
 
 document.addEventListener("keydown",(event) => {
     if (event.code === "KeyA" || event.code === "ArrowLeft") {
