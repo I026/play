@@ -135,7 +135,7 @@ function timerStart(h = 0, m = 0, s = 0) {
         setTimeout(() => {
             topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
             timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedHr} : ${formattedMin} : ${formattedSec}`;
-            stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps} 手`;
+            stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps}`;
         }, 200);
     }, 10);
     autoSaveInterval = setInterval(() => {
