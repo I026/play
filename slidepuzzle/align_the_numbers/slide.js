@@ -370,7 +370,7 @@ function gameClearJudge() {
 }
 
 function swipe() {
-    swipeRecognitionPxDefault = block[0].offsetWidth * .7;
+    swipeRecognitionPxDefaultRecognitionPxUpdate();
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
@@ -478,6 +478,9 @@ function blockShuffle() {
     setTimeout(() => {
         recordDisplay();
     }, 200);
+    setTimeout(() => {
+        recordDisplay();
+    }, 1000);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
@@ -702,7 +705,14 @@ document.addEventListener("touchmove", (event) => {
 
 let startX, startY, endX, endY, nowX, nowY;
 
-let swipeRecognitionPxDefault = block[0].offsetWidth;;
+let swipeRecognitionPxDefault;
+
+function swipeRecognitionPxDefaultRecognitionPxUpdate() {
+    // ブロックの横幅 * .7 か75の大きい方を使用
+    swipeRecognitionPxDefault = Math.min(Math.max(block[0].offsetWidth * .7, 75),150);
+}
+swipeRecognitionPxDefaultRecognitionPxUpdate()
+
 let swipeRecognitionPx = swipeRecognitionPxDefault;
 
 function swipeStartReset(e) {
