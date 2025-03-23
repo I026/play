@@ -1,8 +1,8 @@
-window.onerror = function (message, source, lineno, colno, error) {
-    alert(`エラーが発生 : ${message}
-        開発者にスクリーンショットを送ってくれると開発者が喜びます｡
-        `)
-};
+// window.onerror = function (message, source, lineno, colno, error) {
+//     alert(`エラーが発生 : ${message}
+//         開発者にスクリーンショットを送ってくれると開発者が喜びます｡
+//         `)
+// };
 
 
 let blocks = document.getElementById("blocks");
@@ -23,6 +23,7 @@ const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
       const widthNumber = widthCtrl.querySelector(".number");
      const heightNumber = heightCtrl.querySelector(".number");
         const menuTitle = document.querySelector(".menuTitle");
+        const topTitles = document.getElementById("topTitles");
          const topTitle = document.getElementById("topTitle");
       const timeDisplay = document.getElementById("timeDisplay");
  const  timeInfoDisplay = document.getElementById("timeInfoDisplay");
@@ -110,6 +111,7 @@ let timerInterval;
 let autoSaveInterval;
 
 function autoSaveToLocalStorage() {
+    console.log("autoSaveToLocalStorage");
     localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec, blockCaseWidth, blockCaseHeight, isGameClear]);
 }
 
@@ -132,14 +134,8 @@ function timerStart(h = 0, m = 0, s = 0) {
         formattedHr = String(hr).padStart(2, "0");
         setTimeout(() => {
             topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-            timeDisplay.innerHTML = `${
-                formattedHr
-            } : ${
-                formattedMin
-            } : ${
-                formattedSec
-            } <br><span id="timeFastestDisplay"></span>`;
-            stepsDisplay.innerHTML = `${steps} Step<br><span id="stepsFastestDisplay"></span>`;
+            timeDisplay.innerHTML = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
+            stepsDisplay.innerHTML = `${steps} 手`;
         }, 200);
     }, 10);
     autoSaveInterval = setInterval(() => {
@@ -207,39 +203,45 @@ let localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCase
 let localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
 
 function saveToLocalStorage() {
+    console.log("saveToLocalStorage");
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    function save(key, threshold, saveContent, display, text) {
+    function newRecordJudgeAndSave(key, threshold, saveContent, display, text) {
+        console.log("save");
+        // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
             const keyArray = localStorage.getItem(key).split(",");
             const combinedKey = keyArray.join("").replaceAll(" ","") * 1;
             const combinedThreshold = threshold.join("") * 1;
-            // alert(`${combinedKey} <= ${combinedThreshold}`);
+            // もし現在の比較対象よりlocalStorageのデータの方が良い記録なら
             if (combinedKey * 1 <= combinedThreshold * 1) {
-                // alert("最速ではない");
+                // displayを消去
                 display.innerHTML = "";
+            // もしlocalStorageより現在の比較対象のデータの方が良い記録なら
             } else {
-                // alert("最速");
+                // 新記録テキストを表示､新記録を保存
+                display.innerHTML = "";
                 display.innerHTML = text;
                 localStorage.setItem(key, saveContent);
             }
+        // もしlocalStorageにKeyがない
         } else {
-            // alert("最速");
+            // 新記録テキストを表示､新記録を保存
+            display.innerHTML = "";
             display.innerHTML = text;
             localStorage.setItem(key, saveContent);
         }
     }
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
     const localStorageKey2SaveContent = steps;
-    save(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, "(Fastest)");
-    save(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, "(Least)");
+    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span>`);
+    newRecordJudgeAndSave(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span>`);
 }
 
 let isGameClear = false;
 
 function menuBtnToggle(n = popup[0]) {
     const deployedPopup = document.querySelectorAll(".popup.popupDisplayAnimation");
-    // alert(deployedPopup.length);
     if (deployedPopup.length == 0) {
         popupDisplay(n);
         opacityMitigation();
@@ -282,10 +284,11 @@ function blockNumberChange() {
     popupHidden(popup[1]);
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-        timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
-    }
+    recordDisplay();
+    // if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
+    //     timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+    //     stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
+    // }
 }
 
 okBtn.addEventListener("click", () => {
@@ -333,6 +336,8 @@ function popupHidden(n = popup[0]) {
             menuSticks[2].classList.add("menuStickRotateReverse2Animation");
             menuSticks[1].classList.add("menuStickEraseReverseAnimation");
         }
+        timeInfoDisplay.innerText = "";
+        stepsInfoDisplay.innerText = "";
     }
 }
 
@@ -374,11 +379,13 @@ function gameClearJudge() {
 
 function swipe() {
     swipeMovedBlock += 1;
-    if (swipeMovedBlock == 1 || swipeMovedBlock == 2) {
-        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .1;
-    } else {
-        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .05 * swipeMovedBlock;
-    }
+    swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight, 20) * swipeMovedBlock * .05;
+    console.log(swipeMovedBlock);
+    // if (swipeMovedBlock == 1) {
+    //     swipeRecognitionMagnification = Math.max(blockCaseWidth * blockCaseHeight, 20) * .1;
+    // } else {
+        
+    // }
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
@@ -463,10 +470,10 @@ let shuffleRoop;
 function recordDisplay() {
     topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-        timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
+        timeDisplay.innerHTML = `最速 :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `最小 :<br>${localStorage.getItem(localStorageKey2)} Step`;
     } else {
-        timeDisplay.innerText = `( No record of ${blockCaseWidth} × ${blockCaseHeight})`;
+        timeDisplay.innerHTML = `(まだ記録がありません)`;
         stepsDisplay.innerText = "";
         timeInfoDisplay.innerText = "";
         stepsInfoDisplay.innerText = "";
@@ -614,6 +621,7 @@ heightDown.addEventListener("click", () => {
 });
 
 function recoverFromLocalStorage() {
+    console.log("recoverFromLocalStorage");
     let localStorageSaveContent;
     if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
         localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
@@ -669,6 +677,8 @@ retryBtn.addEventListener("click", () => {
 
 let startX, startY, endX, endY, nowX, nowY;
 
+let swipeMovedBlock;
+
 const swipeRecognitionMagnificationDefault = .5;
 let swipeRecognitionMagnification = swipeRecognitionMagnificationDefault;
 
@@ -678,24 +688,14 @@ function swipeStartReset(e) {
     startY = e.clientY ?? e.touches[0].clientY;
 }
 
-let swipeMovedBlock = 0;
-
 function swipeGetNowCoordinate(e) {
     function swipeDirectionJudge() {
         let difiX = nowX - startX;
         let difiY = nowY - startY;
         if (isOperated) {
             const swipeRecognitionPx = block[0].offsetWidth * swipeRecognitionMagnification;
-            // if (Math.abs(difiX) > swipeRecognitionPx && Math.abs(difiX) > Math.abs(difiY)) {
-            //     if (difiX > swipeRecognitionPx) {
-            //         leftSwipe();
-            //         console.log("left");
-            //     }
-            //     if (difiX < -swipeRecognitionPx) {
-            //         rightSwipe();
-            //         console.log("right");
-            //     }
-            // }
+            // console.log("a");
+            
             if (Math.abs(difiX) > swipeRecognitionPx) {
                 if (difiX > swipeRecognitionPx) {
                     leftSwipe();
@@ -712,7 +712,7 @@ function swipeGetNowCoordinate(e) {
                 }
             }
             // swipeStartReset(e);
-            console.log(swipeMovedBlock);
+            // console.log(swipeMovedBlock);
             
         }
     }

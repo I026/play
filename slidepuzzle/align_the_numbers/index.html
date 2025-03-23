@@ -15,13 +15,13 @@
     <div id="blocks">
     </div>
     <div class="popup">
-        <div><span id="topTitle"></span></div>
+        <div id="topTitles"><span id="topTitle"></span></div>
         <p>
-            <span id="timeDisplay"></span>
+            <span id="timeDisplay"></span><br>
             <span id="timeInfoDisplay"></span>
         </p>
         <p>
-            <span id="stepsDisplay"></span>
+            <span id="stepsDisplay"></span><br>
             <span id="stepsInfoDisplay"></span>
         </p>
         <div class="btns">
@@ -72,6 +72,11 @@
         </div>
     </div>
     <script src="slide.js"></script>
+    <script>
+        document.querySelectorAll('img').forEach(function(img) {
+            img.setAttribute('ondragstart', 'return false;');
+        });
+    </script>
     <script>      
         if (navigator.serviceWorker) {
           navigator.serviceWorker.register ("service-worker.js");
@@ -79,6 +84,10 @@
     </script>
 </body>
 </html>
+<!-- 
+<img src="../medias/hand.svg">
+<img src="../medias/timer.svg">
+ -->
 
 <!-- <div class="block1"><p>1</p></div>
 <div class="block2"><p>2</p></div>
