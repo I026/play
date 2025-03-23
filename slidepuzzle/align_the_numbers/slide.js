@@ -370,7 +370,7 @@ function gameClearJudge() {
 }
 
 function swipe() {
-    swipeRecognitionPxDefault = block[0].offsetWidth;
+    swipeRecognitionPxDefault = block[0].offsetWidth * .7;
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
     air.replaceWith(temp);
