@@ -360,10 +360,10 @@ function gameClearJudge() {
 
 function swipe() {
     swipeMovedBlock += 1;
-    if (swipeMovedBlock == 1) {
+    if (swipeMovedBlock == 1 || swipeMovedBlock == 2) {
         swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .1;
     } else {
-        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .04 * swipeMovedBlock;
+        swipeRecognitionMagnification = blockCaseWidth * blockCaseHeight * .05 * swipeMovedBlock;
     }
     const temp = document.createElement("div");
     air = blocks.querySelector(".air");
@@ -497,7 +497,7 @@ function blockShuffle() {
                 }
                 opacityUndo(retryBtn);
             }
-        }, 2);
+        }, 1);
     }, 500);
 };
 

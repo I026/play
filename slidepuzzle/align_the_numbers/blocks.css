@@ -1,10 +1,30 @@
 :root {
     --blockCaseWidth: 4;
     --blockCaseHeight: 5;
-    --blockSide: calc(min(calc(100dvw / var(--blockCaseWidth) - 4px), calc(100dvh / var(--blockCaseHeight) - 16px)));
+    --blockSide:
+    calc(
+        min(
+            calc(
+                100dvw / var(--blockCaseWidth) - 4px
+            ),
+            calc(
+                100dvh / var(--blockCaseHeight) - 16px
+                )
+            )
+        );
     --sampleBlockCaseWidth: 4;
     --sampleBlockCaseHeight: 5;
-    --sampleBlockSide: calc(min(calc(100dvw / var(--sampleBlockCaseWidth) + 50px), calc(100dvh / var(--sampleBlockCaseHeight) - 50vh)));
+    --sampleBlockSide:
+    calc(
+        min(
+            calc(
+                50dvw / var(--sampleBlockCaseWidth)
+                ),
+            calc(
+                30dvh / var(--sampleBlockCaseHeight)
+                )
+            )
+        );
     --blockColor: white;
     --blockBackgroundColor: black;
     --swipeAnimetionDuration: .1s;
@@ -39,9 +59,6 @@ body {
     font-size: .9em;
     transform: translateY(12.5px);
     position: absolute;
-    /* text-align: left;
-    bottom: 5px;
-    left: 5px; */
 }
 .topMenu .expandableMenuBtn {
     position: absolute;
@@ -49,7 +66,6 @@ body {
     width: 40px;
     right: 15px;
     transform: translateY(calc(12.5px - 10px));
-    /* left: calc(100% - var(--blockSide) + (var(--blockSide) / var(--blockCaseWidth) * 1.5)); */
     background-color: transparent;
 }
 .topMenu .expandableMenuBtn div {
@@ -62,7 +78,6 @@ body {
     display: flex;
     top: 12.5px;
     margin-bottom: 10px;
-    /* rotate: 45deg; */
     border-radius: 10px;
     background-color: black;
 }
@@ -153,7 +168,7 @@ body {
     animation: menuStickOpacityReverseErase .25s ease-in-out both;
     animation-delay: .25s;
 }
-#blocks, .popup.n2 .consoles .sampleBlocks {
+#blocks {
     position: relative;
     padding: 0;
     user-select: none;
@@ -163,12 +178,20 @@ body {
     margin-top: 1.5px;
     line-height: 0;
 }
+.popup.n2 .consoles .sampleBlocks {
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    text-align: center;
+    margin-top: 1.5px;
+    line-height: 0;
+}
 #blocks div p {
-    position: relative;
+    position: absolute;
     color: var(--blockColor);
     height: auto;
     width: 100%;
-    /* top: calc(var(--blockSide) / 7.5); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,6 +204,7 @@ body {
 #blocks div, .popup.n2 .consoles .sampleBlocks div {
     position: relative;
     display: inline-block;
+    box-sizing: border-box;
 }
 #blocks div {
     height: var(--blockSide);
@@ -281,13 +305,14 @@ body {
     height: 75vh;
     width: calc(100vw - 20px);
     left: 10px;
+    backdrop-filter: blur(4px);
 }
 .popup.n2 {
     width: calc(100% - 35px);
     left: calc(.5 * 35px);
     bottom: calc(-75vh - (.25 * 30px));
     /* bottom: 0; */
-    background-color: rgba(200, 200, 200, .975);
+    background-color: rgba(200, 200, 200, .9);
 }
 @keyframes popupDisplay {
     0% {
@@ -379,7 +404,7 @@ body {
     display: flex;
     justify-content: center;
     left: calc(50vw);
-    margin-top: calc(10%);
+    margin-top: calc(15%);
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -388,7 +413,8 @@ body {
     position: absolute;
 }
 .popup.n2 .consoles .sampleBlocks {
-    transform: translateY(calc(-50% + 9.6vh));
+    transform: translateY(calc(-50% + 13dvh));
+    /* top: 10px; */
     position: absolute;
     padding: 0;
     user-select: none;
@@ -398,15 +424,23 @@ body {
     margin-top: 1.5px;
     line-height: 0;
     pointer-events: none;
+    margin: 1.5px;
+    white-space: nowrap;
+    overflow: visible;
+    width: max-content;
 }
 .popup.n2 .consoles .sampleBlocks div {
-    height: var(--sampleBlockSide);
-    width: var(--sampleBlockSide);
+    /* transform: scale(var(--sampleblockSide)); */
+    border-radius: calc(var(--sampleblockSide) / 10);
     background-color: var(--blockBackgroundColor);
     border-radius: calc(.05em);
     margin: 1.5px;
     background-color: black;
     opacity: .1;
+    text-align: center;
+    font-size: .8em;
+    height: calc(var(--sampleBlockSide));
+    width: calc(var(--sampleBlockSide));
 }
 .popup.n2 .consoles .down {
     rotate: 180deg;
