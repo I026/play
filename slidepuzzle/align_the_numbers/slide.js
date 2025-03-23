@@ -5,7 +5,7 @@
 // };
 
 
-let blocks = document.getElementById("blocks");
+             let blocks = document.getElementById("blocks");
               let block = blocks.querySelectorAll("div");
    let substantialBlock = blocks.querySelectorAll("div:not(.air)");
                 let air = blocks.querySelector(".air");
@@ -134,8 +134,8 @@ function timerStart(h = 0, m = 0, s = 0) {
         formattedHr = String(hr).padStart(2, "0");
         setTimeout(() => {
             topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-            timeDisplay.innerHTML = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
-            stepsDisplay.innerHTML = `${steps} 手`;
+            timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedHr} : ${formattedMin} : ${formattedSec}`;
+            stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps} 手`;
         }, 200);
     }, 10);
     autoSaveInterval = setInterval(() => {
@@ -207,7 +207,7 @@ function saveToLocalStorage() {
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     function newRecordJudgeAndSave(key, threshold, saveContent, display, text) {
-        console.log("save");
+        console.log("newRecordJudgeAndSave");
         // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
             const keyArray = localStorage.getItem(key).split(",");
@@ -269,6 +269,7 @@ function popupToggle(n = popup[0]) {
 
 function blockNumberChange() {
     recordDisplay();
+    console.log("recordDisplay");
     if (!(widthNumber.innerText * 1 == blockCaseWidth) || !(heightNumber.innerText * 1 == blockCaseHeight)) {
         clearInterval(timerInterval);
         localStorage.removeItem("slidePuzzleProgressAutoSave");
@@ -285,10 +286,6 @@ function blockNumberChange() {
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     recordDisplay();
-    // if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-    //     timeDisplay.innerHTML = `FastestTime :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-    //     stepsDisplay.innerHTML = `LeastStep :<br>${localStorage.getItem(localStorageKey2)} Step`;
-    // }
 }
 
 okBtn.addEventListener("click", () => {
@@ -469,9 +466,11 @@ let shuffleRoop;
 
 function recordDisplay() {
     topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-        timeDisplay.innerHTML = `最速 :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `最小 :<br>${localStorage.getItem(localStorageKey2)} Step`;
+        timeDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)} 手`;
     } else {
         timeDisplay.innerHTML = `(まだ記録がありません)`;
         stepsDisplay.innerText = "";

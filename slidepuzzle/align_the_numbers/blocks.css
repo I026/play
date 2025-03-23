@@ -188,6 +188,16 @@ body {
     margin-top: 1.5px;
     line-height: 0;
 }
+.popup .timerIcon, .popup .handIcon {
+    position: absolute;
+    left: 10px;
+    height: 1.5em;
+}
+@media screen and (min-width: 500px) {
+    .popup .timerIcon, .popup .handIcon {
+        left: 10vw;
+    }   
+}
 #blocks div p {
     position: relative;
     color: var(--blockColor);
@@ -347,11 +357,16 @@ body {
 }
 .popup div, .popup p {
     font-size: 2em;
-    padding: 10px;
     text-align: center;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
+}
+.popup p {
+    margin: 20px;
+    display: block;
+    position: relative;
+    transform: translateY(1em);
 }
 .popup div, .popup p:hover {
     cursor: default;
@@ -428,8 +443,9 @@ img {
     /* position: relative; */
     height: 1em;
 }
-.popup.n2 .consoles #widthCtrl, .popup.n2 .consoles #heightCtrl {
-    position: absolute;
+.popup.n2 .consoles .widthCtrl, .popup.n2 .consoles .heightCtrl {
+    position: relative;
+    padding: 10px;
 }
 .popup.n2 .consoles .sampleBlocks {
     /* transform: translateY(calc(-50% + 13dvh)); */
@@ -539,11 +555,9 @@ img {
         transform: scale(.25);
         opacity: 0;
     }
-    50%{
-        opacity: .1;
-    }
     75%{
         transform: scale(.95);
+        opacity: .05;
     }
     100%{
         transform: scale(1);
