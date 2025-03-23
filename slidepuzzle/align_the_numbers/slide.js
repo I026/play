@@ -348,29 +348,31 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClearJudge() {
-    let judgeIndex = 0;
-    let secberCleared = 0;
-    // 検証する番目がブロックの総数になるまで繰り返す
-    while (judgeIndex < blockCaseWidth * blockCaseHeight) {
-        // 検証する番目のブロックに検証する番目のclassがある
-        if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
-            secberCleared += 1;
-        }
-        judgeIndex += 1;
-    }
-    if (secberCleared == judgeIndex - 1) {
-        setTimeout(() => {
-            isGameClear = true;
-            timerStop();
-            saveToLocalStorage();
-            popupDisplay();
-            opacityMitigation();
-            autoSaveToLocalStorage();
-            // タイマー処理成功検証
-            while (!(timerInterval) && !(autoSaveInterval)) {
-                timerStop();
+    if (!(isGameClear)) {
+        let judgeIndex = 0;
+        let secberCleared = 0;
+        // 検証する番目がブロックの総数になるまで繰り返す
+        while (judgeIndex < blockCaseWidth * blockCaseHeight) {
+            // 検証する番目のブロックに検証する番目のclassがある
+            if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
+                secberCleared += 1;
             }
-        }, 100);
+            judgeIndex += 1;
+        }
+        if (secberCleared == judgeIndex - 1) {
+            setTimeout(() => {
+                timerStop();
+                saveToLocalStorage();
+                popupDisplay();
+                opacityMitigation();
+                autoSaveToLocalStorage();
+                // タイマー処理成功検証
+                isGameClear = true;
+                while (!(timerInterval) && !(autoSaveInterval)) {
+                    timerStop();
+                }
+            }, 100);
+        }
     }
 }
 
