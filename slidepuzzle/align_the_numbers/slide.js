@@ -23,6 +23,27 @@ const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
      const stepsDisplay = document.getElementById("stepsDisplay");
  const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
      const sampleblocks = document.querySelector(".sampleBlocks");
+     const notification = document.querySelector(".notification");
+ const notificationText = document.getElementById("notificationText");
+
+let sec = 0;
+let min = 0;
+ let hr = 0;
+
+let formattedSec;
+let formattedMin;
+let formattedHr;
+let formattedTimes;
+
+const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
+           const shuffleStartMassage = `シャッフルを開始します`;
+      const shuffleCompletionMassage = `動かすとタイマーを開始します`;
+             const timerStartMassage = `タイマーを開始しました<br>左上から順番に揃えてください`;
+              const gameClearMassage = `タイマーを終了しました`;
+             const unrecordedMassage = 'クリアを記録するには､リトライしてください';
+               const noRecordMassage = `まだ記録がありません`;
+          const recordFastestMassage = `での最速`;
+            const recordLeastMassage = `での最少`;
 
      let steps = 0;
 let isOperated = true;
@@ -56,6 +77,44 @@ document.addEventListener("selectionchange", () => {
 
 widthNumber.innerText = blockCaseWidth;
 heightNumber.innerText = blockCaseHeight;
+
+function notificationDisplay(text = "", duration) {
+    if (!(notification.classList.contains("notificationDisplayAnimetion"))) {
+        notificationText.innerHTML = text;
+        if (text == notificationText.innerHTML) {
+            notification.classList.remove("notificationHiddenAnimetion");
+            notification.classList.add("notificationDisplayAnimetion");
+        }
+        // durationが存在する
+        if (typeof duration !== "undefined") {
+            const formattedDuration = Math.max(duration, 300)
+            // durationが0ではない
+            if (duration !== 0) {
+                setTimeout(() => {
+                    notificationHidden();
+                }, formattedDuration);
+            }
+        } else {
+            setTimeout(() => {
+                if (text == notificationText.innerHTML) {
+                    notificationHidden();
+                }
+            }, 3000);
+        }
+    } else {
+        notificationHidden();
+        setTimeout(() => {
+            notificationDisplay(text, duration);
+        }, 250);
+    }
+}
+
+function notificationHidden() {
+    if ((notification.classList.contains("notificationDisplayAnimetion"))) {
+        notification.classList.remove("notificationDisplayAnimetion");
+        notification.classList.add("notificationHiddenAnimetion");
+    }
+}
 
 function blockNumberCtrlUpdate() {
     blockCaseWidth = widthNumber.innerText * 1;
@@ -92,14 +151,6 @@ air = blocks.querySelector(".air");
 
 let targetBlock = blockCaseWidth * blockCaseHeight - 1;
 
-let sec = 0;
-let min = 0;
-let hr = 0;
-
-let formattedSec;
-let formattedMin;
-let formattedHr;
-
 let timerInterval;
 let autoSaveInterval;
 
@@ -125,19 +176,22 @@ function timerStart(h = 0, m = 0, s = 0) {
         formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
         formattedMin = String(min).padStart(2, "0");
         formattedHr = String(hr).padStart(2, "0");
+        formattedTimes = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
         setTimeout(() => {
             topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-            timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedHr} : ${formattedMin} : ${formattedSec}`;
+            timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedTimes}`;
             stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps}`;
         }, 200);
     }, 10);
+    if (h == 0 && m == 0 && s == 0) {
+        notificationDisplay(timerStartMassage);
+    }
     autoSaveInterval = setInterval(() => {
-        if (isGameClear) {
-            localStorage.removeItem("slidePuzzleProgressAutoSave");
-        } else {
-            if (isOperated) {
-                autoSaveToLocalStorage();
-            }
+        // if (isGameClear) {
+        //     localStorage.removeItem("slidePuzzleProgressAutoSave");
+        // }
+        if (isOperated) {
+            autoSaveToLocalStorage();
         }
     },  Math.floor(Math.random(1) * 1000) / 10 + 100);
 }
@@ -227,8 +281,8 @@ function saveToLocalStorage() {
     }
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
     const localStorageKey2SaveContent = steps;
-    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span>`);
-    newRecordJudgeAndSave(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span>`);
+    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`);
+    newRecordJudgeAndSave(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
 }
 
 let isGameClear = false;
@@ -341,35 +395,51 @@ blocks.addEventListener("click", () => {
     }
 });
 
+function gameClear() {
+    setTimeout(() => {
+        clearSteps = steps;
+        // notificationDisplay(gameClearMassage);
+        timerStop();
+        saveToLocalStorage();
+        popupDisplay();
+        opacityMitigation();
+        // タイマー処理成功検証
+        isGameClear = true;
+        autoSaveToLocalStorage();
+        while (!(timerInterval) && !(autoSaveInterval)) {
+            timerStop();
+        }
+    }, 100);
+}
+
 function gameClearJudge() {
-    if (!(isGameClear) && isOperated) {
-        let judgeIndex = 0;
-        let secberCleared = 0;
-        // 検証する番目がブロックの総数になるまで繰り返す
-        while (judgeIndex < blockCaseWidth * blockCaseHeight) {
-            // 検証する番目のブロックに検証する番目のclassがある
-            if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
-                secberCleared += 1;
-            }
-            judgeIndex += 1;
-        }
-        if (secberCleared == judgeIndex - 1) {
-            setTimeout(() => {
-                timerStop();
-                saveToLocalStorage();
-                popupDisplay();
-                opacityMitigation();
-                autoSaveToLocalStorage();
-                // タイマー処理成功検証
-                isGameClear = true;
-                while (!(timerInterval) && !(autoSaveInterval)) {
-                    timerStop();
+    if (!(isGameClear)) {
+        if (isOperated) {
+            let judgeIndex = 0;
+            let secberCleared = 0;
+            // 検証する番目がブロックの総数になるまで繰り返す
+            while (judgeIndex < blockCaseWidth * blockCaseHeight) {
+                // 検証する番目のブロックに検証する番目のclassがある (位置が合致している数)
+                if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
+                    secberCleared += 1;
                 }
-            }, 100);
+                judgeIndex += 1;
+            }
+            // 位置が合致している数がすべてのブロックの数と同数(クリア)
+            if (secberCleared == judgeIndex - 1) {
+                console.log("gameClearJudge : true");
+                return true;
+            } else {
+                return false;
+            }
         }
+    } else {
+        console.log("gameClearJudge : true");
+        return true;
     }
 }
 
+let clearSteps;
 function swipe() {
     swipeRecognitionPxDefaultRecognitionPxUpdate();
     const temp = document.createElement("div");
@@ -378,21 +448,28 @@ function swipe() {
     block = blocks.querySelectorAll("div");
     block[targetBlock].replaceWith(air);
     temp.replaceWith(block[targetBlock]);
-    steps += 1;
     block = blocks.querySelectorAll("div");
-        if (isOperated) {
-            if ((popup[0].classList.contains("popupDisplayAnimation"))) {
-                opacityUndo();
-            }
-            popupHidden();
-            popupHidden(popup[1]);
-            if (!(isGameClear)) {
-                gameClearJudge();
-            }
-            if (steps == 1) {
-                timerStart();
+    steps += 1;
+    // console.log(clearSteps);
+    
+    if (isOperated) {
+        if ((popup[0].classList.contains("popupDisplayAnimation"))) {
+            opacityUndo();
+        }
+        popupHidden();
+        popupHidden(popup[1]);
+        if (!(isGameClear)) {
+            if (gameClearJudge()) {
+                gameClear();
             }
         }
+        if (steps == 1) {
+            timerStart();
+        }
+    }
+    if (clearSteps + 1 == steps && isGameClear) {
+        notificationDisplay(unrecordedMassage, 0);
+    }
     // console.log(`
     //     Step : ${steps}
     //     Target : ${targetBlock}
@@ -458,10 +535,10 @@ function recordDisplay() {
       localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
       localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-         timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)}`;
+         timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2)}`;
     } else {
-             timeDisplay.innerHTML = `(まだ記録がありません)`;
+             timeDisplay.innerHTML = noRecordMassage;
             stepsDisplay.innerText = "";
          timeInfoDisplay.innerText = "";
         stepsInfoDisplay.innerText = "";
@@ -469,9 +546,9 @@ function recordDisplay() {
 }
 
 function blockShuffle() {
+    isOperated = false;
     targetBlock = blockCaseWidth * blockCaseHeight - 1;
     clearInterval(shuffleRoop);
-    isOperated = false;
     blocksGenerate();
     opacityMitigation();
     opacityMitigation(retryBtn);
@@ -482,6 +559,7 @@ function blockShuffle() {
     setTimeout(() => {
         recordDisplay();
     }, 1000);
+    notificationDisplay(shuffleStartMassage, 0);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
@@ -495,20 +573,21 @@ function blockShuffle() {
             } else {
                 downSwipe();
             }
-            if (steps >= blockCaseWidth * blockCaseHeight * 35) {
+            if (steps >= blockCaseWidth * blockCaseHeight * 35 && !gameClearJudge()) {
                 for (let i = 0; i < blockCaseWidth + blockCaseHeight; i += 1) {
                     downSwipe();
                     rightSwipe();
                 }
                 isOperated = true;
                 clearInterval(shuffleRoop);
+                notificationDisplay(shuffleCompletionMassage, 0);
                 document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
                 steps = 0;
                 if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
                     opacityUndo();
                 }
                 opacityUndo(retryBtn);
-            }
+        }
         }, 1);
     }, 500);
 };
@@ -658,7 +737,7 @@ function recoverFromLocalStorage() {
             document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
             document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
         }
-        if ((localStorageSaveContent[8]) == "false") {   
+        if ((localStorageSaveContent[8]) == "false") {
             blocks = document.getElementById("blocks");
             block = blocks.querySelectorAll("div");
             popup = document.querySelectorAll(".popup");
@@ -668,11 +747,12 @@ function recoverFromLocalStorage() {
             targetBlock = localStorageSaveContent[1] * 1;
             steps = localStorageSaveContent[2] * 1;
             timerStart(localStorageSaveContent[3], localStorageSaveContent[4], localStorageSaveContent[5]);
+            notificationDisplay(recoverFromLocalStorageMessage);
         } else {
-            blockShuffle();
+            retry();
         }
     } else {
-        blockShuffle();
+        retry();
     }
 }
 

@@ -410,7 +410,7 @@ body {
     border: 0;
     border-radius: 100px;
     text-align: center;
-    bottom: 10vh;
+    bottom: calc(10vh + 50px);
     left: 50%;
     transform: translateX(-50%);
     background-color: transparent;
@@ -423,6 +423,8 @@ body {
         left: calc(80vw);
         top: calc(20vh);
     }
+}
+@media screen and (max-height: 850px) {
     .popup p {
         margin-top: -20px;
         font-size: 1.75em;
@@ -588,4 +590,67 @@ img {
 }
 .sampleBlockDisplayAnimation {
     animation: sampleBlockDisplay .4s ease-in-out both;
+}
+.notification {
+    --fontSize: 1.2em;
+    --padding: .5em;
+    padding: var(--padding);
+    padding-left: calc(var(--padding));
+    padding-right: calc(var(--padding));
+    border-radius: calc(var(--fontSize) + var(--padding));
+    font-size: var(--fontSize);
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    color: black;
+    background-color: rgba(225, 225, 225, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    left: 50%;
+    bottom: 75px;
+    margin: 0;
+    width: max-content;
+    max-width: 90vw;
+    transform: translateX(-50%);
+    transform: translate(-50%, 3em);
+    opacity: 0;
+}
+.notification span {
+    color: black;
+    opacity: 1;
+    /* width: 100%; */
+    white-space: normal;
+    word-wrap: break-word;
+}
+.notification span span {
+    white-space: nowarp;
+}
+@keyframes notificationDisplay {
+    0% {
+        transform: translate(-50%, 3em);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+.notificationDisplayAnimetion {
+    animation: notificationDisplay .25s ease-out both;
+}
+@keyframes notificationHidden {
+    0% {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, 3em);
+        opacity: 0;
+    }
+}
+.notificationHiddenAnimetion {
+    animation: notificationHidden .25s ease-out both;
 }
