@@ -269,8 +269,9 @@ function blockNumberChange() {
         opacityMitigation(retryBtn);
         blockNumberCtrlUpdate();
         blocksGenerate();
-        isOperated = false;
-        blockShuffle();
+        // isOperated = false;
+        // blockShuffle();
+        retry();
         block = blocks.querySelectorAll("div");
     } else {
         opacityUndo();
@@ -287,10 +288,10 @@ okBtn.addEventListener("click", () => {
 
 function popupDisplay(n = popup[0]) {
     sampleblocksGenerate();
-    opacityUndo(widthDown);
-    opacityUndo(widthUp);
-    opacityUndo(heightDown);
-    opacityUndo(heightUp);
+    // opacityUndo(widthDown);
+    // opacityUndo(widthUp);
+    // opacityUndo(heightDown);
+    // opacityUndo(heightUp);
     if (!(n.classList.contains("popupDisplayAnimation"))) {
         // isMenuDeployed = true;
         n.classList.remove("popupHiddenAnimation");
@@ -386,6 +387,7 @@ function swipe() {
             popupHidden();
             popupHidden(popup[1]);
             if (!(isGameClear)) {
+                console.log("GameCleared");
                 gameClearJudge();
             }
             if (steps == 1) {
@@ -647,6 +649,7 @@ expandableMenuBtn.addEventListener("click", () => {
 
 function retry() {
     isGameClear = false;
+    isOperated = false;
     blockShuffle();
     setTimeout(() => {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
@@ -656,7 +659,6 @@ function retry() {
     timerStop();
     popupHidden();
     opacityMitigation(retryBtn);
-    isOperated = false;
 }
 
 retryBtn.addEventListener("click", () => {

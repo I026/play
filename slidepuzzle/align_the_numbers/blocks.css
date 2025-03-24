@@ -58,7 +58,6 @@ body {
 }
 .topMenu .menuTitle {
     font-size: .9em;
-    transform: translateY(12.5px);
     position: absolute;
 }
 .topMenu .expandableMenuBtn {
@@ -66,8 +65,11 @@ body {
     height: 40px;
     width: 40px;
     right: 15px;
-    transform: translateY(calc(12.5px - 10px));
+    transform: translateY(-5px);
     background-color: transparent;
+}
+.expandableMenuBtn {
+    padding-right: env(safe-area-inset-right);
 }
 .topMenu .expandableMenuBtn div {
     user-select: none;

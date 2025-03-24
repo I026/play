@@ -76,8 +76,19 @@
         document.querySelectorAll('img').forEach(function(img) {
             img.setAttribute('ondragstart', 'return false;');
         });
-    </script>
-    <script>      
+        
+        document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+        });
+        let lastTouchEnd = 0;
+        document.addEventListener("touchend", function (event) {
+        let now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) { // 300ms以内の連続タップを防ぐ
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+        }, false);
+        
         if (navigator.serviceWorker) {
           navigator.serviceWorker.register ("service-worker.js");
         }
