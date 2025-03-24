@@ -387,7 +387,6 @@ function swipe() {
             popupHidden();
             popupHidden(popup[1]);
             if (!(isGameClear)) {
-                console.log("GameCleared");
                 gameClearJudge();
             }
             if (steps == 1) {
@@ -733,17 +732,10 @@ function swipeGetNowCoordinate(e) {
         let difiY = nowY - startY;
         if (isOperated) {
             if (swipeMovedBlock == 1) {
-                swipeRecognitionPx = swipeRecognitionPxDefault * 2;
+                swipeRecognitionPx = swipeRecognitionPxDefault * 2.5;
             }
-            if (swipeMovedBlock >= 3 && !(swipeRecognitionPx < 1)) {
-                if (!(swipeRecognitionPx < swipeMovedBlock)) {
-                    swipeRecognitionPx -= swipeMovedBlock;
-                    if (swipeRecognitionPx == 0) {
-                        swipeRecognitionPx = swipeRecognitionPxDefault;
-                    }
-                } else {
-                    swipeRecognitionPx = swipeRecognitionPxDefault;
-                }
+            if (swipeMovedBlock >= 2) {
+                swipeRecognitionPx = swipeRecognitionPxDefault / Math.min(swipeMovedBlock, 10);
             }
             console.log(swipeRecognitionPx);
             if (Math.abs(difiX) > swipeRecognitionPx) {
