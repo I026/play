@@ -551,7 +551,31 @@ function sampleblocksGenerate(w = widthNumber.innerText * 1, h = heightNumber.in
     }
 }
 
-function widthUpCtrl() {
+function PinchInZoomPrevent() {
+    document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+    });
+}
+
+let lastTouchEnd = 0;
+let now = new Date().getTime();
+
+function dubbleTapZoomPrevent(event) {
+    now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) { // 300ms以内の連続タップを防ぐ
+        console.log(now - lastTouchEnd);
+        // ダブルタップ検出
+        lastTouchEnd = now;
+        return false;
+    } else {
+        lastTouchEnd = now;
+        return true;
+    }
+}
+
+PinchInZoomPrevent();
+
+function widthUpCtrl(e) {
     if (numberMatchCheck_Plus(widthNumber.innerText * 1)) {
         widthNumber.innerText = widthNumber.innerText * 1 + 1;
         sampleblocksGenerate();
@@ -562,7 +586,7 @@ function widthUpCtrl() {
     }
 }
 
-function widthDownCtrl() {
+function widthDownCtrl(e) {
     if (numberMatchCheck_Minus(widthNumber.innerText * 1 + 1)) {
         widthNumber.innerText = widthNumber.innerText * 1 - 1;
         sampleblocksGenerate();
@@ -573,7 +597,7 @@ function widthDownCtrl() {
     }
 }
 
-function heightUpCtrl() {
+function heightUpCtrl(e) {
     if (numberMatchCheck_Plus(heightNumber.innerText * 1)) {
         heightNumber.innerText = heightNumber.innerText * 1 + 1;
         sampleblocksGenerate();
@@ -584,7 +608,7 @@ function heightUpCtrl() {
     }
 }
 
-function heightDownCtrl() {
+function heightDownCtrl(e) {
     if (numberMatchCheck_Minus(heightNumber.innerText * 1)) {
         heightNumber.innerText = heightNumber.innerText * 1 - 1;
         sampleblocksGenerate();
@@ -596,18 +620,30 @@ function heightDownCtrl() {
 }
 
 widthUp.addEventListener("click", () => {
+    if (dubbleTapZoomPrevent(event)) {
+        event.preventDefault;
+    }
     widthUpCtrl();
 });
 
 widthDown.addEventListener("click", () => {
+    if (dubbleTapZoomPrevent(event)) {
+        event.preventDefault;
+    }
     widthDownCtrl();
 });
 
 heightUp.addEventListener("click", () => {
+    if (dubbleTapZoomPrevent(event)) {
+        event.preventDefault;
+    }
     heightUpCtrl();
 });
 
 heightDown.addEventListener("click", () => {
+    if (dubbleTapZoomPrevent(event)) {
+        event.preventDefault;
+    }
     heightDownCtrl();
 });
 
