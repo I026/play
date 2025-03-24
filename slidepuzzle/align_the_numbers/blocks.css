@@ -8,7 +8,7 @@
                 100dvw / var(--blockCaseWidth) - 4px
             ),
             calc(
-                100dvh / var(--blockCaseHeight) - 16px
+                100dvh / var(--blockCaseHeight) - 20px
                 )
             )
         );
@@ -192,12 +192,17 @@ body {
 }
 .popup .timerIcon, .popup .handIcon {
     position: absolute;
-    left: 10px;
+    left: 10vw;
     height: 1.5em;
+    display: flex;
+    align-content: center;
 }
-@media screen and (min-width: 500px) {
+@media screen and (max-width: 500px) {
     .popup .timerIcon, .popup .handIcon {
-        left: 10vw;
+        --iconHeight: clamp(1em, 10vw, 1.5em);
+        left: -10px;
+        height: var(--iconHeight);
+        transform: translateY(calc(var(--iconHeight) * -.35 + 15px));
     }   
 }
 #blocks div p {
@@ -366,6 +371,9 @@ body {
 }
 .popup p {
     margin: 20px;
+    --fontSize: clamp(1.5em, 15vh, 3em);
+    /* font-size: calc(var(--fontSize) - .8em); */
+    height: var(--fontSize);
     display: block;
     position: relative;
     transform: translateY(1em);
@@ -407,6 +415,18 @@ body {
     transform: translateX(-50%);
     background-color: transparent;
     /* border: 4px black solid; */
+}
+@media screen and (max-height: 650px) {
+    .popup .btns {
+        height: 110px;
+        width: 110px;
+        left: calc(80vw);
+        top: calc(20vh);
+    }
+    .popup p {
+        margin-top: -20px;
+        font-size: 1.75em;
+    }
 }
 .popup .btns .partition {
     position: absolute;

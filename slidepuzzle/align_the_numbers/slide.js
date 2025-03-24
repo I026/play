@@ -455,15 +455,15 @@ let shuffleRoop;
 
 function recordDisplay() {
     topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
-    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
+      localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+      localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-        timeDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)}`;
+         timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最速</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}での最少</span> :<br>${localStorage.getItem(localStorageKey2)}`;
     } else {
-        timeDisplay.innerHTML = `(まだ記録がありません)`;
-        stepsDisplay.innerText = "";
-        timeInfoDisplay.innerText = "";
+             timeDisplay.innerHTML = `(まだ記録がありません)`;
+            stepsDisplay.innerText = "";
+         timeInfoDisplay.innerText = "";
         stepsInfoDisplay.innerText = "";
     }
 }
@@ -773,7 +773,7 @@ function swipeGetNowCoordinate(e) {
             if (swipeMovedBlock >= 2) {
                 swipeRecognitionPx = swipeRecognitionPxDefault / Math.min(swipeMovedBlock, 10);
             }
-            console.log(swipeRecognitionPx);
+            // console.log(swipeRecognitionPx);
             if (Math.abs(difiX) > swipeRecognitionPx) {
                 if (difiX > swipeRecognitionPx) {
                     leftSwipe();
