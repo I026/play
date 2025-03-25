@@ -47,8 +47,8 @@ const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
 
 window.onerror = function(message, source, lineno, colno, error) {
-    notificationDisplay(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`);
-    return true; // true を返すと、ブラウザのエラーメッセージを抑制できる
+    alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
+    return true;
   };
 
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
