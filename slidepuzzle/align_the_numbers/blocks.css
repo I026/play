@@ -428,7 +428,7 @@ body {
 }
 @media screen and (min-height: 650px) {
     .popup.n2 .consoles {
-        margin-top: calc(15%);
+        margin-top: calc(15vh);
     }
 }
 .popup .btns .partition {
