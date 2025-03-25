@@ -1,48 +1,48 @@
-             let blocks = document.getElementById("blocks");
-              let block = blocks.querySelectorAll("div");
-   let substantialBlock = blocks.querySelectorAll("div:not(.air)");
-                let air = blocks.querySelector(".air");
-              let popup = document.querySelectorAll(".popup");
-               let btns = document.querySelector(".btns");
-           let retryBtn = document.getElementById("retryBtn");
-              let okBtn = document.getElementById("okBtn");
-const expandableMenuBtn = document.querySelector(".expandableMenuBtn");
-        const widthCtrl = popup[1].querySelector(".widthCtrl");
-       const heightCtrl = popup[1].querySelector(".heightCtrl");
-          const widthUp = widthCtrl.querySelector(".up");
-        const widthDown = widthCtrl.querySelector(".down");
-         const heightUp = heightCtrl.querySelector(".up");
-       const heightDown = heightCtrl.querySelector(".down");
-      const widthNumber = widthCtrl.querySelector(".number");
-     const heightNumber = heightCtrl.querySelector(".number");
-        const menuTitle = document.querySelector(".menuTitle");
-        const topTitles = document.getElementById("topTitles");
-         const topTitle = document.getElementById("topTitle");
-      const timeDisplay = document.getElementById("timeDisplay");
- const  timeInfoDisplay = document.getElementById("timeInfoDisplay");
-     const stepsDisplay = document.getElementById("stepsDisplay");
- const stepsInfoDisplay = document.getElementById("stepsInfoDisplay");
-     const sampleblocks = document.querySelector(".sampleBlocks");
-     const notification = document.querySelector(".notification");
- const notificationText = document.getElementById("notificationText");
+let blocks                = document.getElementById("blocks");
+let block                 = blocks.querySelectorAll("div");
+let substantialBlock      = blocks.querySelectorAll("div:not(.air)");
+let air                   = blocks.querySelector(".air");
+let popup                 = document.querySelectorAll(".popup");
+let btns                  = document.querySelector(".btns");
+let retryBtn              = document.getElementById("retryBtn");
+let okBtn                 = document.getElementById("okBtn");
+const expandableMenuBtn   = document.querySelector(".expandableMenuBtn");
+const widthCtrl           = popup[1].querySelector(".widthCtrl");
+const heightCtrl          = popup[1].querySelector(".heightCtrl");
+const widthUp             = widthCtrl.querySelector(".up");
+const widthDown           = widthCtrl.querySelector(".down");
+const heightUp            = heightCtrl.querySelector(".up");
+const heightDown          = heightCtrl.querySelector(".down");
+const widthNumber         = widthCtrl.querySelector(".number");
+const heightNumber        = heightCtrl.querySelector(".number");
+const menuTitle           = document.querySelector(".menuTitle");
+const topTitles           = document.getElementById("topTitles");
+const topTitle            = document.getElementById("topTitle");
+const timeDisplay         = document.getElementById("timeDisplay");
+const  timeInfoDisplay    = document.getElementById("timeInfoDisplay");
+const stepsDisplay        = document.getElementById("stepsDisplay");
+const stepsInfoDisplay    = document.getElementById("stepsInfoDisplay");
+const sampleblocks        = document.querySelector(".sampleBlocks");
+const notification        = document.querySelector(".notification");
+const notificationText    = document.getElementById("notificationText");
 
 let sec = 0;
 let min = 0;
- let hr = 0;
+let hr  = 0;
 
 let formattedSec;
 let formattedMin;
 let formattedHr;
 let formattedTimes;
 
-     let steps = 0;
+let steps      = 0;
 let isOperated = true;
 
- let blockCaseWidth = 4;
+let blockCaseWidth  = 4;
 let blockCaseHeight = 5;
 
-const blockCaseWidthMax = 20;
-const blockCaseWidthMin = 2;
+const blockCaseWidthMax  = 20;
+const blockCaseWidthMin  = 2;
 const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
 
@@ -50,18 +50,18 @@ window.onerror = function(message, source, lineno, colno, error) {
     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
     return true;
   };
-
+  
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
-           const shuffleStartMassage = `シャッフルを開始します`;
-      const shuffleCompletionMassage = `動かすとタイマーを開始します`;
-             const timerStartMassage = `タイマーを開始しました<br>左上から順番に揃えてください`;
-              const gameClearMassage = `タイマーを終了しました`;
-             const unrecordedMassage = 'クリアを記録するには､リトライしてください';
-               const noRecordMassage = `まだ記録がありません`;
-          const recordFastestMassage = `での最速`;
-            const recordLeastMassage = `での最少`;
-         const blockLimitPlusMassage = `これ以上増やせません`;
-        const blockLimitMinusMassage = `これ以上減らせません`;
+const shuffleStartMassage            = `シャッフルを開始します`;
+const shuffleCompletionMassage       = `動かすとタイマーを開始します`;
+const timerStartMassage              = `タイマーを開始しました<br>左上から順番に揃えてください`;
+const gameClearMassage               = `タイマーを終了しました`;
+const unrecordedMassage              = 'クリアを記録するには､リトライしてください';
+const noRecordMassage                = `まだ記録がありません`;
+const recordFastestMassage           = `での最速`;
+const recordLeastMassage             = `での最少`;
+const blockLimitPlusMassage          = `これ以上増やせません`;
+const blockLimitMinusMassage         = `これ以上減らせません`;
 
 function selectionPrevention(o) {
     let tentative;
@@ -124,7 +124,7 @@ function notificationHidden() {
 }
 
 function blockNumberCtrlUpdate() {
-    blockCaseWidth = widthNumber.innerText * 1;
+    blockCaseWidth  = widthNumber.innerText * 1;
     blockCaseHeight = heightNumber.innerText * 1;
     steps = 0;
 }
@@ -151,12 +151,12 @@ function blocksGenerate() {
 
 blocksGenerate();
 
-blocks = document.getElementById("blocks");
-block = blocks.querySelectorAll("div");
+blocks           = document.getElementById("blocks");
+block            = blocks.querySelectorAll("div");
 substantialBlock = blocks.querySelectorAll("div:not(.air)");
-air = blocks.querySelector(".air");
+air              = blocks.querySelector(".air");
 
-let targetBlock = blockCaseWidth * blockCaseHeight - 1;
+let targetBlock  = blockCaseWidth * blockCaseHeight - 1;
 
 let timerInterval;
 let autoSaveInterval;
@@ -167,14 +167,14 @@ function autoSaveToLocalStorage() {
 }
 
 function timerStart(h = 0, m = 0, s = 0) {
-    hr = h * 1;
+    hr  = h * 1;
     min = m * 1;
     sec = s * 1;
     timerInterval = setInterval(() => {
         sec += .01;
         if (sec >= 60) {
             min += 1;
-            sec = 0;
+            sec  = 0;
         }
         if (min >= 60) {
             hr += 1;
@@ -209,12 +209,12 @@ function timerStop() {
 }
 
 function timerReset() {
-    sec = 0;
-    min = 0;
-    hr = 0;
+    sec          = 0;
+    min          = 0;
+    hr           = 0;
     formattedSec = 0;
     formattedMin = 0;
-    formattedHr = 0;
+    formattedHr  = 0;
 }
 
 function opacityMitigation(o = blocks, t = .5) {
@@ -241,11 +241,11 @@ function opacityUndo(o = blocks, t = .5) {
 }
 
 function getDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    const hours = now.getHours();
+    const now     = new Date();
+    const year    = now.getFullYear();
+    const month   = now.getMonth() + 1;
+    const day     = now.getDate();
+    const hours   = now.getHours();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
 
@@ -264,8 +264,8 @@ function saveToLocalStorage() {
         console.log("newRecordJudgeAndSave");
         // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
-            const keyArray = localStorage.getItem(key).split(",");
-            const combinedKey = keyArray.join("").replaceAll(" ","") * 1;
+            const keyArray          = localStorage.getItem(key).split(",");
+            const combinedKey       = keyArray.join("").replaceAll(" ","") * 1;
             const combinedThreshold = threshold.join("") * 1;
             // もし現在の比較対象よりlocalStorageのデータの方が良い記録なら
             if (combinedKey * 1 <= combinedThreshold * 1) {
@@ -573,22 +573,22 @@ let shuffleRoop;
 
 function recordDisplay() {
     topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-      localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
-      localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
          timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
         stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2)}`;
     } else {
-             timeDisplay.innerHTML = noRecordMassage;
-            stepsDisplay.innerText = "";
-         timeInfoDisplay.innerText = "";
+        timeDisplay.innerHTML      = noRecordMassage;
+        stepsDisplay.innerText     = "";
+        timeInfoDisplay.innerText  = "";
         stepsInfoDisplay.innerText = "";
     }
 }
 
 function blockShuffle() {
-    steps = 0;
-    isOperated = false;
+    steps       = 0;
+    isOperated  = false;
     targetBlock = blockCaseWidth * blockCaseHeight - 1;
     clearInterval(shuffleRoop);
     blocksGenerate();
@@ -602,12 +602,12 @@ function blockShuffle() {
         recordDisplay();
     }, 1000);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
-    let MaxClearJudge = 0;
+    let MaxClearJudge    = 0;
     let aim_DownRightAir = false;
     notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
-            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
+            MaxClearJudge              = Math.max(gameClearJudge(), MaxClearJudge)
             notificationText.innerText = `${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %`;
             let swipeableArray = [];
             if (rightSwipeableJudge()) {
