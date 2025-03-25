@@ -44,7 +44,7 @@ let blockCaseHeight = 5;
 const blockCaseWidthMax  = 20;
 const blockCaseWidthMin  = 2;
 const blockCaseHeightMax = 20;
-const blockCaseHeightMin = 2;
+const blockCaseHeightMin = 3;
 
 // window.onerror = function(message, source, lineno, colno, error) {
 //     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
