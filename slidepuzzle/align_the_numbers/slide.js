@@ -997,7 +997,7 @@ document.addEventListener("mousedown", swipeDetection);
 document.addEventListener("touchstart", swipeDetection);
 
 document.addEventListener("keydown",(event) => {
-    if (event.code === "KeyA" || event.code === "ArrowLeft") {
+    if ((event.code === "KeyA" || event.code === "ArrowLeft") && isOperated) {
         rightSwipe();
     }
     if (event.code === "KeyE" || event.code === "ArrowRight") {
@@ -1006,33 +1006,33 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyD") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (popup[1].classList.contains("popupDisplayAnimation") || !isOperated) {
             heightDownCtrl();
         } else {   
             leftSwipe();
         }
     }
-    if (event.code === "ArrowRight") {
+    if (event.code === "ArrowRight" && isOperated) {
         leftSwipe();
     }
-    if (event.code === "KeyW") {
+    if (event.code === "KeyW" && isOperated) {
         if (popup[1].classList.contains("popupDisplayAnimation")) {
             widthUpCtrl();
         } else {   
             downSwipe();
         }
     }
-    if (event.code === "ArrowUp") {
+    if (event.code === "ArrowUp" && isOperated) {
         downSwipe();
     }
     if (event.code === "KeyS") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (popup[1].classList.contains("popupDisplayAnimation") || !isOperated) {
             widthDownCtrl();
         } else {   
             upSwipe();
         }
     }
-    if (event.code === "ArrowDown") {
+    if (event.code === "ArrowDown" && isOperated) {
         upSwipe();
     }
     if (event.code === "KeyF") {
