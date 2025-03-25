@@ -58,11 +58,6 @@ function selectionPrevention(o) {
     o.innerHTML = tentative;
 }
 
-document.addEventListener("selectionchange", () => {
-    // selectionPrevention(blocks);
-    // selectionPrevention(menuTitle);
-});
-
 // function resize() {
 //     if (window.innerWidth < window.innerHeight) {
 //         blockCaseWidth = blockCaseWidthOriginal;
@@ -414,28 +409,30 @@ function gameClear() {
 
 function gameClearJudge() {
     if (!(isGameClear)) {
-        if (isOperated) {
-            let judgeIndex = 0;
-            let secberCleared = 0;
-            // 検証する番目がブロックの総数になるまで繰り返す
-            while (judgeIndex < blockCaseWidth * blockCaseHeight) {
-                // 検証する番目のブロックに検証する番目のclassがある (位置が合致している数)
-                if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
-                    secberCleared += 1;
-                }
-                judgeIndex += 1;
+        let judgeIndex = 0;
+        let secberCleared = 0;
+        // 検証する番目がブロックの総数になるまで繰り返す
+        while (judgeIndex < blockCaseWidth * blockCaseHeight) {
+            // 検証する番目のブロックに検証する番目のclassがある (位置が合致している数)
+            if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
+                secberCleared += 1;
             }
-            // 位置が合致している数がすべてのブロックの数と同数(クリア)
-            if (secberCleared == judgeIndex - 1) {
-                console.log("gameClearJudge : true");
-                return true;
-            } else {
-                return false;
-            }
+            judgeIndex += 1;
+        }
+        return judgeIndex - 1 - secberCleared;
+        // 位置が合致している数がすべてのブロックの数と同数(クリア)
+        if (secberCleared == judgeIndex - 1) {
+            // console.log("gameClearJudge : true");
+            // return true;
+        // そうではない
+        } else {
+            // console.log("gameClearJudge : false");
+            // return false;
         }
     } else {
-        console.log("gameClearJudge : true");
-        return true;
+        return 0;
+        // console.log("gameClearJudge : true (isGameClear : true)");
+        // return true;
     }
 }
 
@@ -459,7 +456,7 @@ function swipe() {
         popupHidden();
         popupHidden(popup[1]);
         if (!(isGameClear)) {
-            if (gameClearJudge()) {
+            if (gameClearJudge() == 0 && isOperated) {
                 gameClear();
             }
         }
@@ -488,8 +485,40 @@ function swipeAnimetion(block,animetion) {
     // parseFloat(getComputedStyle(block).animationDuration)
 }
 
-function leftSwipe() {
+function leftSwipeableJudge() {
     if (!((targetBlock % blockCaseWidth) == 0)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function rightSwipeableJudge() {
+    if (!((targetBlock + 1) % blockCaseWidth == 0)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function upSwipeableJudge() {
+    if (!(targetBlock <= blockCaseWidth - 1)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function downSwipeableJudge() {
+    if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function leftSwipe() {
+    if (leftSwipeableJudge()) {
         targetBlock -= 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "leftSwipeAnimetion");
@@ -499,7 +528,7 @@ function leftSwipe() {
 }
 
 function rightSwipe() {
-    if (!((targetBlock + 1) % blockCaseWidth == 0)) {
+    if (rightSwipeableJudge()) {
         targetBlock += 1;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "rightSwipeAnimetion");
@@ -509,7 +538,7 @@ function rightSwipe() {
 }
 
 function upSwipe() {
-    if (!(targetBlock <= blockCaseWidth - 1)) {
+    if (upSwipeableJudge()) {
         targetBlock -= blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "upSwipeAnimetion");
@@ -519,7 +548,7 @@ function upSwipe() {
 }
 
 function downSwipe() {
-    if (!(targetBlock >= blockCaseWidth * blockCaseHeight - blockCaseWidth)) {
+    if (downSwipeableJudge()) {
         targetBlock += blockCaseWidth;
         block = blocks.querySelectorAll("div");
         swipeAnimetion(block[targetBlock], "downSwipeAnimetion");
@@ -562,32 +591,67 @@ function blockShuffle() {
     notificationDisplay(shuffleStartMassage, 0);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     setTimeout(() => {
+        let MaxClearJudge = 0;
+        let aim_DownRightAir = false;
         shuffleRoop = setInterval(() => {
-            const random = Math.random();
-            if (random < .25) {
-                leftSwipe();
-            } else if (random < .5) {
-                rightSwipe();
-            } else if (random < .75) {
-                upSwipe();
-            } else {
-                downSwipe();
+            let swipeableArray = [];
+            if (rightSwipeableJudge()) {
+                swipeableArray.push(rightSwipe);
             }
-            if (steps >= blockCaseWidth * blockCaseHeight * 35 && !gameClearJudge()) {
-                for (let i = 0; i < blockCaseWidth + blockCaseHeight; i += 1) {
-                    downSwipe();
-                    rightSwipe();
+            if (downSwipeableJudge()) {
+                swipeableArray.push(downSwipe);
+            }
+            if (leftSwipeableJudge()) {
+                swipeableArray.push(leftSwipe);
+            }
+            if (upSwipeableJudge()) {
+                swipeableArray.push(upSwipe);
+            }
+            const random = Math.random();
+
+            // console.log(Math.floor(random * swipeableArray.length));
+
+            function bottomRightIsAirJudge() {
+                if (block[blockCaseWidth * blockCaseHeight - 1].classList.contains("air")) {
+                    return true;
+                } else {
+                    return false;
                 }
-                isOperated = true;
-                clearInterval(shuffleRoop);
-                notificationDisplay(shuffleCompletionMassage, 0);
-                document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
-                steps = 0;
-                if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
-                    opacityUndo();
+            }
+
+            if (aim_DownRightAir) {
+                if (swipeableArray[Math.floor(random * swipeableArray.length / 2)]) {
+                    swipeableArray[Math.floor(random * swipeableArray.length / 2)]();
+                } else {
+                    lastMinuteameClearJudge = blockCaseWidth * blockCaseHeight * 2;
                 }
-                opacityUndo(retryBtn);
-        }
+            } else {
+                swipeableArray[Math.floor(random * swipeableArray.length)]();
+            }
+
+            // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
+            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
+            console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
+            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30) {
+                // シャッフル完成
+                if (bottomRightIsAirJudge()) {
+                    clearInterval(shuffleRoop);
+                    aim_DownRightAir = false;
+                    isOperated = true;
+                    notificationDisplay(shuffleCompletionMassage, 0);
+                    document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
+                    steps = 0;
+                    if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
+                        opacityUndo();
+                    }
+                    opacityUndo(retryBtn);
+                // シャッフル完成(Airの位置のみ未完成)
+                } else {
+                    console.log("aim_DownRightAir");
+                    
+                    aim_DownRightAir = true;
+                }
+            }
         }, 1);
     }, 500);
 };
@@ -962,7 +1026,9 @@ document.addEventListener("keydown",(event) => {
     }
     if (event.code === "KeyR") {
         if (popup[0].classList.contains("popupDisplayAnimation") && !(popup[1].classList.contains("popupDisplayAnimation"))) {
-            retry();
+            if (isOperated) {
+                retry();
+            }
         }
     }
     if (event.code === "Enter" || event.code === "Space") {

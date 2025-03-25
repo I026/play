@@ -595,8 +595,8 @@ img {
     --fontSize: 1.2em;
     --padding: .5em;
     padding: var(--padding);
-    padding-left: calc(var(--padding));
-    padding-right: calc(var(--padding));
+    padding-left: calc(var(--padding) * 1.5);
+    padding-right: calc(var(--padding) * 1.5);
     border-radius: calc(var(--fontSize) + var(--padding));
     font-size: var(--fontSize);
     position: fixed;
