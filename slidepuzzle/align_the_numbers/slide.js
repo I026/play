@@ -35,6 +35,17 @@ let formattedMin;
 let formattedHr;
 let formattedTimes;
 
+     let steps = 0;
+let isOperated = true;
+
+ let blockCaseWidth = 4;
+let blockCaseHeight = 5;
+
+const blockCaseWidthMax = 20
+const blockCaseWidthMin = 2
+const blockCaseHeightMax = 20
+const blockCaseHeightMin = 3
+
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
            const shuffleStartMassage = `シャッフルを開始します`;
       const shuffleCompletionMassage = `動かすとタイマーを開始します`;
@@ -44,12 +55,8 @@ const recoverFromLocalStorageMessage = `最新のデータから復元しまし�
                const noRecordMassage = `まだ記録がありません`;
           const recordFastestMassage = `での最速`;
             const recordLeastMassage = `での最少`;
-
-     let steps = 0;
-let isOperated = true;
-
- let blockCaseWidth = 4;
-let blockCaseHeight = 5;
+         const blockLimitPlusMassage = `これ以上増やせません`;
+        const blockLimitMinusMassage = `これ以上減らせません`;
 
 function selectionPrevention(o) {
     let tentative;
@@ -337,10 +344,6 @@ okBtn.addEventListener("click", () => {
 
 function popupDisplay(n = popup[0]) {
     sampleblocksGenerate();
-    // opacityUndo(widthDown);
-    // opacityUndo(widthUp);
-    // opacityUndo(heightDown);
-    // opacityUndo(heightUp);
     if (!(n.classList.contains("popupDisplayAnimation"))) {
         // isMenuDeployed = true;
         n.classList.remove("popupHiddenAnimation");
@@ -355,14 +358,18 @@ function popupDisplay(n = popup[0]) {
             menuSticks[1].classList.add("menuStickEraseAnimation");
             sampleblocksGenerate();
         }
-        widthNumber.classList.add("changeAcceptanceAnimation");
-        heightNumber.classList.add("changeAcceptanceAnimation");
+        // widthNumber.classList.add("changeAcceptanceAnimation");
+        // heightNumber.classList.add("changeAcceptanceAnimation");
     }
 }
 
+
 function popupHidden(n = popup[0]) {
-    widthNumber.innerText = blockCaseWidth;
-    heightNumber.innerText = blockCaseHeight;
+    setTimeout(() => {
+        widthNumber.innerText = blockCaseWidth;
+        heightNumber.innerText = blockCaseHeight;
+        disableArrow();
+    }, 400);
     if (n.classList.contains("popupDisplayAnimation")) {
         // isMenuDeployed = false;
         n.classList.remove("popupDisplayAnimation");
@@ -575,6 +582,7 @@ function recordDisplay() {
 }
 
 function blockShuffle() {
+    steps = 0;
     isOperated = false;
     targetBlock = blockCaseWidth * blockCaseHeight - 1;
     clearInterval(shuffleRoop);
@@ -588,12 +596,14 @@ function blockShuffle() {
     setTimeout(() => {
         recordDisplay();
     }, 1000);
-    notificationDisplay(shuffleStartMassage, 0);
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
+    let MaxClearJudge = 0;
+    let aim_DownRightAir = false;
+    notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
     setTimeout(() => {
-        let MaxClearJudge = 0;
-        let aim_DownRightAir = false;
         shuffleRoop = setInterval(() => {
+            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
+            notificationText.innerText = `${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %`;
             let swipeableArray = [];
             if (rightSwipeableJudge()) {
                 swipeableArray.push(rightSwipe);
@@ -610,7 +620,7 @@ function blockShuffle() {
             const random = Math.random();
 
             // console.log(Math.floor(random * swipeableArray.length));
-
+            
             function bottomRightIsAirJudge() {
                 if (block[blockCaseWidth * blockCaseHeight - 1].classList.contains("air")) {
                     return true;
@@ -630,7 +640,6 @@ function blockShuffle() {
             }
 
             // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
-            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
             if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30) {
                 // シャッフル完成
@@ -660,16 +669,16 @@ topTitle.addEventListener("click", () => {
     popupToggle(popup[1]);
 });
 
-function numberMatchCheck_Plus(n) {
-    if (n < 20) {
+function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
+    if (n < cn) {
         return true;
     } else {
         return false;
     }
 }
 
-function numberMatchCheck_Minus(n) {
-    if (n > 3) {
+function numberMatchCheck_Down(n = heightNumber, cn = blockCaseHeightMin) {
+    if (n > cn) {
         return true;
     } else {
         return false;
@@ -718,47 +727,60 @@ function dubbleTapZoomPrevent(event) {
 
 PinchInZoomPrevent();
 
+function disableArrow() {
+    widthDown.style.opacity = 1;
+    widthUp.style.opacity = 1;
+    heightDown.style.opacity = 1;
+    heightUp.style.opacity = 1;
+    if (!numberMatchCheck_Up(widthNumber.innerText * 1, blockCaseWidthMax)) {
+        widthUp.style.transition = ".5s";
+        widthUp.style.opacity = .25;
+    }
+    if (numberMatchCheck_Up(widthNumber.innerText * 1, blockCaseWidthMin + 1)) {
+        widthDown.style.transition = ".5s";
+        widthDown.style.opacity = .25;
+    }
+    if (!numberMatchCheck_Up(heightNumber.innerText * 1, blockCaseHeightMax)) {
+        heightUp.style.transition = ".5s";
+        heightUp.style.opacity = .25;
+    }
+    if (numberMatchCheck_Up(heightNumber.innerText * 1, blockCaseHeightMin + 1)) {
+        heightDown.style.transition = ".5s";
+        heightDown.style.opacity = .25;
+    }
+}
+
 function widthUpCtrl(e) {
-    if (numberMatchCheck_Plus(widthNumber.innerText * 1)) {
+    // widthDown.style.opacity = 1;
+    if (numberMatchCheck_Up(widthNumber.innerText * 1, blockCaseHeightMax)) {
         widthNumber.innerText = widthNumber.innerText * 1 + 1;
         sampleblocksGenerate();
-        opacityUndo(widthDown);
-        if (!(numberMatchCheck_Plus(widthNumber.innerText * 1))) {
-            opacityMitigation(widthUp, .25);
-        }
+        disableArrow();
     }
 }
 
 function widthDownCtrl(e) {
-    if (numberMatchCheck_Minus(widthNumber.innerText * 1 + 1)) {
+    if (numberMatchCheck_Down(widthNumber.innerText * 1 , blockCaseWidthMin)) {
         widthNumber.innerText = widthNumber.innerText * 1 - 1;
         sampleblocksGenerate();
-        opacityUndo(widthUp);
-        if (!(numberMatchCheck_Minus(widthNumber.innerText * 1 + 1))) {
-            opacityMitigation(widthDown, .25);
-        }
+        disableArrow();
     }
 }
 
 function heightUpCtrl(e) {
-    if (numberMatchCheck_Plus(heightNumber.innerText * 1)) {
+    // heightDown.style.opacity = 1;
+    if (numberMatchCheck_Up(heightNumber.innerText * 1, blockCaseHeightMax)) {
         heightNumber.innerText = heightNumber.innerText * 1 + 1;
         sampleblocksGenerate();
-        opacityUndo(heightDown);
-        if (!(numberMatchCheck_Plus(heightNumber.innerText * 1))) {
-            opacityMitigation(heightUp, .25);
-        }
+        disableArrow();
     }
 }
 
 function heightDownCtrl(e) {
-    if (numberMatchCheck_Minus(heightNumber.innerText * 1)) {
+    if (numberMatchCheck_Down(heightNumber.innerText * 1, blockCaseHeightMin)) {
         heightNumber.innerText = heightNumber.innerText * 1 - 1;
         sampleblocksGenerate();
-        opacityUndo(heightUp);
-        if (!(numberMatchCheck_Minus(heightNumber.innerText * 1))) {
-            opacityMitigation(heightDown, .25);
-        }
+        disableArrow();
     }
 }
 

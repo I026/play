@@ -8,7 +8,7 @@
                 100dvw / var(--blockCaseWidth) - 4px
             ),
             calc(
-                100dvh / var(--blockCaseHeight) - 20px
+                100dvh / var(--blockCaseHeight) - 4px - (50px / var(--blockCaseHeight))
                 )
             )
         );
@@ -37,7 +37,7 @@ body {
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     overflow: hidden;
     overscroll-behavior: none;
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: calc(env(safe-area-inset-bottom) * .75);
 }
 .topMenu {
     position: absolute;
@@ -202,7 +202,7 @@ body {
         left: -10px;
         height: var(--iconHeight);
         transform: translateY(calc(var(--iconHeight) * -.35 + 15px));
-    }   
+    }
 }
 #blocks div p {
     position: relative;
@@ -417,16 +417,18 @@ body {
 }
 @media screen and (max-height: 650px) {
     .popup .btns {
-        height: 110px;
-        width: 110px;
+        height: 80px;
+        width: 80px;
         left: calc(80vw);
-        top: calc(20vh);
+        top: calc(40vh);
+    }
+    .topMenu .menuTitle {
+        opacity: 0;
     }
 }
-@media screen and (max-height: 850px) {
-    .popup p {
-        margin-top: -20px;
-        font-size: 1.75em;
+@media screen and (min-height: 650px) {
+    .popup.n2 .consoles {
+        margin-top: calc(15%);
     }
 }
 .popup .btns .partition {
@@ -457,7 +459,7 @@ body {
     display: flex;
     justify-content: center;
     left: calc(50vw);
-    margin-top: calc(15%);
+    /* margin-top: calc(15%); */
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -594,8 +596,8 @@ img {
     --fontSize: 1.2em;
     --padding: .5em;
     padding: var(--padding);
-    padding-left: calc(var(--padding) * 1.5);
-    padding-right: calc(var(--padding) * 1.5);
+    padding-left: calc(var(--padding) * 2);
+    padding-right: calc(var(--padding) * 2);
     border-radius: calc(var(--fontSize) + var(--padding));
     font-size: var(--fontSize);
     position: fixed;
@@ -609,7 +611,7 @@ img {
     align-items: center;
     text-align: center;
     left: 50%;
-    bottom: 75px;
+    bottom: 60px;
     margin: 0;
     width: max-content;
     max-width: 90vw;
@@ -629,7 +631,7 @@ img {
 }
 @keyframes notificationDisplay {
     0% {
-        transform: translate(-50%, 3em);
+        transform: translate(-50%, 4em);
         opacity: 0;
     }
     100% {
@@ -646,7 +648,7 @@ img {
         opacity: 1;
     }
     100% {
-        transform: translate(-50%, 3em);
+        transform: translate(-50%, 4em);
         opacity: 0;
     }
 }
