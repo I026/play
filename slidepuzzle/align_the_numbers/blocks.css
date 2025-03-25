@@ -37,6 +37,7 @@ body {
     font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     overflow: hidden;
     overscroll-behavior: none;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 .topMenu {
     position: absolute;
@@ -68,7 +69,6 @@ body {
     right: 15px;
     transform: translateY(-5px);
     background-color: transparent;
-    padding-right: env(safe-area-inset-right);
 }
 .topMenu .expandableMenuBtn div {
     user-select: none;
