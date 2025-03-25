@@ -30,13 +30,14 @@ let sec = 0;
 let min = 0;
 let hr  = 0;
 
-let formattedSec;
-let formattedMin;
-let formattedHr;
+let formattedSec = 0;
+let formattedMin = 0;
+let formattedHr = 0;
 let formattedTimes;
 
-let steps      = 0;
-let isOperated = true;
+let steps         = 0;
+let isOperated    = true;
+let isTimerActive = false;
 
 let blockCaseWidth  = 4;
 let blockCaseHeight = 5;
@@ -54,9 +55,11 @@ const blockCaseHeightMin = 3;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフルを開始します`;
 const shuffleCompletionMassage       = `動かすとタイマーを開始します`;
-const timerStartMassage              = `タイマーを開始しました<br>左上から順番に揃えてください`;
+const timerStartMassage              = `タイマーを開始しました <br>左上から順番に揃えてください`;
+const timerRestartMassage            = `タイマーを再開しました`;
+const timerStopMassage               = `タイマーを停止しました`;
 const gameClearMassage               = `タイマーを終了しました`;
-const unrecordedMassage              = 'クリアを記録するには､リトライしてください';
+const unrecordedMassage              = `クリアを記録するには､<br>リトライしてください`;
 const noRecordMassage                = `まだ記録がありません`;
 const recordFastestMassage           = `での最速`;
 const recordLeastMassage             = `での最少`;
@@ -167,45 +170,52 @@ function autoSaveToLocalStorage() {
 }
 
 function timerStart(h = 0, m = 0, s = 0) {
-    hr  = h * 1;
-    min = m * 1;
-    sec = s * 1;
-    timerInterval = setInterval(() => {
-        sec += .01;
-        if (sec >= 60) {
-            min += 1;
-            sec  = 0;
+    if (!isTimerActive) {
+        isTimerActive = true;
+        hr  = h * 1;
+        min = m * 1;
+        sec = s * 1;
+        timerInterval = setInterval(() => {
+            sec += .01;
+            if (sec >= 60) {
+                min += 1;
+                sec  = 0;
+            }
+            if (min >= 60) {
+                hr += 1;
+                min = 0;
+            }
+            formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
+            formattedMin = String(min).padStart(2, "0");
+            formattedHr = String(hr).padStart(2, "0");
+            formattedTimes = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
+            console.log(formattedTimes);
+            setTimeout(() => {
+                topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+                timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedTimes}`;
+                stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps}`;
+            }, 200);
+        }, 10);
+        if (h == 0 && m == 0 && s == 0) {
+            notificationDisplay(timerStartMassage);
         }
-        if (min >= 60) {
-            hr += 1;
-            min = 0;
-        }
-        formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
-        formattedMin = String(min).padStart(2, "0");
-        formattedHr = String(hr).padStart(2, "0");
-        formattedTimes = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
-        setTimeout(() => {
-            topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-            timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedTimes}`;
-            stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps}`;
-        }, 200);
-    }, 10);
-    if (h == 0 && m == 0 && s == 0) {
-        notificationDisplay(timerStartMassage);
+        autoSaveInterval = setInterval(() => {
+            // if (isGameClear) {
+            //     localStorage.removeItem("slidePuzzleProgressAutoSave");
+            // }
+            if (isOperated) {
+                autoSaveToLocalStorage();
+            }
+        },  Math.floor(Math.random(1) * 1000) / 10 + 100);
     }
-    autoSaveInterval = setInterval(() => {
-        // if (isGameClear) {
-        //     localStorage.removeItem("slidePuzzleProgressAutoSave");
-        // }
-        if (isOperated) {
-            autoSaveToLocalStorage();
-        }
-    },  Math.floor(Math.random(1) * 1000) / 10 + 100);
 }
 
 function timerStop() {
-    clearInterval(timerInterval);
-    clearInterval(autoSaveInterval);
+    if (isTimerActive) {
+        isTimerActive = false;
+        clearInterval(timerInterval);
+        clearInterval(autoSaveInterval);
+    }
 }
 
 function timerReset() {
@@ -215,6 +225,14 @@ function timerReset() {
     formattedSec = 0;
     formattedMin = 0;
     formattedHr  = 0;
+}
+
+function timerNumberIsZero() {
+    if ((formattedHr * 1 + formattedMin * 1 + formattedSec * 1) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function opacityMitigation(o = blocks, t = .5) {
@@ -303,6 +321,7 @@ function menuBtnToggle(n = popup[0]) {
         popupHidden(popup[deployedPopup.length - 1]);
         if (deployedPopup.length - 1 == 0 && isOperated) {
             opacityUndo();
+            // alert(formattedTimes)
         }
     }
 }
@@ -362,9 +381,12 @@ function popupDisplay(n = popup[0]) {
             menuSticks[2].classList.add("menuStickRotate2Animation");
             menuSticks[1].classList.add("menuStickEraseAnimation");
             sampleblocksGenerate();
+            timerStop();
+            if (!isGameClear && !timerNumberIsZero()) {
+                timeDisplay.classList.add("changeAcceptanceAnimation");
+                notificationHidden();
+            }
         }
-        // widthNumber.classList.add("changeAcceptanceAnimation");
-        // heightNumber.classList.add("changeAcceptanceAnimation");
     }
 }
 
@@ -374,7 +396,7 @@ function popupHidden(n = popup[0]) {
         widthNumber.innerText = blockCaseWidth;
         heightNumber.innerText = blockCaseHeight;
         disableArrow();
-    }, 400);
+    }, 500);
     if (n.classList.contains("popupDisplayAnimation")) {
         // isMenuDeployed = false;
         n.classList.remove("popupDisplayAnimation");
@@ -387,9 +409,12 @@ function popupHidden(n = popup[0]) {
             menuSticks[0].classList.add("menuStickRotateReverse1Animation");
             menuSticks[2].classList.add("menuStickRotateReverse2Animation");
             menuSticks[1].classList.add("menuStickEraseReverseAnimation");
+            if (!isGameClear && isOperated && !timerNumberIsZero()) {
+                timerStart(formattedHr,formattedMin,formattedSec)
+                notificationDisplay(timerRestartMassage);
+            }
+            timeDisplay.classList.remove("changeAcceptanceAnimation");
         }
-        timeInfoDisplay.innerText = "";
-        stepsInfoDisplay.innerText = "";
     }
 }
 
@@ -406,16 +431,16 @@ function gameClear() {
     setTimeout(() => {
         clearSteps = steps;
         // notificationDisplay(gameClearMassage);
+        popupDisplay();
         timerStop();
         saveToLocalStorage();
-        popupDisplay();
         opacityMitigation();
-        // タイマー処理成功検証
         isGameClear = true;
         autoSaveToLocalStorage();
-        while (!(timerInterval) && !(autoSaveInterval)) {
-            timerStop();
-        }
+        timeDisplay.classList.remove("changeAcceptanceAnimation");
+        // while (!(timerInterval) && !(autoSaveInterval)) {
+        //     timerStop();
+        // }
     }, 100);
 }
 
@@ -607,7 +632,7 @@ function blockShuffle() {
     notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
-            MaxClearJudge              = Math.max(gameClearJudge(), MaxClearJudge)
+            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
             notificationText.innerText = `${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %`;
             let swipeableArray = [];
             if (rightSwipeableJudge()) {
@@ -637,8 +662,6 @@ function blockShuffle() {
             if (aim_DownRightAir) {
                 if (swipeableArray[Math.floor(random * swipeableArray.length / 2)]) {
                     swipeableArray[Math.floor(random * swipeableArray.length / 2)]();
-                } else {
-                    lastMinuteameClearJudge = blockCaseWidth * blockCaseHeight * 2;
                 }
             } else {
                 swipeableArray[Math.floor(random * swipeableArray.length)]();
@@ -646,10 +669,9 @@ function blockShuffle() {
 
             // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
-            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() >= 3) {
+            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() !== 0) {
                 // シャッフル完成
                 if (bottomRightIsAirJudge()) {
-                    // alert(gameClearJudge());
                     clearInterval(shuffleRoop);
                     aim_DownRightAir = false;
                     isOperated = true;
@@ -663,8 +685,11 @@ function blockShuffle() {
                 // シャッフル完成(Airの位置のみ未完成)
                 } else {
                     console.log("aim_DownRightAir");
-                    
-                    aim_DownRightAir = true;
+                    if (!gameClearJudge() >= Math.max(blockCaseWidth - 1, 1)) {
+                        aim_DownRightAir = true;
+                    } else {
+                        aim_DownRightAir = false;
+                    }
                 }
             }
         }, 1);
@@ -857,6 +882,10 @@ expandableMenuBtn.addEventListener("click", () => {
 function retry() {
     isGameClear = false;
     isOperated = false;
+    setTimeout(() => {
+        timeInfoDisplay.innerText = "";
+        stepsInfoDisplay.innerText = "";
+    }, 500);
     blockShuffle();
     setTimeout(() => {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;

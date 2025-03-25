@@ -415,22 +415,6 @@ body {
     background-color: transparent;
     /* border: 4px black solid; */
 }
-@media screen and (max-height: 650px) {
-    .popup .btns {
-        height: 80px;
-        width: 80px;
-        left: calc(80vw);
-        top: calc(40vh);
-    }
-    .topMenu .menuTitle {
-        opacity: 0;
-    }
-}
-@media screen and (min-height: 650px) {
-    .popup.n2 .consoles {
-        margin-top: calc(15vh);
-    }
-}
 .popup .btns .partition {
     position: absolute;
     top: 30px;
@@ -556,7 +540,7 @@ img {
     }
 }
 .changeAcceptanceAnimation {
-    animation: changeAcceptance 1s ease-in-out 3 forwards;
+    animation: changeAcceptance 1s ease-in-out forwards infinite;
 }
 @keyframes limit {
     0% {
@@ -596,8 +580,8 @@ img {
     --fontSize: 1.2em;
     --padding: .5em;
     padding: var(--padding);
-    padding-left: calc(var(--padding) * 2);
-    padding-right: calc(var(--padding) * 2);
+    padding-left: calc(var(--padding) * 1.25);
+    padding-right: calc(var(--padding) * 1.25);
     border-radius: calc(var(--fontSize) + var(--padding));
     font-size: var(--fontSize);
     position: fixed;
@@ -622,12 +606,18 @@ img {
 .notification span {
     color: black;
     opacity: 1;
+    text-align: center;
+    /* display: inline-block; */
     /* width: 100%; */
-    white-space: normal;
-    word-wrap: break-word;
+    /* white-space: normal; */
+    /* word-wrap: break-word; */
 }
 .notification span span {
-    white-space: nowarp;
+    display: inline-block;
+    white-space: nowrap;
+    text-align: center;
+    /* white-space: nowrap; */
+    /* width: fit-content; */
 }
 @keyframes notificationDisplay {
     0% {
@@ -654,4 +644,42 @@ img {
 }
 .notificationHiddenAnimetion {
     animation: notificationHidden .25s ease-out both;
+}
+@media screen and (max-height: 700px) {
+    .popup .btns {
+        bottom: 60px;
+    }
+}
+@media screen and (max-height: 550px) {
+    .notification {
+        bottom: 10px;
+        /* width: max-content; */
+        max-width: 70vw;
+        /* left: calc(50% - 30px); */
+    }
+    .topMenu .menuTitle {
+        opacity: 0;
+    }
+    /* .popup p {
+        transform: translateY(-20px);
+    } */
+    .popup .btns {
+        height: 70px;
+        width: 70px;
+        /* left: calc(80vw);
+        top: calc(40vh); */
+        left: -5px;
+        bottom: 0;
+        transform: translateY(6px);
+    }
+}
+@media screen and (max-height: 650px) {
+    .popup p {
+        transform: translateY(-5px);
+    }
+}
+@media screen and (min-height: 700px) {
+    .popup.n2 .consoles {
+        margin-top: calc(15vh);
+    }
 }
