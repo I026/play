@@ -646,7 +646,7 @@ function blockShuffle() {
 
             // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
-            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30) {
+            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() !== 0) {
                 // シャッフル完成
                 if (bottomRightIsAirJudge()) {
                     clearInterval(shuffleRoop);
