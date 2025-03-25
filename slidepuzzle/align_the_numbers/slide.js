@@ -44,14 +44,14 @@ let blockCaseHeight = 5;
 const blockCaseWidthMax = 20
 const blockCaseWidthMin = 2
 const blockCaseHeightMax = 20
-const blockCaseHeightMin = 2
+const blockCaseHeightMin = 3
 
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
            const shuffleStartMassage = `シャッフルを開始します`;
       const shuffleCompletionMassage = `動かすとタイマーを開始します`;
              const timerStartMassage = `タイマーを開始しました<br>左上から順番に揃えてください`;
               const gameClearMassage = `タイマーを終了しました`;
-             const unrecordedMassage = `新しいクリアを記録するには､リトライしてください`;
+             const unrecordedMassage = 'クリアを記録するには､リトライしてください';
                const noRecordMassage = `まだ記録がありません`;
           const recordFastestMassage = `での最速`;
             const recordLeastMassage = `での最少`;
