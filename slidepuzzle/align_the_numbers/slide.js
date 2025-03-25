@@ -41,10 +41,15 @@ let isOperated = true;
  let blockCaseWidth = 4;
 let blockCaseHeight = 5;
 
-const blockCaseWidthMax = 20
-const blockCaseWidthMin = 2
-const blockCaseHeightMax = 20
-const blockCaseHeightMin = 3
+const blockCaseWidthMax = 20;
+const blockCaseWidthMin = 2;
+const blockCaseHeightMax = 20;
+const blockCaseHeightMin = 3;
+
+window.onerror = function(message, source, lineno, colno, error) {
+    notificationDisplay(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`);
+    return true; // true を返すと、ブラウザのエラーメッセージを抑制できる
+  };
 
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
            const shuffleStartMassage = `シャッフルを開始します`;
