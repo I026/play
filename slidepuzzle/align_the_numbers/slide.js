@@ -46,10 +46,10 @@ const blockCaseWidthMin  = 2;
 const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
 
-window.onerror = function(message, source, lineno, colno, error) {
-    alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
-    return true;
-  };
+// window.onerror = function(message, source, lineno, colno, error) {
+//     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
+//     return true;
+//   };
   
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフルを開始します`;
