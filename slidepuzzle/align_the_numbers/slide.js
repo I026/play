@@ -44,7 +44,7 @@ let blockCaseHeight = 5;
 const blockCaseWidthMax  = 20;
 const blockCaseWidthMin  = 2;
 const blockCaseHeightMax = 20;
-const blockCaseHeightMin = 3;
+const blockCaseHeightMin = 2;
 
 // window.onerror = function(message, source, lineno, colno, error) {
 //     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
@@ -646,9 +646,10 @@ function blockShuffle() {
 
             // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
-            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() !== 0) {
+            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() >= 3) {
                 // シャッフル完成
                 if (bottomRightIsAirJudge()) {
+                    // alert(gameClearJudge());
                     clearInterval(shuffleRoop);
                     aim_DownRightAir = false;
                     isOperated = true;
