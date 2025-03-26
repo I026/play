@@ -47,7 +47,7 @@ const blockCaseWidthMin  = 3;
 const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
 
-const blockswipeDurationDefault = 65;
+const blockswipeDurationDefault = 80;
 
 function blockswipeDuration(n) {
     if (n) {
