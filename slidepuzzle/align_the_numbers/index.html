@@ -81,6 +81,7 @@
         document.querySelectorAll('img').forEach(function(img) {
             img.setAttribute('ondragstart', 'return false;');
         });
+        
         if (navigator.serviceWorker) {
         navigator.serviceWorker.register ("service-worker.js");
         }
