@@ -428,6 +428,7 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClear() {
+    isOperated = false;
     setTimeout(() => {
         clearSteps = steps;
         // notificationDisplay(gameClearMassage);
