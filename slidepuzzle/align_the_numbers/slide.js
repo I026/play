@@ -423,12 +423,11 @@ blocks.addEventListener("click", () => {
     // popupHidden(popup[1]);
     // opacityUndo();
     if (popup[0].classList.contains("popupDisplayAnimation")) {
-        menuBtnToggle();
+        popupHidden()
     }
 });
 
 function gameClear() {
-    isOperated = false;
     setTimeout(() => {
         clearSteps = steps;
         // notificationDisplay(gameClearMassage);
