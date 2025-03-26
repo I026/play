@@ -5,7 +5,7 @@
     calc(
         min(
             calc(
-                100dvw / var(--blockCaseWidth) - 4px
+                100dvw / var(--blockCaseWidth) - 4px - (50px / var(--blockCaseWidth))
             ),
             calc(
                 100dvh / var(--blockCaseHeight) - 4px - (50px / var(--blockCaseHeight))
