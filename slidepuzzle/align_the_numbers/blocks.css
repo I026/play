@@ -63,6 +63,7 @@ body {
     position: absolute;
 }
 .topMenu .expandableMenuBtn {
+    z-index: 100;
     position: absolute;
     height: 40px;
     width: 40px;
@@ -659,9 +660,6 @@ img {
     }
     .topMenu .menuTitle {
         opacity: 0;
-    }
-    .topMenu {
-        pointer-events: none;
     }
     /* .popup p {
         transform: translateY(-20px);

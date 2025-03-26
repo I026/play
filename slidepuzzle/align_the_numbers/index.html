@@ -19,6 +19,16 @@
             <span id="notificationText"></span>
         </div>
     </div>
+        <div class="topMenu">
+        <span class="menuTitle">
+            SlidePuzzle
+        </span>
+        <div class="expandableMenuBtn">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
     <div class="popup">
         <div id="topTitles"><span id="topTitle"></span></div>
         <p>
@@ -66,22 +76,12 @@
             <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
         </div>
     </div>
-    <div class="topMenu">
-        <span class="menuTitle">
-            SlidePuzzle
-        </span>
-        <div class="expandableMenuBtn">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
     <script src="slide.js"></script>
     <script>
         document.querySelectorAll('img').forEach(function(img) {
             img.setAttribute('ondragstart', 'return false;');
         });
-        
+
         if (navigator.serviceWorker) {
         navigator.serviceWorker.register ("service-worker.js");
         }
