@@ -767,10 +767,10 @@ function dubbleTapZoomPrevent(event) {
         console.log(now - lastTouchEnd);
         // ダブルタップ検出
         lastTouchEnd = now;
-        return false;
+        return true;
     } else {
         lastTouchEnd = now;
-        return true;
+        return false;
     }
 }
 
