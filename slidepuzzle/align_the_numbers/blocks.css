@@ -51,7 +51,6 @@ body {
     align-items: center;
     color: black;
     bottom: 0;
-    pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -660,6 +659,9 @@ img {
     }
     .topMenu .menuTitle {
         opacity: 0;
+    }
+    .topMenu {
+        pointer-events: none;
     }
     /* .popup p {
         transform: translateY(-20px);
