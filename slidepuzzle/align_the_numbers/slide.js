@@ -835,28 +835,28 @@ function heightDownCtrl(e) {
 
 widthUp.addEventListener("click", () => {
     if (dubbleTapZoomPrevent(event)) {
-        event.preventDefault;
+        event.preventDefault();
     }
     widthUpCtrl();
 });
 
 widthDown.addEventListener("click", () => {
     if (dubbleTapZoomPrevent(event)) {
-        event.preventDefault;
+        event.preventDefault();
     }
     widthDownCtrl();
 });
 
 heightUp.addEventListener("click", () => {
     if (dubbleTapZoomPrevent(event)) {
-        event.preventDefault;
+        event.preventDefault();
     }
     heightUpCtrl();
 });
 
 heightDown.addEventListener("click", () => {
     if (dubbleTapZoomPrevent(event)) {
-        event.preventDefault;
+        event.preventDefault();
     }
     heightDownCtrl();
 });
