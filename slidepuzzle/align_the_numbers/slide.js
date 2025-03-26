@@ -679,12 +679,15 @@ function blockShuffle() {
                     swipeableArray[Math.floor(random * swipeableArray.length / 2)]();
                 }
             } else {
-                swipeableArray[Math.floor(random * swipeableArray.length)]();
+                const executionTime =  Math.min(Math.max(Math.floor(Math.random() * 5), 1), Math.min(blockCaseWidth, blockCaseHeight));
+                for (let i = 0; i < executionTime; i += 1) {
+                    swipeableArray[Math.floor(random * swipeableArray.length)]();
+                }
             }
 
             // console.log(`${steps} / ${blockCaseWidth * blockCaseHeight * 35}`);
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
-            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() !== 0) {
+            if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 50 && gameClearJudge() !== 0) {
                 // シャッフル完成
                 if (bottomRightIsAirJudge() && steps > blockCaseWidth * blockCaseHeight) {
                     clearInterval(shuffleRoop);
@@ -1043,8 +1046,10 @@ document.addEventListener("mousedown", swipeDetection);
 document.addEventListener("touchstart", swipeDetection);
 
 document.addEventListener("keydown",(event) => {
-    if ((event.code === "KeyA" || event.code === "ArrowLeft") && isOperated) {
-        rightSwipe();
+    if ((event.code === "KeyA" || event.code === "ArrowLeft")) {
+        if (isOperated) {
+            rightSwipe();
+        }
     }
     if (event.code === "KeyE" || event.code === "ArrowRight") {
         if (popup[1].classList.contains("popupDisplayAnimation")) {
@@ -1052,34 +1057,46 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyD") {
-        if (popup[1].classList.contains("popupDisplayAnimation") || !isOperated) {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
             heightDownCtrl();
-        } else {   
+        } else {
+            if (isOperated) {
+                leftSwipe();
+            }
+        }
+    }
+    if (event.code === "ArrowRight") {
+        if (isOperated) {
             leftSwipe();
         }
     }
-    if (event.code === "ArrowRight" && isOperated) {
-        leftSwipe();
-    }
-    if (event.code === "KeyW" && isOperated) {
+    if (event.code === "KeyW") {
         if (popup[1].classList.contains("popupDisplayAnimation")) {
             widthUpCtrl();
-        } else {   
+        } else {
+            if (isOperated) {
+                downSwipe();
+            }
+        }
+    }
+    if (event.code === "ArrowUp") {
+        if (isOperated) {
             downSwipe();
         }
     }
-    if (event.code === "ArrowUp" && isOperated) {
-        downSwipe();
-    }
     if (event.code === "KeyS") {
-        if (popup[1].classList.contains("popupDisplayAnimation") || !isOperated) {
+        if (popup[1].classList.contains("popupDisplayAnimation")) {
             widthDownCtrl();
-        } else {   
-            upSwipe();
+        } else {
+            if (isOperated) {
+                upSwipe();
+            }
         }
     }
-    if (event.code === "ArrowDown" && isOperated) {
-        upSwipe();
+    if (event.code === "ArrowDown") {
+        if (isOperated) {
+            upSwipe();
+        }
     }
     if (event.code === "KeyF") {
         menuBtnToggle();
