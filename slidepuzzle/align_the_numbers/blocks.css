@@ -28,7 +28,7 @@
     --blockColor: white;
     --blockBackgroundColor: black;
     --popupBackgroundColor: 220, 220, 220;
-    --swipeAnimetionDuration: .1s;
+    --swipeAnimetionDuration: .05s;
     /* --swipeAnimetionDuration: .02s; */
 }
 body {

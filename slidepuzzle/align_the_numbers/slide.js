@@ -39,13 +39,24 @@ let steps         = 0;
 let isOperated    = true;
 let isTimerActive = false;
 
-let blockCaseWidth  = 4;
-let blockCaseHeight = 5;
+let blockCaseWidth  = 3;
+let blockCaseHeight = 3;
 
 const blockCaseWidthMax  = 20;
-const blockCaseWidthMin  = 2;
+const blockCaseWidthMin  = 3;
 const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
+
+const blockswipeDurationDefault = 65;
+
+function blockswipeDuration(n) {
+    if (n) {
+        document.documentElement.style.setProperty("--swipeAnimetionDuration", `${n / 1000}s`);
+    } else {
+        return document.documentElement.style.getPropertyValue("--swipeAnimetionDuration");
+    }
+}
+
 
 // window.onerror = function(message, source, lineno, colno, error) {
 //     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
@@ -341,8 +352,6 @@ function popupToggle(n = popup[0]) {
 }
 
 function blockNumberChange() {
-    recordDisplay();
-    console.log("recordDisplay");
     if (!(widthNumber.innerText * 1 == blockCaseWidth) || !(heightNumber.innerText * 1 == blockCaseHeight)) {
         clearInterval(timerInterval);
         localStorage.removeItem("slidePuzzleProgressAutoSave");
@@ -354,12 +363,14 @@ function blockNumberChange() {
         retry();
         block = blocks.querySelectorAll("div");
     } else {
-        opacityUndo();
+        // opacityUndo();
     }
     popupHidden(popup[1]);
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    recordDisplay();
+    if (timerNumberIsZero()) {
+        recordDisplay();
+    }
 }
 
 okBtn.addEventListener("click", () => {
@@ -632,7 +643,11 @@ function blockShuffle() {
     notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
-            MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
+            if (steps !== 0) {
+                MaxClearJudge = Math.max(gameClearJudge(), MaxClearJudge)
+            } else {
+                MaxClearJudge = 0;
+            }
             notificationText.innerText = `${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %`;
             let swipeableArray = [];
             if (rightSwipeableJudge()) {
@@ -671,12 +686,12 @@ function blockShuffle() {
             console.log(`${MaxClearJudge} / ${blockCaseWidth * blockCaseHeight} | ${steps}`);
             if (MaxClearJudge > blockCaseWidth * blockCaseHeight * .9 || steps > blockCaseWidth * blockCaseHeight * 30 && gameClearJudge() !== 0) {
                 // シャッフル完成
-                if (bottomRightIsAirJudge()) {
+                if (bottomRightIsAirJudge() && steps > blockCaseWidth * blockCaseHeight) {
                     clearInterval(shuffleRoop);
                     aim_DownRightAir = false;
                     isOperated = true;
                     notificationDisplay(shuffleCompletionMassage, 0);
-                    document.documentElement.style.setProperty("--swipeAnimetionDuration", ".1s");
+                    blockswipeDuration(blockswipeDurationDefault);
                     steps = 0;
                     if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
                         opacityUndo();
@@ -685,14 +700,14 @@ function blockShuffle() {
                 // シャッフル完成(Airの位置のみ未完成)
                 } else {
                     console.log("aim_DownRightAir");
-                    if (!gameClearJudge() >= Math.max(blockCaseWidth - 1, 1)) {
+                    if (!gameClearJudge() == 0) {
                         aim_DownRightAir = true;
                     } else {
                         aim_DownRightAir = false;
                     }
                 }
             }
-        }, 1);
+        }, blockswipeDuration());
     }, 500);
 };
 
@@ -871,6 +886,8 @@ function recoverFromLocalStorage() {
     } else {
         retry();
     }
+    widthNumber.innerText = blockCaseWidth;
+    heightNumber.innerText = blockCaseHeight;
 }
 
 recoverFromLocalStorage();
