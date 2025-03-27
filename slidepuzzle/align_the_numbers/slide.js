@@ -49,6 +49,10 @@ const blockCaseHeightMin = 3;
 
 const blockswipeDurationDefault = 90;
 
+window.addEventListener("scroll", () => {
+    window.scrollTo({top: 0});
+});
+
 function blockswipeDuration(n) {
     if (n) {
         document.documentElement.style.setProperty("--swipeAnimetionDuration", `${n / 1000}s`);
