@@ -19,12 +19,13 @@ const menuTitle           = document.querySelector(".menuTitle");
 const topTitles           = document.getElementById("topTitles");
 const topTitle            = document.getElementById("topTitle");
 const timeDisplay         = document.getElementById("timeDisplay");
-const  timeInfoDisplay    = document.getElementById("timeInfoDisplay");
+const timeInfoDisplay     = document.getElementById("timeInfoDisplay");
 const stepsDisplay        = document.getElementById("stepsDisplay");
 const stepsInfoDisplay    = document.getElementById("stepsInfoDisplay");
 const sampleblocks        = document.querySelector(".sampleBlocks");
 const notification        = document.querySelector(".notification");
 const notificationText    = document.getElementById("notificationText");
+let timerIconHands        = document.querySelector(".timerIcon.hands");
 
 let sec = 0;
 let min = 0;
@@ -39,8 +40,8 @@ let steps         = 0;
 let isOperated    = true;
 let isTimerActive = false;
 
-let blockCaseWidth  = 9;
-let blockCaseHeight = 9;
+let blockCaseWidth  = 3;
+let blockCaseHeight = 3;
 
 const blockCaseWidthMax  = 20;
 const blockCaseWidthMin  = 3;
@@ -81,6 +82,9 @@ const recordLeastMassage             = `での最少`;
 const blockLimitPlusMassage          = `これ以上増やせません`;
 const blockLimitMinusMassage         = `これ以上減らせません`;
 
+const timerIconImg                   = `<img class="timerIcon" src="../medias/timer_flame.svg"> <img class="timerIcon hands" src="../medias/timer_hands.svg">`;
+const stepsIconImg                   = `<img class="handIcon" src="../medias/hand.svg">`;
+
 function selectionPrevention(o) {
     let tentative;
       tentative = o.innerHTML;
@@ -104,10 +108,13 @@ widthNumber.innerText = blockCaseWidth;
 heightNumber.innerText = blockCaseHeight;
 
 function notificationDisplay(text = "", duration) {
+    // すでに通知が表示されていない
     if (!(notification.classList.contains("notificationDisplayAnimetion"))) {
         notificationText.innerHTML = text;
+        // textが通知にある文字と同様
         if (text == notificationText.innerHTML) {
             notification.classList.remove("notificationHiddenAnimetion");
+            // notification.classList.remove("notificationHidden_D3sAnimetion");
             notification.classList.add("notificationDisplayAnimetion");
         }
         // durationが存在する
@@ -119,13 +126,19 @@ function notificationDisplay(text = "", duration) {
                     notificationHidden();
                 }, formattedDuration);
             }
+        // durationが存在しない
         } else {
+            // setTimeout(() => {
+            //     // notification.classList.add("notificationHidden_D3sAnimetion");
+            //     notification.classList.add("notificationHidden_D3sAnimetion");
+            // }, 250);
             setTimeout(() => {
                 if (text == notificationText.innerHTML) {
                     notificationHidden();
                 }
             }, 3000);
         }
+    // すでに通知が表示されている
     } else {
         notificationHidden();
         setTimeout(() => {
@@ -207,8 +220,8 @@ function timerStart(h = 0, m = 0, s = 0) {
             console.log(formattedTimes);
             setTimeout(() => {
                 topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-                timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> ${formattedTimes}`;
-                stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> ${steps}`;
+                timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes}`;
+                stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
             }, 200);
         }, 10);
         if (h == 0 && m == 0 && s == 0) {
@@ -231,6 +244,12 @@ function timerStop() {
         clearInterval(timerInterval);
         clearInterval(autoSaveInterval);
     }
+    setTimeout(() => {
+        timerIconHands = document.querySelector(".timerIcon.hands");
+        if (timerIconHands) {
+            timerIconHands.style.rotate = `${formattedSec * 6}deg`;
+        }
+    }, 200);
 }
 
 function timerReset() {
@@ -251,26 +270,22 @@ function timerNumberIsZero() {
 }
 
 function opacityMitigation(o = blocks, t = .5) {
+    o.classList.remove("opacityUndoAnimation");
     if (!(o.classList.contains("opacityMitigationAnimation"))) {
         o.classList.remove("opacityUndoAnimation");
         o.classList.remove("opacityMitigationAnimation");
         o.style.setProperty("animation-duration", `${t}s`);
         o.classList.add("opacityMitigationAnimation");
     }
-    setTimeout(() => {
-        o.classList.remove("opacityUndoAnimation");
-    }, t * 1000);
 }
 function opacityUndo(o = blocks, t = .5) {
+    o.classList.remove("opacityMitigationAnimation");
     if (!(o.classList.contains("opacityUndoAnimation"))) {
         o.classList.remove("opacityMitigationAnimation");
         o.classList.remove("opacityUndoAnimation");
         o.style.setProperty("animation-duration", `${t}s`);
         o.classList.add("opacityUndoAnimation");
     }
-    setTimeout(() => {
-        o.classList.remove("opacityMitigationAnimation");
-    }, t * 1000);
 }
 
 function getDate() {
@@ -444,17 +459,18 @@ blocks.addEventListener("click", () => {
 
 function gameClear() {
     const clearedBlockBCArray = [
-        "lightblue",
+        "skyblue",
         "cornflowerblue",
+        "cadetblue",
         "lightgreen",
-        "green",
         "greenyellow",
         "yellow",
         "orange",
         "coral",
-        "crimson"
+        "crimson",
+        "chocolate"
     ]
-    const clearedBlockBCArraySelect = clearedBlockBCArray[Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax + blockCaseHeightMax) / 2)) * clearedBlockBCArray.length) - 1]
+    const clearedBlockBCArraySelect = clearedBlockBCArray[Math.min(Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax - blockCaseWidthMin + blockCaseHeightMax - blockCaseHeightMin) / 2)) * clearedBlockBCArray.length) - 1, clearedBlockBCArray.length - 1)]
     document.documentElement.style.setProperty("--clearedBlockAnimationBC", clearedBlockBCArraySelect);
     timerStop();
     saveToLocalStorage();
@@ -484,21 +500,21 @@ function gameClear() {
             clearedBlockAnimationExeIndex += 1;
         } else {
             clearInterval(clearedBlockAnimationExeInterval);
+            setTimeout(() => {
+                isOperated = true;
+                clearSteps = steps;
+                // notificationDisplay(gameClearMassage);
+                popupDisplay();
+                opacityMitigation();
+                isGameClear = true;
+                autoSaveToLocalStorage();
+                timeDisplay.classList.remove("changeAcceptanceAnimation");
+                // while (!(timerInterval) && !(autoSaveInterval)) {
+                    //     timerStop();
+                    // }
+            }, clearedBlockInterval * blockCaseWidth);
         }
     }, clearedBlockInterval);
-    setTimeout(() => {
-        isOperated = true;
-        clearSteps = steps;
-        // notificationDisplay(gameClearMassage);
-        popupDisplay();
-        opacityMitigation();
-        isGameClear = true;
-        autoSaveToLocalStorage();
-        timeDisplay.classList.remove("changeAcceptanceAnimation");
-        // while (!(timerInterval) && !(autoSaveInterval)) {
-        //     timerStop();
-        // }
-    }, blockCaseWidth * clearedBlockInterval * 2);
 }
 
 function gameClearJudge() {
@@ -658,8 +674,8 @@ function recordDisplay() {
     localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-         timeDisplay.innerHTML = `<img class="timerIcon" src="../medias/timer.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `<img class="handIcon" src="../medias/hand.svg"> <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2)}`;
+         timeDisplay.innerHTML = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2)}`;
     } else {
         timeDisplay.innerHTML      = noRecordMassage;
         stepsDisplay.innerText     = "";
@@ -1027,7 +1043,6 @@ function swipeStartReset(e) {
 let swipeMovedBlock = 0;
 
 function swipeGetNowCoordinate(e) {
-    const formattedSwipeMA = Math.min(Math.abs(swipeMouseAcceleration * .0005),100);
     // console.log(formattedSwipeMA);
     
     function swipeDirectionJudge() {

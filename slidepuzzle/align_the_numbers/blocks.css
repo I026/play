@@ -199,6 +199,9 @@ body {
     display: flex;
     align-content: center;
 }
+.popup .timerIcon.hands {
+    rotate: 0deg;
+}
 @media screen and (max-width: 500px) {
     .popup .timerIcon, .popup .handIcon {
         --iconHeight: clamp(1em, 10vw, 1.5em);
