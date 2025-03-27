@@ -462,7 +462,7 @@ function gameClear() {
     isOperated = false;
     let clearedBlockAnimationExeIndex = 0;
     const clearedBlockAnimationExeInterval = setInterval(() => {
-        if (clearedBlockAnimationExeIndex < blockCaseWidth) {
+        if (clearedBlockAnimationExeIndex < blockCaseHeight) {
             clearedBlockAnimation(clearedBlockAnimationExeIndex);
             clearedBlockAnimationExeIndex += 1;
         } else {
@@ -1156,7 +1156,7 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
-    if (event.code === "KeyZ") {
-        gameClear();
-    }
+    // if (event.code === "KeyZ") {
+    //     gameClear();
+    // }
 });
