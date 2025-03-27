@@ -1012,8 +1012,8 @@ let startX, startY, endX, endY, nowX, nowY;
 let swipeRecognitionPxDefault;
 
 function swipeRecognitionPxDefaultRecognitionPxUpdate() {
-    // ブロックの横幅 * .7 か75の大きい方を使用
-    swipeRecognitionPxDefault = Math.min(Math.max(block[0].offsetWidth * .7, 75),150);
+    // ブロックの横幅 * .5 か75の大きい方を使用
+    swipeRecognitionPxDefault = Math.min(Math.max(block[0].offsetWidth * .5, 75),150);
 }
 swipeRecognitionPxDefaultRecognitionPxUpdate()
 
@@ -1079,7 +1079,7 @@ function swipeDetection(e) {
     document.addEventListener("mousemove",swipeGetNowCoordinate);
     document.addEventListener("touchmove",swipeGetNowCoordinate);
 
-    document.addEventListener("mouseup",() => { 
+    document.addEventListener("mouseup",() => {
         swipeRemoveEventListener();
     });
 
