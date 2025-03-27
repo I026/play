@@ -445,14 +445,14 @@ blocks.addEventListener("click", () => {
 function gameClear() {
     const clearedBlockBCArray = [
         "lightblue",
-        "blue",
+        "cornflowerblue",
         "lightgreen",
         "green",
         "greenyellow",
         "yellow",
         "orange",
         "coral",
-        "red"
+        "crimson"
     ]
     const clearedBlockBCArraySelect = clearedBlockBCArray[Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax + blockCaseHeightMax) / 2)) * clearedBlockBCArray.length) - 1]
     document.documentElement.style.setProperty("--clearedBlockAnimationBC", clearedBlockBCArraySelect);
