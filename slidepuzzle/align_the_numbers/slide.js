@@ -439,6 +439,16 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClear() {
+    const clearedBlockBCArray = [
+        "skyblue",
+        "blue",
+        "green",
+        "yellow",
+        "orange",
+        "red"
+    ]
+    const clearedBlockBCArraySelect = clearedBlockBCArray[Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax + blockCaseHeightMax) / 2)) * clearedBlockBCArray.length) - 1]
+    document.documentElement.style.setProperty("--clearedBlockAnimationBC", clearedBlockBCArraySelect);
     timerStop();
     saveToLocalStorage();
     const clearedBlockInterval = 75;
