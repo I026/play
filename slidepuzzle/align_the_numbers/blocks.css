@@ -21,7 +21,7 @@
                 (90vw - 10px) / var(--sampleBlockCaseWidth) - 4px
             ),
             calc(
-                (75vh) / var(--sampleBlockCaseHeight) - 16px
+                (75vh) / var(--sampleBlockCaseHeight) - 4px - (50px / var(--sampleBlockCaseHeight))
             )
         )
     );
@@ -29,6 +29,7 @@
     --blockBackgroundColor: black;
     --popupBackgroundColor: 220, 220, 220;
     --swipeAnimetionDuration: .05s;
+    --clearedBlockAnimationBC: coral;
     /* --swipeAnimetionDuration: .02s; */
 }
 body {
@@ -580,15 +581,15 @@ img {
 @keyframes clearedBlock {
     0%{
         transform: scale(1);
-        background-color: black;
+        background-color: var(--blockBackgroundColor);
     }
     50%{
         transform: scale(1.05);
-        background-color: gray;
+        background-color: var(--clearedBlockAnimationBC);
     }
     100%{
         transform: scale(1);
-        background-color: black;
+        background-color: var(--blockBackgroundColor);
     }
 }
 .clearedBlockAnimation {

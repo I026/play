@@ -439,6 +439,8 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClear() {
+    timerStop();
+    saveToLocalStorage();
     const clearedBlockInterval = 75;
     function clearedBlockAnimation(n = 0) {
         let clearedBlockAnimationIndex = 0;
@@ -472,8 +474,6 @@ function gameClear() {
         clearSteps = steps;
         // notificationDisplay(gameClearMassage);
         popupDisplay();
-        timerStop();
-        saveToLocalStorage();
         opacityMitigation();
         isGameClear = true;
         autoSaveToLocalStorage();
@@ -1156,7 +1156,7 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
-    // if (event.code === "KeyZ") {
-    //     gameClear();
-    // }
+    if (event.code === "KeyZ") {
+        gameClear();
+    }
 });
