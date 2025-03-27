@@ -444,11 +444,14 @@ blocks.addEventListener("click", () => {
 
 function gameClear() {
     const clearedBlockBCArray = [
-        "skyblue",
+        "lightblue",
         "blue",
+        "lightgreen",
         "green",
+        "greenyellow",
         "yellow",
         "orange",
+        "coral",
         "red"
     ]
     const clearedBlockBCArraySelect = clearedBlockBCArray[Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax + blockCaseHeightMax) / 2)) * clearedBlockBCArray.length) - 1]
