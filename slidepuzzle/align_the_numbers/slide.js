@@ -47,7 +47,7 @@ const blockCaseWidthMin  = 3;
 const blockCaseHeightMax = 20;
 const blockCaseHeightMin = 3;
 
-const blockswipeDurationDefault = 80;
+const blockswipeDurationDefault = 90;
 
 function blockswipeDuration(n) {
     if (n) {
@@ -395,7 +395,7 @@ function popupDisplay(n = popup[0]) {
             timerStop();
             if (!isGameClear && !timerNumberIsZero()) {
                 timeDisplay.classList.add("changeAcceptanceAnimation");
-                notificationHidden();
+                // notificationHidden();
             }
         }
     }
@@ -703,10 +703,10 @@ function blockShuffle() {
                 // シャッフル完成(Airの位置のみ未完成)
                 } else {
                     console.log("aim_DownRightAir");
-                    if (!gameClearJudge() == 0) {
-                        aim_DownRightAir = true;
-                    } else {
+                    if (!gameClearJudge() >= 1) {
                         aim_DownRightAir = false;
+                    } else {
+                        aim_DownRightAir = true;
                     }
                 }
             }
