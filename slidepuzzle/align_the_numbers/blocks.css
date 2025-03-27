@@ -568,7 +568,7 @@ img {
         opacity: 0;
     }
     75%{
-        transform: scale(.95);
+        transform: scale(.975);
         opacity: .05;
     }
     100%{
@@ -584,11 +584,8 @@ img {
         transform: scale(1);
         background-color: var(--blockBackgroundColor);
     }
-    25% {
-        transform: scale(.95);
-    }
     50% {
-        transform: scale(1.05);
+        transform: scale(.95);
         background-color: var(--clearedBlockAnimationBC);
     }
     100% {
