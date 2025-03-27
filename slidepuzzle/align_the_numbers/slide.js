@@ -39,8 +39,8 @@ let steps         = 0;
 let isOperated    = true;
 let isTimerActive = false;
 
-let blockCaseWidth  = 3;
-let blockCaseHeight = 3;
+let blockCaseWidth  = 9;
+let blockCaseHeight = 9;
 
 const blockCaseWidthMax  = 20;
 const blockCaseWidthMin  = 3;
@@ -439,7 +439,36 @@ blocks.addEventListener("click", () => {
 });
 
 function gameClear() {
+    const clearedBlockInterval = 75;
+    function clearedBlockAnimation(n = 0) {
+        let clearedBlockAnimationIndex = 0;
+        const clearedBlockAnimationInterval = setInterval(() => {
+            if (clearedBlockAnimationIndex < blockCaseWidth) {
+                const animetionTargetBlock =  block[clearedBlockAnimationIndex + n * blockCaseWidth]
+                if (animetionTargetBlock && !animetionTargetBlock.classList.contains("air")) {
+                    animetionTargetBlock.classList.add("clearedBlockAnimation");
+                    setTimeout(() => {
+                        animetionTargetBlock.classList.remove("clearedBlockAnimation");
+                    }, 400);
+                }
+                clearedBlockAnimationIndex += 1;
+            } else {
+                clearInterval(clearedBlockAnimationInterval);
+            }
+        }, clearedBlockInterval);
+    }
+    isOperated = false;
+    let clearedBlockAnimationExeIndex = 0;
+    const clearedBlockAnimationExeInterval = setInterval(() => {
+        if (clearedBlockAnimationExeIndex < blockCaseWidth) {
+            clearedBlockAnimation(clearedBlockAnimationExeIndex);
+            clearedBlockAnimationExeIndex += 1;
+        } else {
+            clearInterval(clearedBlockAnimationExeInterval);
+        }
+    }, clearedBlockInterval);
     setTimeout(() => {
+        isOperated = true;
         clearSteps = steps;
         // notificationDisplay(gameClearMassage);
         popupDisplay();
@@ -452,7 +481,7 @@ function gameClear() {
         // while (!(timerInterval) && !(autoSaveInterval)) {
         //     timerStop();
         // }
-    }, 100);
+    }, blockCaseWidth * clearedBlockInterval * 2);
 }
 
 function gameClearJudge() {
@@ -1127,4 +1156,7 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
+    // if (event.code === "KeyZ") {
+    //     gameClear();
+    // }
 });

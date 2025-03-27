@@ -577,6 +577,23 @@ img {
 .sampleBlockDisplayAnimation {
     animation: sampleBlockDisplay .4s ease-in-out both;
 }
+@keyframes clearedBlock {
+    0%{
+        transform: scale(1);
+        background-color: black;
+    }
+    50%{
+        transform: scale(1.05);
+        background-color: gray;
+    }
+    100%{
+        transform: scale(1);
+        background-color: black;
+    }
+}
+.clearedBlockAnimation {
+    animation: clearedBlock .4s ease-in-out both;
+}
 .notification {
     --fontSize: 1.2em;
     --padding: .5em;
