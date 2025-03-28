@@ -915,10 +915,10 @@ function recordRemove() {
             if (log.querySelector(".confirmDeletionDisplayAnimation")) {
                 // メニューを非表示
                 log.querySelector(".confirmDeletionDisplayAnimation").classList.remove("confirmDeletionHiddenAnimation");
-                log.querySelector(".confirmDeletionHiddenAnimation").classList.add("confirmDeletionHiddenAnimation");
-                log.querySelector(".confirmDeletionHiddenAnimation").remove();
+                log.querySelector(".confirmDeletionDisplayAnimation").classList.add("confirmDeletionHiddenAnimation");
+                // log.querySelector(".confirmDeletionHiddenAnimation").remove();
                 setTimeout(() => {
-                    log.querySelector(".confirmDeletionHiddenAnimation").remove();
+                    log.querySelector(".confirmDeletionDisplayAnimation").remove();
                 }, 250);
             // 削除メニューが非表示
             } else {
