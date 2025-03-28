@@ -54,7 +54,7 @@ let steps         = 0;
 let isOperated    = true;
 let isTimerActive = false;
 
-let blockCaseWidth  = 2;
+let blockCaseWidth  = 3;
 let blockCaseHeight = 3;
 
 const blockCaseWidthMax  = 20;
