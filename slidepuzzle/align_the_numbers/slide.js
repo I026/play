@@ -911,20 +911,26 @@ function recordRemove() {
     const recordLogs = document.querySelectorAll(".recordLogs");
     recordLogs.forEach(log => {
         log.addEventListener("click", () => {
-            // すでに削除メニューが展開済み
+            // すでに選択した削除メニューが展開済み
             if (log.querySelector(".confirmDeletionDisplayAnimation")) {
-                log.querySelector(".confirmDeletionDisplayAnimation").classList.add("confirmDeletionHiddenAnimation");
+                // メニューを非表示
+                log.querySelector(".confirmDeletionDisplayAnimation").classList.remove("confirmDeletionHiddenAnimation");
+                log.querySelector(".confirmDeletionHiddenAnimation").classList.add("confirmDeletionHiddenAnimation");
+                log.querySelector(".confirmDeletionHiddenAnimation").remove();
                 setTimeout(() => {
-                    log.querySelector(".confirmDeletionDisplayAnimation").remove();
+                    log.querySelector(".confirmDeletionHiddenAnimation").remove();
                 }, 250);
             // 削除メニューが非表示
             } else {
-                if (document.querySelector(".confirmDeletionDisplayAnimation")) {
+                // もし他に展開済みの削除メニューが存在する
+                if (document.querySelectorAll(".confirmDeletionDisplayAnimation").length >= 1) {
+                    // それを非表示
                     document.querySelector(".confirmDeletionDisplayAnimation").classList.add("confirmDeletionHiddenAnimation");
                     setTimeout(() => {
-                        document.querySelector(".confirmDeletionDisplayAnimation").remove();
+                        document.querySelector(".confirmDeletionHiddenAnimation").remove();
                     }, 250);
                 }
+                // 押された項目に以下を追加
                 log.innerHTML += `
                 <div class="confirmDeletionDisplayAnimation">
                     <img src="../medias/ng.svg" alt="Delete" ondragstart="return false;">
