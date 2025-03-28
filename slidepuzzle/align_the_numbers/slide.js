@@ -12,6 +12,7 @@ const blockCaseChangePopup = popup[2];
 const bottomBarChangePopup = popup[3];
 const recordResetPopup     = popup[4];
 const optionPopup          = document.querySelectorAll(".optionPopup");
+const recordArrayDisplay   = document.getElementById("recordArrayDisplay");
 const blockCaseChangeOp    = document.querySelector(".blockCaseChangeOp");
 const bottomBarChangeOp    = document.querySelector(".bottomBarChangeOp");
 const recordResetOp        = document.querySelector(".recordResetOp");
@@ -226,7 +227,7 @@ function bottomBarContentDisplay(text) {
     }, animationDuration);
 }
 
-function bottomBarContentChange(n = 0, ignoreThePresent = false) {
+function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) {
     if (bottomBarContent !== n && !ignoreThePresent) {
         bottomBarContent = n;
         bottomBarContentDisplay(bottomBarArray[n]);
@@ -416,6 +417,28 @@ function saveToLocalStorage() {
     newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`);
     newRecordJudgeAndSave(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
 }
+
+function getRecordArray() {
+    let removeBlockCandidate = [];
+    let removeBlockCaseWidth = 1;
+    let removeBlockCaseHeight = 1;
+    while (removeBlockCaseWidth * removeBlockCaseHeight < blockCaseWidthMax * blockCaseHeightMax) {
+        const removeLocalStorageKey1 = (`slidePuzzlePlayLog_Time${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
+        const removeLocalStorageKey2 = (`slidePuzzlePlayLog_Steps${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
+        if (localStorage.getItem(removeLocalStorageKey1)) {
+            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight}, ${localStorage.getItem(removeLocalStorageKey1).replaceAll(",", " :")}, ${localStorage.getItem(removeLocalStorageKey2)}`).split(","));
+        }
+        if (removeBlockCaseWidth < blockCaseWidthMax) {
+            removeBlockCaseWidth += 1;
+        } else {
+            removeBlockCaseWidth = 1;
+            removeBlockCaseHeight += 1;
+        }
+    }
+    return removeBlockCandidate
+}
+
+// getRecordArray();
 
 let isGameClear = false;
 
@@ -876,8 +899,65 @@ bottomBarChangeOp.addEventListener("click", () => {
     popupToggle(bottomBarChangePopup);
 });
 
+function recordDisplayUpdate() {
+    recordArrayDisplay.innerHTML = "";
+    for (let i = 0; i < getRecordArray().length; i += 1 ) {
+        recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>${getRecordArray()[i].join(" | ")}</p></div>`;
+    }
+}
+
+function recordRemove() {
+    recordDisplayUpdate();
+    const recordLogs = document.querySelectorAll(".recordLogs");
+    recordLogs.forEach(log => {
+        log.addEventListener("click", () => {
+            // すでに削除メニューが展開済み
+            if (log.querySelector(".confirmDeletionDisplayAnimation")) {
+                log.querySelector(".confirmDeletionDisplayAnimation").classList.add("confirmDeletionHiddenAnimation");
+                setTimeout(() => {
+                    log.querySelector(".confirmDeletionDisplayAnimation").remove();
+                }, 250);
+            // 削除メニューが非表示
+            } else {
+                if (document.querySelector(".confirmDeletionDisplayAnimation")) {
+                    document.querySelector(".confirmDeletionDisplayAnimation").classList.add("confirmDeletionHiddenAnimation");
+                    setTimeout(() => {
+                        document.querySelector(".confirmDeletionDisplayAnimation").remove();
+                    }, 250);
+                }
+                log.innerHTML += `
+                <div class="confirmDeletionDisplayAnimation">
+                    <img src="../medias/ng.svg" alt="Delete" ondragstart="return false;">
+                </div>`;
+                log.querySelector(".confirmDeletionDisplayAnimation").addEventListener("click", () => {
+                    localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split(" |")[0]}`);
+                    localStorage.removeItem(`slidePuzzlePlayLog_Steps${log.innerText.split(" |")[0]}`);
+                    log.classList.add("deleteRecordAnimation");
+                    let fillLine = false;
+                    recordLogs.forEach((recordLogs) => {
+                    if (fillLine) {
+                        recordLogs.classList.add("recordFillLinesAnimation");
+                    }
+                    if (recordLogs === log) {
+                        fillLine = true;
+                    }
+                    });
+                    setTimeout(() => {
+                        recordDisplayUpdate();
+                        log.remove();
+                        recordDisplay();
+                        recordRemove();
+                    }, 500);
+                });
+            }
+
+        });
+    });
+}
+
 recordResetOp.addEventListener("click", () => {
     popupToggle(recordResetPopup);
+    recordRemove();
 });
 
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
@@ -1278,8 +1358,8 @@ document.addEventListener("keydown",(event) => {
     }
     if (event.code === "KeyC") {
         if (popup[0].classList.contains("popupDisplayAnimation")) {
-            if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
-                popupToggle(blockCaseChangePopup);
+            if (document.querySelector(".optionPopup.popupDisplayAnimation")) {
+                popupToggle(document.querySelector(".optionPopup.popupDisplayAnimation"));
             } else {
                 popupToggle(optionMenuPopup);
             }
@@ -1302,7 +1382,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "Enter" || event.code === "Space") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             blockNumberChange();
         }
     }
