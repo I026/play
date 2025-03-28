@@ -1183,6 +1183,8 @@ function recoverFromLocalStorage() {
     if (localStorage.getItem("slidePuzzleBottomBar")) {
         bottomBarContent = localStorage.getItem("slidePuzzleBottomBar") * 1;
         bottomBarContentChange(bottomBarContent);
+    } else {
+        localStorage.setItem("slidePuzzleColorTheme", "false");
     }
     if (localStorage.getItem("slidePuzzleColorTheme")) {
         if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
