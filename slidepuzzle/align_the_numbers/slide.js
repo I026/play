@@ -951,7 +951,6 @@ function recordRemove() {
                     setTimeout(() => {
                         recordDisplayUpdate();
                         log.remove();
-                        recordDisplay();
                         recordRemove();
                     }, 500);
                 });
