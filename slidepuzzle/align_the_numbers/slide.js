@@ -1,31 +1,44 @@
-let blocks                = document.getElementById("blocks");
-let block                 = blocks.querySelectorAll("div");
-let substantialBlock      = blocks.querySelectorAll("div:not(.air)");
-let air                   = blocks.querySelector(".air");
-let popup                 = document.querySelectorAll(".popup");
-let btns                  = document.querySelector(".btns");
-let retryBtn              = document.getElementById("retryBtn");
-let okBtn                 = document.getElementById("okBtn");
-const expandableMenuBtn   = document.querySelector(".expandableMenuBtn");
-const widthCtrl           = popup[1].querySelector(".widthCtrl");
-const heightCtrl          = popup[1].querySelector(".heightCtrl");
-const widthUp             = widthCtrl.querySelector(".up");
-const widthDown           = widthCtrl.querySelector(".down");
-const heightUp            = heightCtrl.querySelector(".up");
-const heightDown          = heightCtrl.querySelector(".down");
-const widthNumber         = widthCtrl.querySelector(".number");
-const heightNumber        = heightCtrl.querySelector(".number");
-const menuTitle           = document.querySelector(".menuTitle");
-const topTitles           = document.getElementById("topTitles");
-const topTitle            = document.getElementById("topTitle");
-const timeDisplay         = document.getElementById("timeDisplay");
-const timeInfoDisplay     = document.getElementById("timeInfoDisplay");
-const stepsDisplay        = document.getElementById("stepsDisplay");
-const stepsInfoDisplay    = document.getElementById("stepsInfoDisplay");
-const sampleblocks        = document.querySelector(".sampleBlocks");
-const notification        = document.querySelector(".notification");
-const notificationText    = document.getElementById("notificationText");
-let timerIconHands        = document.querySelector(".timerIcon.hands");
+let blocks                 = document.getElementById("blocks");
+let block                  = blocks.querySelectorAll("div");
+let substantialBlock       = blocks.querySelectorAll("div:not(.air)");
+let air                    = blocks.querySelector(".air");
+let popup                  = document.querySelectorAll(".popup");
+let btns                   = document.querySelector(".btns");
+let retryBtn               = document.getElementById("retryBtn");
+let okBtn                  = document.getElementById("okBtn");
+const expandableMenuBtn    = document.querySelector(".expandableMenuBtn");
+const optionMenuPopup      = popup[1];
+const blockCaseChangePopup = popup[2];
+const bottomBarChangePopup = popup[3];
+const recordResetPopup     = popup[4];
+const optionPopup          = document.querySelectorAll(".optionPopup");
+const blockCaseChangeOp    = document.querySelector(".blockCaseChangeOp");
+const bottomBarChangeOp    = document.querySelector(".bottomBarChangeOp");
+const recordResetOp        = document.querySelector(".recordResetOp");
+const widthCtrl            = blockCaseChangePopup.querySelector(".widthCtrl");
+const heightCtrl           = blockCaseChangePopup.querySelector(".heightCtrl");
+const widthUp              = widthCtrl.querySelector(".up");
+const widthDown            = widthCtrl.querySelector(".down");
+const heightUp             = heightCtrl.querySelector(".up");
+const heightDown           = heightCtrl.querySelector(".down");
+const widthNumber          = widthCtrl.querySelector(".number");
+const heightNumber         = heightCtrl.querySelector(".number");
+const menuTitle            = document.querySelector(".menuTitle");
+const topTitles            = document.querySelector(".topTitles");
+const topTitle             = document.getElementById("topTitle");
+const timeDisplay          = document.getElementById("timeDisplay");
+const timeInfoDisplay      = document.getElementById("timeInfoDisplay");
+const stepsDisplay         = document.getElementById("stepsDisplay");
+const stepsInfoDisplay     = document.getElementById("stepsInfoDisplay");
+const sampleblocks         = document.querySelector(".sampleBlocks");
+const notification         = document.querySelector(".notification");
+const notificationText     = document.getElementById("notificationText");
+let timerIconHands         = document.querySelector(".timerIcon.hands");
+const optionBtn            = document.querySelector(".optionBtn");
+const bottomBarNothing     = document.querySelector(".optionPopup .bottomBarNothing");
+const bottomBarSlidepuzzle = document.querySelector(".optionPopup .bottomBarSlidepuzzle");
+const bottomBarTime        = document.querySelector(".optionPopup .bottomBarTime");
+const bottomBarSteps       = document.querySelector(".optionPopup .bottomBarSteps");
 
 let sec = 0;
 let min = 0;
@@ -34,13 +47,14 @@ let hr  = 0;
 let formattedSec = 0;
 let formattedMin = 0;
 let formattedHr = 0;
-let formattedTimes;
+const formattedTimesDefault = "00 : 00 : 00.00";
+let formattedTimes = formattedTimesDefault;
 
 let steps         = 0;
 let isOperated    = true;
 let isTimerActive = false;
 
-let blockCaseWidth  = 3;
+let blockCaseWidth  = 2;
 let blockCaseHeight = 3;
 
 const blockCaseWidthMax  = 20;
@@ -68,6 +82,7 @@ function blockswipeDuration(n) {
 //     return true;
 //   };
   
+const appNameMessage                 = `SlidePuzzle`;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフルを開始します`;
 const shuffleCompletionMassage       = `動かすとタイマーを開始します`;
@@ -197,6 +212,67 @@ function autoSaveToLocalStorage() {
     localStorage.setItem("slidePuzzleProgressAutoSave", [blocks.innerHTML, targetBlock, steps, formattedHr, formattedMin, formattedSec, blockCaseWidth, blockCaseHeight, isGameClear]);
 }
 
+let bottomBarContent = 1;
+const bottomBarArray = ["", appNameMessage, formattedTimes, steps];
+
+function bottomBarContentDisplay(text) {
+    const animationDuration = 500;
+        menuTitle.classList.add("bottomBarChangeAnimation");
+        setTimeout(() => {
+        menuTitle.innerText = text;
+    }, animationDuration / 2);
+    setTimeout(() => {
+        menuTitle.classList.remove("bottomBarChangeAnimation");
+    }, animationDuration);
+}
+
+function bottomBarContentChange(n = 0, ignoreThePresent = false) {
+    if (bottomBarContent !== n && !ignoreThePresent) {
+        bottomBarContent = n;
+        bottomBarContentDisplay(bottomBarArray[n]);
+    } else if (ignoreThePresent) {
+        bottomBarContent = n;
+        menuTitle.innerText = bottomBarArray[n];
+    }
+    localStorage.setItem("slidePuzzleBottomBar", bottomBarContent);
+}
+
+bottomBarNothing.addEventListener("click", () => {
+    // bottomBarContentNothing();
+    if (bottomBarContent !== 0) {
+        bottomBarContentChange(0);
+    }
+});
+
+bottomBarSlidepuzzle.addEventListener("click", () => {
+    // bottomBarContentSlidePuzzle();
+    if (bottomBarContent !== 1) {
+        bottomBarContentChange(1);
+    }
+});
+
+bottomBarTime.addEventListener("click", () => {
+    // bottomBarContentTime();
+    if (bottomBarContent !== 2) {
+        bottomBarContentChange(2);
+    }
+});
+
+bottomBarSteps.addEventListener("click", () => {
+    // bottomBarContentSteps();
+    if (bottomBarContent !== 3) {
+        bottomBarContentChange(3);
+    }
+});
+
+function bottomBarContentUpdate() {
+    if (bottomBarContent == 2) {
+        menuTitle.innerHTML = formattedTimes;
+    } else if (bottomBarContent == 3) {
+        menuTitle.innerHTML = steps;
+    }
+}
+
 function timerStart(h = 0, m = 0, s = 0) {
     if (!isTimerActive) {
         isTimerActive = true;
@@ -223,6 +299,7 @@ function timerStart(h = 0, m = 0, s = 0) {
                 timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes}`;
                 stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
             }, 200);
+            bottomBarContentUpdate();
         }, 10);
         if (h == 0 && m == 0 && s == 0) {
             notificationDisplay(timerStartMassage);
@@ -348,7 +425,7 @@ function menuBtnToggle(n = popup[0]) {
         popupDisplay(n);
         opacityMitigation();
     } else {
-        popupHidden(popup[deployedPopup.length - 1]);
+        popupHidden(deployedPopup[deployedPopup.length - 1]);
         if (deployedPopup.length - 1 == 0 && isOperated) {
             opacityUndo();
             // alert(formattedTimes)
@@ -385,6 +462,7 @@ function blockNumberChange() {
         // opacityUndo();
     }
     popupHidden(popup[1]);
+    popupHidden(blockCaseChangePopup);
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (timerNumberIsZero()) {
@@ -564,8 +642,14 @@ function swipe() {
             opacityUndo();
         }
         popupHidden();
-        popupHidden(popup[1]);
+        popupHidden(optionMenuPopup);
+
+        for (let i = 0; i < optionPopup.length; i += 1) {
+            popupHidden(optionPopup[i]);
+        }
+
         if (!(isGameClear)) {
+            bottomBarContentUpdate();
             if (gameClearJudge() == 0 && isOperated) {
                 gameClear();
             }
@@ -776,8 +860,24 @@ function blockShuffle() {
     }, 500);
 };
 
-topTitle.addEventListener("click", () => {
+optionBtn.addEventListener("click", () => {
     popupToggle(popup[1]);
+});
+
+topTitles.addEventListener("click", () => {
+    popupToggle(blockCaseChangePopup);
+});
+
+blockCaseChangeOp.addEventListener("click", () => {
+    popupToggle(blockCaseChangePopup);
+});
+
+bottomBarChangeOp.addEventListener("click", () => {
+    popupToggle(bottomBarChangePopup);
+});
+
+recordResetOp.addEventListener("click", () => {
+    popupToggle(recordResetPopup);
 });
 
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
@@ -846,14 +946,17 @@ function disableArrow() {
     if (!numberMatchCheck_Up(widthNumber.innerText * 1, blockCaseWidthMax)) {
         widthUp.style.transition = ".5s";
         widthUp.style.opacity = .25;
+        widthUp.style.cursor = "normal";
     }
     if (numberMatchCheck_Up(widthNumber.innerText * 1, blockCaseWidthMin + 1)) {
         widthDown.style.transition = ".5s";
         widthDown.style.opacity = .25;
+        widthDown.style.cursor = "normal";
     }
     if (!numberMatchCheck_Up(heightNumber.innerText * 1, blockCaseHeightMax)) {
         heightUp.style.transition = ".5s";
         heightUp.style.opacity = .25;
+        heightUp.style.cursor = "normal";
     }
     if (numberMatchCheck_Up(heightNumber.innerText * 1, blockCaseHeightMin + 1)) {
         heightDown.style.transition = ".5s";
@@ -926,6 +1029,10 @@ heightDown.addEventListener("click", () => {
 function recoverFromLocalStorage() {
     console.log("recoverFromLocalStorage");
     let localStorageSaveContent;
+    if (localStorage.getItem("slidePuzzleBottomBar")) {
+        bottomBarContent = localStorage.getItem("slidePuzzleBottomBar") * 1;
+        bottomBarContentChange(bottomBarContent);
+    }
     if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
         localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
         if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {
@@ -957,11 +1064,18 @@ function recoverFromLocalStorage() {
 
 recoverFromLocalStorage();
 
+bottomBarContentChange(bottomBarContent, true);
+
 expandableMenuBtn.addEventListener("click", () => {
     menuBtnToggle();
 });
 
 function retry() {
+    if (bottomBarContent == 2) {
+        bottomBarContentDisplay(formattedTimesDefault);
+    } else if (bottomBarContent == 3) {
+        bottomBarContentDisplay("0");
+    }
     isGameClear = false;
     isOperated = false;
     setTimeout(() => {
@@ -989,10 +1103,10 @@ let lastX = 0, lastY = 0, lastTime = 0;
 let lastSpeed = 0;
 let active = false;
 
-document.addEventListener("mousedown", () => { active = true; });
-document.addEventListener("mouseup", () => { active = false; });
-document.addEventListener("touchstart", () => { active = true; });
-document.addEventListener("touchend", () => { active = false; });
+blocks.addEventListener("mousedown", () => { active = true; });
+blocks.addEventListener("mouseup", () => { active = false; });
+blocks.addEventListener("touchstart", () => { active = true; });
+blocks.addEventListener("touchend", () => { active = false; });
 
 let swipeMouseSpeed;
 let swipeMouseAcceleration;
@@ -1014,11 +1128,11 @@ function calculateAcceleration(event, x, y) {
     lastTime = currentTime;
 }
 
-document.addEventListener("mousemove", (event) => {
+blocks.addEventListener("mousemove", (event) => {
     calculateAcceleration(event, event.clientX, event.clientY);
 });
 
-document.addEventListener("touchmove", (event) => {
+blocks.addEventListener("touchmove", (event) => {
     let touch = event.touches[0];
     calculateAcceleration(event, touch.clientX, touch.clientY);
 });
@@ -1085,26 +1199,26 @@ function swipeGetNowCoordinate(e) {
 function swipeRemoveEventListener() {
     swipeMovedBlock = 0;
     swipeRecognitionPx = swipeRecognitionPxDefault;
-    document.removeEventListener("mousemove",swipeGetNowCoordinate);
-    document.removeEventListener("touchmove",swipeGetNowCoordinate);
+    blocks.removeEventListener("mousemove",swipeGetNowCoordinate);
+    blocks.removeEventListener("touchmove",swipeGetNowCoordinate);
 }
 
 function swipeDetection(e) {
     swipeStartReset(e);
-    document.addEventListener("mousemove",swipeGetNowCoordinate);
-    document.addEventListener("touchmove",swipeGetNowCoordinate);
+    blocks.addEventListener("mousemove",swipeGetNowCoordinate);
+    blocks.addEventListener("touchmove",swipeGetNowCoordinate);
 
-    document.addEventListener("mouseup",() => {
+    blocks.addEventListener("mouseup",() => {
         swipeRemoveEventListener();
     });
 
-    document.addEventListener("touchend",() => { 
+    blocks.addEventListener("touchend",() => { 
         swipeRemoveEventListener();
     });
 }
 
-document.addEventListener("mousedown", swipeDetection);
-document.addEventListener("touchstart", swipeDetection);
+blocks.addEventListener("mousedown", swipeDetection);
+blocks.addEventListener("touchstart", swipeDetection);
 
 document.addEventListener("keydown",(event) => {
     if ((event.code === "KeyA" || event.code === "ArrowLeft")) {
@@ -1113,12 +1227,12 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyE" || event.code === "ArrowRight") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             heightUpCtrl();
         }
     }
     if (event.code === "KeyD") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             heightDownCtrl();
         } else {
             if (isOperated) {
@@ -1132,7 +1246,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyW") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             widthUpCtrl();
         } else {
             if (isOperated) {
@@ -1146,7 +1260,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyS") {
-        if (popup[1].classList.contains("popupDisplayAnimation")) {
+        if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             widthDownCtrl();
         } else {
             if (isOperated) {
@@ -1164,11 +1278,15 @@ document.addEventListener("keydown",(event) => {
     }
     if (event.code === "KeyC") {
         if (popup[0].classList.contains("popupDisplayAnimation")) {
-            popupToggle(popup[1]);
+            if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
+                popupToggle(blockCaseChangePopup);
+            } else {
+                popupToggle(optionMenuPopup);
+            }
         } else {
             opacityMitigation();
             popupDisplay(popup[0]);
-            popupDisplay(popup[1]);
+            popupDisplay(optionMenuPopup);
         }
     }
     if (event.code === "Escape") {
@@ -1188,7 +1306,7 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
-    // if (event.code === "KeyZ") {
-    //     gameClear();
-    // }
+    if (event.code === "KeyZ") {
+        // gameClear();
+    }
 });

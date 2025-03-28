@@ -30,7 +30,11 @@
     --popupBackgroundColor: 220, 220, 220;
     --swipeAnimetionDuration: .05s;
     --clearedBlockAnimationBC: coral;
+    color:chocolate
     /* --swipeAnimetionDuration: .02s; */
+}
+* {
+    user-select: none;
 }
 body {
     margin: 0;
@@ -70,7 +74,7 @@ body {
     height: 40px;
     width: 40px;
     right: 15px;
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     background-color: transparent;
 }
 .topMenu .expandableMenuBtn div {
@@ -182,8 +186,10 @@ body {
     text-align: center;
     margin-top: 1.5px;
     line-height: 0;
+    width: 100dvw;
+    height: 100dvh;
 }
-.popup.n2 .consoles .sampleBlocks {
+.popup.blockCaseChangePopup .consoles .sampleBlocks {
     padding: 0;
     user-select: none;
     -webkit-user-select: none;
@@ -224,7 +230,7 @@ body {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
 }
-#blocks div, .popup.n2 .consoles .sampleBlocks div {
+#blocks div, .popup.blockCaseChangePopup .consoles .sampleBlocks div {
     display: inline-block;
     box-sizing: border-box;
     margin: 0;
@@ -320,6 +326,7 @@ body {
 .popup {
     position: fixed;
     color: black;
+    overflow-X: scroll;
     background-color: rgba(var(--popupBackgroundColor), .75);
     border-radius: 20px;
     border-bottom-left-radius: 0;
@@ -330,12 +337,19 @@ body {
     left: 10px;
     backdrop-filter: blur(4px);
 }
-.popup.n2 {
-    width: calc(100% - 35px);
-    left: calc(.5 * 35px);
-    bottom: calc(-75vh - (.25 * 30px));
+.popup.optionMenuPopup {
+    width: calc(100% - 35px * 1);
+    left: calc(.5 * 35px * 1);
+    bottom: calc(-75vh - (.25 * 30px * 1));
     /* bottom: 0; */
     background-color: rgba(var(--popupBackgroundColor), .875);
+}
+.popup.optionPopup {
+    width: calc(100% - 35px * 1);
+    left: calc(.5 * 35px * 1);
+    bottom: calc(-75vh - (.25 * 30px * 1));
+    /* bottom: 0; */
+    background-color: rgba(var(--popupBackgroundColor), .9375);
 }
 @keyframes popupDisplay {
     0% {
@@ -368,7 +382,7 @@ body {
     animation: popupHidden .4s ease-in-out forwards;
 }
 .popup div, .popup p {
-    font-size: 2em;
+    font-size: 1.85em;
     text-align: center;
     user-select: none;
     -webkit-user-select: none;
@@ -386,31 +400,47 @@ body {
 .popup div, .popup p:hover {
     cursor: default;
 }
-.popup #topTitles {
+.popup .topTitles {
     margin-top: 15px;
     font-size: 1.5em;
     background-color: transparent;
-    border: 3px black solid;
+    /* border: 3px black solid; */
     border-radius: 1.5em;
     padding: 0px;
     padding-left: 20px;
     padding-right: 20px;
-    width: 150px;
+    width: auto;
     margin-left: auto;
     margin-right: auto;
+}
+.popup #topTitles :hover {
+    cursor: pointer;
 }
 .popup div #topTitle {
     font-size: 1.5em;
     background-color: transparent;
 }
-.popup div :hover {
-    cursor: pointer;
+.popup .optionBtn {
+    position: fixed;
+    height: 55px;
+    width: 55px;
+    /* left: calc(80vw);
+    top: calc(40vh); */
+    left: 1px;
+    bottom: 10px;
+    transform: translateY(2px);
+    background-color: transparent;
+}
+.popup .optionBtn img {
+    height: 100%;
+    width: 100%;
 }
 .popup .btns {
     position: absolute;
+    display: flex;
     user-select: none;
     height: 100px;
-    width: 100px;
+    width: max-content;
     padding: 5px;
     border: 0;
     border-radius: 100px;
@@ -421,12 +451,17 @@ body {
     background-color: transparent;
     /* border: 4px black solid; */
 }
+.popup .btns :hover {
+    cursor: pointer;
+}
 .popup .btns .partition {
     position: absolute;
+    display: flex;
+    background-color: black;
     top: 30px;
     width: 5px;
     padding: 0;
-    height: 150px;
+    height: 100%;
     left: calc(200px + 5px);
     border-radius: 10px;
 }
@@ -443,7 +478,26 @@ body {
     width: 90%;
     user-select: none;
 }
-.popup.n2 .consoles {
+.popup .table {
+    /* transform: translateY(-15px); */
+}
+.popup .table div {
+    width: 90%;
+    transform: translate(5%);
+    bottom: 0;
+    height: .5em;
+    border-bottom: 1px black solid;
+}
+.popup .table div p {
+    font-size: .35em;
+    height: 100%;
+    bottom: 0;
+    transform: translateY(0px);
+    left: -20px;
+    text-align: left;
+    justify-content: left;
+}
+.popup.blockCaseChangePopup .consoles {
     text-align: center;
     font-size: .8em;
     display: flex;
@@ -458,11 +512,17 @@ img {
     /* position: relative; */
     height: 1em;
 }
-.popup.n2 .consoles .widthCtrl, .popup.n2 .consoles .heightCtrl {
+.popup.blockCaseChangePopup .consoles .widthCtrl, .popup.blockCaseChangePopup .consoles .heightCtrl {
     position: relative;
     padding: 10px;
 }
-.popup.n2 .consoles .sampleBlocks {
+.popup.blockCaseChangePopup .consoles .widthCtrl .up :hover,
+.popup.blockCaseChangePopup .consoles .widthCtrl .down :hover,
+.popup.blockCaseChangePopup .consoles .heightCtrl .up :hover,
+.popup.blockCaseChangePopup .consoles .heightCtrl .down :hover {
+    cursor: pointer;
+}
+.popup.blockCaseChangePopup .consoles .sampleBlocks {
     /* transform: translateY(calc(-50% + 13dvh)); */
     /* top: 10px; */
     position: absolute;
@@ -481,7 +541,7 @@ img {
     align-items: center;
     /* transform: translateY(-30px); */
 }
-.popup.n2 .consoles .sampleBlocks div {
+.popup.blockCaseChangePopup .consoles .sampleBlocks div {
     /* all: unset; */
     padding: 0;
     box-sizing: border-box;
@@ -498,32 +558,32 @@ img {
     width: var(--sampleBlockSide);
     border-radius: calc(var(--sampleBlockSide) / 10);
 }
-.popup.n2 .consoles .down {
+.popup.blockCaseChangePopup .consoles .down {
     rotate: 180deg;
 }
-.popup.n2 .consoles img {
+.popup.blockCaseChangePopup .consoles img {
     width: .7em;
     height: .7em;
     user-select: none;
 }
-.popup.n2 .consoles img::selection {
+.popup.blockCaseChangePopup .consoles img::selection {
     background-color: transparent;
 }
-.popup.n2 .consoles .margin {
+.popup.blockCaseChangePopup .consoles .margin {
     width: 1em;
 }
-.popup.n2 .consoles span {
+.popup.blockCaseChangePopup .consoles span {
     font-size: 2em;
     width: 2em;
 }
-.popup.n2 .consoles .operatorSymbols {
+.popup.blockCaseChangePopup .consoles .operatorSymbols {
     position: relative;
     top: 1.6em;
 }
-.popup.n2 .consoles .number,
-.popup.n2 .consoles .operatorSymbols,
-.popup.n2 .consoles .up,
-.popup.n2 .consoles .down {
+.popup.blockCaseChangePopup .consoles .number,
+.popup.blockCaseChangePopup .consoles .operatorSymbols,
+.popup.blockCaseChangePopup .consoles .up,
+.popup.blockCaseChangePopup .consoles .down {
     text-shadow:
     0px 0px 10px rgba(200, 200, 200, .975),
     0px 0px 10px rgba(200, 200, 200, .975),
@@ -673,7 +733,7 @@ img {
         bottom: 60px;
     }
 }
-@media screen and (max-height: 550px) {
+@media screen and (max-height: 550px), screen and (max-width: 270px) {
     .notification {
         bottom: 10px;
         /* width: max-content; */
@@ -683,6 +743,9 @@ img {
     .topMenu .menuTitle {
         opacity: 0;
     }
+    .popup #topTitles {
+        font-size: 1em;
+    }
     /* .popup p {
         transform: translateY(-20px);
     } */
@@ -691,18 +754,42 @@ img {
         width: 70px;
         /* left: calc(80vw);
         top: calc(40vh); */
-        left: -5px;
+        justify-items: center;
         bottom: 0;
-        transform: translateY(6px);
+        transform: translate(-50%, 6px);
     }
 }
 @media screen and (max-height: 650px) {
     .popup p {
-        transform: translateY(-5px);
+        transform: translateY(0);
+        font-size: 1.2em;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 }
 @media screen and (min-height: 700px) {
-    .popup.n2 .consoles {
+    .popup.blockCaseChangePopup .consoles {
         margin-top: calc(15vh);
     }
+}
+@keyframes bottomBarChange {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(25vw);
+        opacity: 0;
+    }
+    51% {
+        transform: translateX(-25vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+.bottomBarChangeAnimation {
+    animation: bottomBarChange .5s ease-in-out both;
 }

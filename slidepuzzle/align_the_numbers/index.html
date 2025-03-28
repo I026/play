@@ -21,7 +21,7 @@
     </div>
     <div class="topMenu">
         <span class="menuTitle">
-            SlidePuzzle
+            <!-- SlidePuzzle -->
         </span>
         <div class="expandableMenuBtn">
             <div></div>
@@ -30,7 +30,8 @@
         </div>
         </div>
     <div class="popup">
-        <div id="topTitles"><span id="topTitle"></span></div>
+        <div class="topTitles"><span id="topTitle"></span></div>
+        <button class="optionBtn"><img src="../medias/option.svg" alt="Option"></button>
         <p>
             <span id="timeDisplay"></span><br>
             <span id="timeInfoDisplay"></span>
@@ -45,7 +46,24 @@
             <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
         </div>
     </div>
-    <div class="popup n2">
+    <div class="popup optionMenuPopup">
+        <div class="topTitles"><span>オプション</span></div>
+        <div class="table">
+            <div class="blockCaseChangeOp">
+                <p>ブロック数を変更</p>
+            </div>
+            <div class="bottomBarChangeOp">
+                <p>下部バーの内容を変更</p>
+            </div>
+            <!-- <div class="recordResetOp">
+                <p>記録をリセット</p>
+            </div> -->
+        </div>
+    </div>
+    <div class="popup blockCaseChangePopup optionPopup">
+        <div class="topTitles"><span>
+            ブロック数を変更
+        </span></div>
         <div class="consoles">
             <div class="sampleBlocks"></div>
             <div class="widthCtrl">
@@ -76,6 +94,35 @@
             <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
         </div>
     </div>
+    <div class="popup bottomBarChangePopup optionPopup">
+        <div class="topTitles"><span>
+            下部バーの内容を変更
+        </span></div>
+        <div class="table">
+            <div>
+                <p class="bottomBarNothing">何も表示しない</p>
+            </div>
+            <div>
+                <p class="bottomBarSlidepuzzle">"SlidePuzzle"を表示</p>
+            </div>
+            <div>
+                <p class="bottomBarTime">タイムを表示</p>
+            </div>
+            <div>
+                <p class="bottomBarSteps">手数を表示</p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="popup recordResetPopup optionPopup">
+        <div class="topTitles"><span>
+            記録をリセットします
+        </span></div>
+        <p></p>
+        <div class="btns">
+            <button><img src="../medias/ok.svg" alt="OK" ondragstart="return false;"></button>
+            <button><img src="../medias/ng.svg" alt="OK" ondragstart="return false;"></button>
+        </div>
+    </div> -->
     <script src="slide.js"></script>
     <script>
         document.querySelectorAll('img').forEach(function(img) {
