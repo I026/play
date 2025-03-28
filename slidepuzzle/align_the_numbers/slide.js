@@ -7,15 +7,16 @@ let btns                   = document.querySelector(".btns");
 let retryBtn               = document.getElementById("retryBtn");
 let okBtn                  = document.getElementById("okBtn");
 const expandableMenuBtn    = document.querySelector(".expandableMenuBtn");
+const optionPopup          = document.querySelectorAll(".optionPopup");
 const optionMenuPopup      = popup[1];
 const blockCaseChangePopup = popup[2];
 const bottomBarChangePopup = popup[3];
 const recordResetPopup     = popup[4];
-const optionPopup          = document.querySelectorAll(".optionPopup");
-const recordArrayDisplay   = document.getElementById("recordArrayDisplay");
 const blockCaseChangeOp    = document.querySelector(".blockCaseChangeOp");
 const bottomBarChangeOp    = document.querySelector(".bottomBarChangeOp");
 const recordResetOp        = document.querySelector(".recordResetOp");
+const colorThemeChangeOp   = document.querySelector(".colorThemeChangeOp");
+const recordArrayDisplay   = document.getElementById("recordArrayDisplay");
 const widthCtrl            = blockCaseChangePopup.querySelector(".widthCtrl");
 const heightCtrl           = blockCaseChangePopup.querySelector(".heightCtrl");
 const widthUp              = widthCtrl.querySelector(".up");
@@ -97,6 +98,16 @@ const recordFastestMassage           = `での最速`;
 const recordLeastMassage             = `での最少`;
 const blockLimitPlusMassage          = `これ以上増やせません`;
 const blockLimitMinusMassage         = `これ以上減らせません`;
+
+const bottomBarMessegeArray          = [`何も表示しない`, 
+                                        `${appNameMessage}を表示`,
+                                        `タイムを表示`,
+                                        `手数を表示`];
+
+const blockCaseChangeOpMessage       = `ブロック数 : `;
+const bottomBarChangeOpMessage       = `下部バーの内容 : `;
+const recordResetOpMessage           = `記録一覧`;
+const colorThemeOpMessage            = `カラーテーマ : `;
 
 const timerIconImg                   = `<img class="timerIcon" src="../medias/timer_flame.svg"> <img class="timerIcon hands" src="../medias/timer_hands.svg">`;
 const stepsIconImg                   = `<img class="handIcon" src="../medias/hand.svg">`;
@@ -456,6 +467,40 @@ function menuBtnToggle(n = popup[0]) {
     }
 }
 
+function darkThemeChange(dark) {
+    if (dark == true) {
+        document.documentElement.style.setProperty("--documentBackgroundColor", "black");
+        document.documentElement.style.setProperty("--blockOutlineColor", "gray");
+        document.documentElement.style.setProperty("--documentBaseColor", "lightgray");
+        if (popup[0].classList.contains("popupDisplayAnimation")) {
+            document.documentElement.style.setProperty("--documentBaseColor", "black");
+        }
+        localStorage.setItem("slidePuzzleColorTheme", "true");
+    } else if (dark == false) {
+        document.documentElement.style.setProperty("--documentBackgroundColor", "white");
+        document.documentElement.style.setProperty("--blockOutlineColor", "transparent");
+        document.documentElement.style.setProperty("--documentBaseColor", "black");
+        localStorage.setItem("slidePuzzleColorTheme", "false");
+    } else {
+        if (document.documentElement.style.getPropertyValue("--documentBackgroundColor") === "white") {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
+function optionMenuItemsUpdate() {
+    bottomBarNothing.innerText = bottomBarMessegeArray[0];
+    bottomBarSlidepuzzle.innerText = bottomBarMessegeArray[1];
+    bottomBarTime.innerText = bottomBarMessegeArray[2];
+    bottomBarSteps.innerText = bottomBarMessegeArray[3];
+    blockCaseChangeOp.querySelector("p").innerText = `${blockCaseChangeOpMessage}${blockCaseWidth} × ${blockCaseHeight}`;
+    bottomBarChangeOp.querySelector("p").innerText = `${bottomBarChangeOpMessage}${bottomBarMessegeArray[bottomBarContent]}`;
+    recordResetOp.querySelector("p").innerText = recordResetOpMessage;
+    colorThemeChangeOp.querySelector("p").innerText = `${colorThemeOpMessage}${darkThemeChange() ? "ダーク" : "ライト"}`;
+}
+
 function popupToggle(n = popup[0]) {
     if (n.classList.contains("popupDisplayAnimation")) {
         popupHidden(n);
@@ -498,6 +543,10 @@ okBtn.addEventListener("click", () => {
 });
 
 function popupDisplay(n = popup[0]) {
+    if (darkThemeChange()) {
+        document.documentElement.style.setProperty("--documentBaseColor", "black");
+    }
+    optionMenuItemsUpdate();
     sampleblocksGenerate();
     if (!(n.classList.contains("popupDisplayAnimation"))) {
         // isMenuDeployed = true;
@@ -523,6 +572,7 @@ function popupDisplay(n = popup[0]) {
 
 
 function popupHidden(n = popup[0]) {
+    optionMenuItemsUpdate();
     setTimeout(() => {
         widthNumber.innerText = blockCaseWidth;
         heightNumber.innerText = blockCaseHeight;
@@ -533,6 +583,9 @@ function popupHidden(n = popup[0]) {
         n.classList.remove("popupDisplayAnimation");
         n.classList.add("popupHiddenAnimation");
         if (n == popup[0]) {
+            if (darkThemeChange()) {
+                document.documentElement.style.setProperty("--documentBaseColor", "lightgray");
+            }
             const menuSticks =  expandableMenuBtn.querySelectorAll("div");
             menuSticks[0].classList.remove("menuStickRotate1Animation");
             menuSticks[2].classList.remove("menuStickRotate2Animation");
@@ -576,7 +629,7 @@ function gameClear() {
     timerStop();
     saveToLocalStorage();
     const clearedBlockInterval = 75;
-    function clearedBlockAnimation(n = 0) {
+    function clearedBlockAnimationX(n = 0) {
         let clearedBlockAnimationIndex = 0;
         const clearedBlockAnimationInterval = setInterval(() => {
             if (clearedBlockAnimationIndex < blockCaseWidth) {
@@ -597,7 +650,7 @@ function gameClear() {
     let clearedBlockAnimationExeIndex = 0;
     const clearedBlockAnimationExeInterval = setInterval(() => {
         if (clearedBlockAnimationExeIndex < blockCaseHeight) {
-            clearedBlockAnimation(clearedBlockAnimationExeIndex);
+            clearedBlockAnimationX(clearedBlockAnimationExeIndex);
             clearedBlockAnimationExeIndex += 1;
         } else {
             clearInterval(clearedBlockAnimationExeInterval);
@@ -965,6 +1018,19 @@ recordResetOp.addEventListener("click", () => {
     recordRemove();
 });
 
+colorThemeChangeOp.addEventListener("click", () => {
+    document.body.style.transition = "1s";
+    setTimeout(() => {
+        document.body.style.transition = "0";
+    }, 1000);
+    if (darkThemeChange()) {
+        darkThemeChange(false);
+    } else {
+        darkThemeChange(true);
+    }
+    optionMenuItemsUpdate();
+});
+
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
     if (n < cn) {
         return true;
@@ -1117,6 +1183,13 @@ function recoverFromLocalStorage() {
     if (localStorage.getItem("slidePuzzleBottomBar")) {
         bottomBarContent = localStorage.getItem("slidePuzzleBottomBar") * 1;
         bottomBarContentChange(bottomBarContent);
+    }
+    if (localStorage.getItem("slidePuzzleColorTheme")) {
+        if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
+            darkThemeChange(true);
+        } else {
+            darkThemeChange(false);
+        }
     }
     if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
         localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
@@ -1311,7 +1384,7 @@ document.addEventListener("keydown",(event) => {
             rightSwipe();
         }
     }
-    if (event.code === "KeyE" || event.code === "ArrowRight") {
+    if (event.code === "KeyE") {
         if (blockCaseChangePopup.classList.contains("popupDisplayAnimation")) {
             heightUpCtrl();
         }
