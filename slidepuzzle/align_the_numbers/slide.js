@@ -353,7 +353,7 @@ function timerStart(h = 0, m = 0, s = 0) {
             formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
             formattedMin = String(min).padStart(2, "0");
             formattedHr = String(hr).padStart(2, "0");
-            formattedTimes = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
+            formattedTimes = `<span class="timeDisplayNumBlock">${formattedHr}</span> : <span class="timeDisplayNumBlock">${formattedMin}</span> : <span class="timeDisplayNumBlock">${formattedSec}</span>`;
             // console.log(formattedTimes);
             setTimeout(() => {
                 topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
