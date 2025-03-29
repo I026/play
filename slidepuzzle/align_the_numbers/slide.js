@@ -78,9 +78,12 @@ function blockswipeDuration(n) {
     }
 }
 
+import { Vibration } from "react-native";
+
 function vibration(v = 10) {
     if ("vibrate" in navigator) {
         navigator.vibrate(v);
+        Vibration.vibrate(v);
         console.log(`v ${v}`)
     } else {
         console.log(`v : not supported ${v}`)
