@@ -865,12 +865,6 @@ img {
 .notificationHiddenAnimetion {
     animation: notificationHidden .25s ease-out both;
 }
-@media screen and (max-height: 700px) {
-    .popup .btns {
-        bottom: 60px;
-        left: 100px;
-    }
-}
 @media screen and (max-height: 550px), screen and (max-width: 270px) {
     .notification {
         /* bottom: 10px; */
@@ -892,6 +886,8 @@ img {
         justify-items: center;
         bottom: 0;
         transform: translate(-50%, 6px);
+        bottom: 0px;
+        left: 100px;
     }
 }
 @media screen and (max-height: 650px) {
