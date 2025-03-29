@@ -1,46 +1,47 @@
-let blocks                 = document.getElementById("blocks");
-let block                  = blocks.querySelectorAll("div");
-let substantialBlock       = blocks.querySelectorAll("div:not(.air)");
-let air                    = blocks.querySelector(".air");
-let popup                  = document.querySelectorAll(".popup");
-let btns                   = document.querySelector(".btns");
-let retryBtn               = document.getElementById("retryBtn");
-let okBtn                  = document.getElementById("okBtn");
-const expandableMenuBtn    = document.querySelector(".expandableMenuBtn");
-const optionPopup          = document.querySelectorAll(".optionPopup");
-const optionMenuPopup      = popup[1];
-const blockCaseChangePopup = popup[2];
-const bottomBarChangePopup = popup[3];
-const recordResetPopup     = popup[4];
-const blockCaseChangeOp    = document.querySelector(".blockCaseChangeOp");
-const bottomBarChangeOp    = document.querySelector(".bottomBarChangeOp");
-const recordResetOp        = document.querySelector(".recordResetOp");
-const colorThemeChangeOp   = document.querySelector(".colorThemeChangeOp");
-const recordArrayDisplay   = document.getElementById("recordArrayDisplay");
-const widthCtrl            = blockCaseChangePopup.querySelector(".widthCtrl");
-const heightCtrl           = blockCaseChangePopup.querySelector(".heightCtrl");
-const widthUp              = widthCtrl.querySelector(".up");
-const widthDown            = widthCtrl.querySelector(".down");
-const heightUp             = heightCtrl.querySelector(".up");
-const heightDown           = heightCtrl.querySelector(".down");
-const widthNumber          = widthCtrl.querySelector(".number");
-const heightNumber         = heightCtrl.querySelector(".number");
-const menuTitle            = document.querySelector(".menuTitle");
-const topTitles            = document.querySelector(".topTitles");
-const topTitle             = document.getElementById("topTitle");
-const timeDisplay          = document.getElementById("timeDisplay");
-const timeInfoDisplay      = document.getElementById("timeInfoDisplay");
-const stepsDisplay         = document.getElementById("stepsDisplay");
-const stepsInfoDisplay     = document.getElementById("stepsInfoDisplay");
-const sampleblocks         = document.querySelector(".sampleBlocks");
-const notification         = document.querySelector(".notification");
-const notificationText     = document.getElementById("notificationText");
-let timerIconHands         = document.querySelector(".timerIcon.hands");
-const optionBtn            = document.querySelector(".optionBtn");
-const bottomBarNothing     = document.querySelector(".optionPopup .bottomBarNothing");
-const bottomBarSlidepuzzle = document.querySelector(".optionPopup .bottomBarSlidepuzzle");
-const bottomBarTime        = document.querySelector(".optionPopup .bottomBarTime");
-const bottomBarSteps       = document.querySelector(".optionPopup .bottomBarSteps");
+let blocks                   = document.getElementById("blocks");
+let block                    = blocks.querySelectorAll("div");
+let substantialBlock         = blocks.querySelectorAll("div:not(.air)");
+let air                      = blocks.querySelector(".air");
+let popup                    = document.querySelectorAll(".popup");
+let btns                     = document.querySelector(".btns");
+let retryBtn                 = document.getElementById("retryBtn");
+let okBtn                    = document.getElementById("okBtn");
+const expandableMenuBtn      = document.querySelector(".expandableMenuBtn");
+const optionPopup            = document.querySelectorAll(".optionPopup");
+const optionMenuPopup        = popup[1];
+const blockCaseChangePopup   = popup[2];
+const bottomBarChangePopup   = popup[3];
+const recordResetPopup       = popup[4];
+const blockCaseChangeOp      = document.querySelector(".blockCaseChangeOp");
+const bottomBarChangeOp      = document.querySelector(".bottomBarChangeOp");
+const recordResetOp          = document.querySelector(".recordResetOp");
+const colorThemeChangeOp     = document.querySelector(".colorThemeChangeOp");
+const vibrationValidChangeOp = document.querySelector(".vibrationValidChangeOp");
+const recordArrayDisplay     = document.getElementById("recordArrayDisplay");
+const widthCtrl              = blockCaseChangePopup.querySelector(".widthCtrl");
+const heightCtrl             = blockCaseChangePopup.querySelector(".heightCtrl");
+const widthUp                = widthCtrl.querySelector(".up");
+const widthDown              = widthCtrl.querySelector(".down");
+const heightUp               = heightCtrl.querySelector(".up");
+const heightDown             = heightCtrl.querySelector(".down");
+const widthNumber            = widthCtrl.querySelector(".number");
+const heightNumber           = heightCtrl.querySelector(".number");
+const menuTitle              = document.querySelector(".menuTitle");
+const topTitles              = document.querySelector(".topTitles");
+const topTitle               = document.getElementById("topTitle");
+const timeDisplay            = document.getElementById("timeDisplay");
+const timeInfoDisplay        = document.getElementById("timeInfoDisplay");
+const stepsDisplay           = document.getElementById("stepsDisplay");
+const stepsInfoDisplay       = document.getElementById("stepsInfoDisplay");
+const sampleblocks           = document.querySelector(".sampleBlocks");
+const notification           = document.querySelector(".notification");
+const notificationText       = document.getElementById("notificationText");
+let timerIconHands           = document.querySelector(".timerIcon.hands");
+const optionBtn              = document.querySelector(".optionBtn");
+const bottomBarNothing       = document.querySelector(".optionPopup .bottomBarNothing");
+const bottomBarSlidepuzzle   = document.querySelector(".optionPopup .bottomBarSlidepuzzle");
+const bottomBarTime          = document.querySelector(".optionPopup .bottomBarTime");
+const bottomBarSteps         = document.querySelector(".optionPopup .bottomBarSteps");
 
 let sec = 0;
 let min = 0;
@@ -78,12 +79,24 @@ function blockswipeDuration(n) {
     }
 }
 
-function vibration(v = 10) {
-    if ("vibrate" in navigator) {
-        navigator.vibrate(v);
-        console.log(`v ${v}`)
+let isVibrationValid = true;
+
+function vibration(v) {
+    if (v) {
+        if (isVibrationValid) {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(v);
+                console.log(`v ${v}`)
+            } else {
+                console.log(`v : not supported ${v}`)
+            }
+        }
     } else {
-        console.log(`v : not supported ${v}`)
+        if ("vibrate" in navigator) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -108,7 +121,7 @@ const blockLimitPlusMassage          = `これ以上増やせません`;
 const blockLimitMinusMassage         = `これ以上減らせません`;
 
 const bottomBarMessegeArray          = [`何も表示しない`, 
-                                        `${appNameMessage}を表示`,
+                                        `"${appNameMessage}"を表示`,
                                         `タイムを表示`,
                                         `手数を表示`];
 
@@ -116,6 +129,13 @@ const blockCaseChangeOpMessage       = `ブロック数 : `;
 const bottomBarChangeOpMessage       = `下部バーの内容 : `;
 const recordResetOpMessage           = `記録一覧`;
 const colorThemeOpMessage            = `カラーテーマ : `;
+const vibrationValidChangeOpMessage  = `デバイスの振動 : `;
+
+const validMessage                   = `有効`;
+const invalidMessage                 = `無効`;
+
+const bottomBarLKey                  = `slidePuzzleBottomBar`;
+const vibrationValidLKey             = `slidePuzzleVibrationValid`;
 
 const timerIconImg                   = `<img class="timerIcon" src="../medias/timer_flame.svg"> <img class="timerIcon hands" src="../medias/timer_hands.svg">`;
 const stepsIconImg                   = `<img class="handIcon" src="../medias/hand.svg">`;
@@ -142,7 +162,20 @@ function selectionPrevention(o) {
 widthNumber.innerText = blockCaseWidth;
 heightNumber.innerText = blockCaseHeight;
 
+function notificationPositionUpdate() {
+    if (bottomBarContent == 0) {
+        notification.style.bottom = "10px";
+    } else {
+        notification.style.bottom = "60px";
+    }
+    notification.style.transition = ".5s";
+    setTimeout(() => {
+        notification.style.transition = "0";
+    }, 500);
+}
+
 function notificationDisplay(text = "", duration) {
+    notificationPositionUpdate();
     // すでに通知が表示されていない
     if (!(notification.classList.contains("notificationDisplayAnimetion"))) {
         notificationText.innerHTML = text;
@@ -235,6 +268,7 @@ function autoSaveToLocalStorage() {
 let bottomBarContent = 1;
 
 function bottomBarContentDisplay(text) {
+    notificationPositionUpdate();
     const animationDuration = 500;
         menuTitle.classList.add("bottomBarChangeAnimation");
         setTimeout(() => {
@@ -530,6 +564,7 @@ function optionMenuItemsUpdate() {
     bottomBarChangeOp.querySelector("p").innerText = `${bottomBarChangeOpMessage}${bottomBarMessegeArray[bottomBarContent]}`;
     recordResetOp.querySelector("p").innerText = recordResetOpMessage;
     colorThemeChangeOp.querySelector("p").innerText = `${colorThemeOpMessage}${darkThemeChange() ? "ダーク" : "ライト"}`;
+    vibrationValidChangeOp.querySelector("p").innerText = `${vibrationValidChangeOpMessage}${isVibrationValid ? validMessage : invalidMessage}`;
 }
 
 function popupToggle(n = popup[0]) {
@@ -1066,6 +1101,16 @@ colorThemeChangeOp.addEventListener("click", () => {
     optionMenuItemsUpdate();
 });
 
+vibrationValidChangeOp.addEventListener("click", () => {
+    if (isVibrationValid) {
+        isVibrationValid = false;
+    } else {
+        isVibrationValid = true;
+    }
+    localStorage.setItem(vibrationValidLKey, isVibrationValid ? "true" : "false");
+    optionMenuItemsUpdate();
+});
+
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
     if (n < cn) {
         return true;
@@ -1215,10 +1260,18 @@ heightDown.addEventListener("click", () => {
 function recoverFromLocalStorage() {
     console.log("recoverFromLocalStorage");
     let localStorageSaveContent;
-    if (localStorage.getItem("slidePuzzleBottomBar")) {
-        bottomBarContent = localStorage.getItem("slidePuzzleBottomBar") * 1;
+    if (localStorage.getItem(bottomBarLKey)) {
+        bottomBarContent = localStorage.getItem(bottomBarLKey) * 1;
         bottomBarContentChange(bottomBarContent);
     }
+    if (localStorage.getItem(vibrationValidLKey)) {
+        if (localStorage.getItem(vibrationValidLKey) == "true") {
+            isVibrationValid = true;
+        } else {
+            isVibrationValid = false;
+        }
+    }
+    optionMenuItemsUpdate();
     // if (localStorage.getItem("slidePuzzleColorTheme")) {
     //     if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
     //         darkThemeChange(true);
