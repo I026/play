@@ -672,7 +672,7 @@ function gameClear() {
                     }, 400);
                 }
                 clearedBlockAnimationIndex += 1;
-                vibration(5);
+                vibration(1);
             } else {
                 clearInterval(clearedBlockAnimationInterval);
             }
@@ -745,7 +745,7 @@ function swipe() {
     steps += 1;
     // console.log(clearSteps);
     // 振動
-    vibration(5);
+    vibration(1);
     
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
