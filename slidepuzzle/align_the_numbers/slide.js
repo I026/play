@@ -500,6 +500,12 @@ function deviceDarkThemeMatch(e) {
 
 const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+if (deviceDarkThemeQuery.matches) {
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
+} else {
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest.json">`;
+}
+
 deviceDarkThemeMatch(deviceDarkThemeQuery);
 
 deviceDarkThemeQuery.addEventListener("change", (e) => {

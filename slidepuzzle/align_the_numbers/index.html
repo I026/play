@@ -129,12 +129,6 @@
     </div>
     <script src="slide.js"></script>
     <script>
-        if (window.matchMedia("(prefers-color-scheme: dark)")) {
-            document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
-        } else {
-            document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest.json">`;
-        }
-
         document.querySelectorAll('img').forEach(function(img) {
             img.setAttribute('ondragstart', 'return false;');
         });
