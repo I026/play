@@ -1120,7 +1120,9 @@ vibrationValidChangeOp.addEventListener("click", () => {
         const notificationConventionalText = notificationDisplay();
         notificationDisplay(vibrationImpossibleMessage);
         setTimeout(() => {
-            notificationDisplay(notificationConventionalText);
+            if (notificationDisplay() == vibrationImpossibleMessage) {
+                notificationDisplay(notificationConventionalText);
+            }
         }, 3000);
     }
 });
