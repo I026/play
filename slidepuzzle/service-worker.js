@@ -8,61 +8,61 @@ const DISP_VERSION = "D1";
 
 // キャッシュ対象ディレクトリ
 const resources = [
-  "/",
-  "/img"
+    "/align_the_numbers",
+    "/medias"
 ];
 
 // キャッシュ追加
 self.addEventListener("install", function (event) {
-  console.log("ServiceWorkerInstall");
-  event.waitUntil(
-    caches.open(CACHE_VERSION)
-      .then(function (cache) {
-        console.log("cache.addAll");
-        cache.addAll(resources);
-      })
-  );
+    console.log("ServiceWorkerInstall");
+    event.waitUntil(
+        caches.open(CACHE_VERSION)
+        .then(function (cache) {
+            console.log("cache.addAll");
+            cache.addAll(resources);
+        })
+    );
 });
 // キャッシュ表示
 self.addEventListener("fetch", function (event) {
-  console.log("ServiceWorkerFetch");
-  event.respondWith(
+    console.log("ServiceWorkerFetch");
+    event.respondWith(
     // キャッシュが存在するか確認
     caches.match(event.request)
-      .then(function (response) {
+        .then(function (response) {
         if (response) {
-          return response;
+            return response;
         } else {
-          // キャッシュがないならキャッシュを追加
-          return fetch(event.request)
+            // キャッシュがないならキャッシュを追加
+            return fetch(event.request)
             .then(function (res) {
-              return caches.open(DISP_VERSION)
+                return caches.open(DISP_VERSION)
                 .then(function (cache) {
-                  console.log("cache.put");
-                  cache.put(event.request.url, res.clone());
-                  return res;
+                    console.log("cache.put");
+                    cache.put(event.request.url, res.clone());
+                    return res;
                 });
             })
             .catch(function () {
-              // 何もしない
+                // 何もしない
             });
         }
-      })
+        })
   );
 });
 // 古いキャッシュ削除
 self.addEventListener("activate", function (event) {
-  console.log("activateServiceWorker");
-  event.waitUntil(
+    console.log("activateServiceWorker");
+    event.waitUntil(
     caches.keys()
-      .then(function (keyList) {
+        .then(function (keyList) {
         return Promise.all(keyList.map(function (key) {
-          if (key !== CACHE_VERSION && key !== DISP_VERSION) {
+            if (key !== CACHE_VERSION && key !== DISP_VERSION) {
             console.log("cache.delete");
             return caches.delete(key);
-          }
+            }
         }));
-      })
-  );
-  return self.clients.claim();
+        })
+    );
+    return self.clients.claim();
 });
