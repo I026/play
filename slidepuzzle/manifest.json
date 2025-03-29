@@ -7,7 +7,7 @@
 "start_url": "https://i026.github.io/play/slidepuzzle/align_the_numbers/",
 "icons": [
   {
-    "src": "../medias/icon.png",
+    "src": "medias/icon.png",
     "sizes": "256x256",
     "type": "image/png"
   }
