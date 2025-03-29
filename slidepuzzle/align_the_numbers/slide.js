@@ -81,6 +81,9 @@ function blockswipeDuration(n) {
 function vibration(v) {
     if ("vibrate" in navigator) {
         navigator.vibrate(v);
+        console.log(`vibration ${v}`)
+    } else {
+        console.log(`vibration is not supported ${v}`)
     }
 }
 
@@ -310,7 +313,7 @@ function timerStart(h = 0, m = 0, s = 0) {
             formattedMin = String(min).padStart(2, "0");
             formattedHr = String(hr).padStart(2, "0");
             formattedTimes = `${formattedHr} : ${formattedMin} : ${formattedSec}`;
-            console.log(formattedTimes);
+            // console.log(formattedTimes);
             setTimeout(() => {
                 topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
                 timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes}`;
@@ -955,7 +958,7 @@ function blockShuffle() {
                     opacityUndo(retryBtn);
                 // シャッフル完成(Airの位置のみ未完成)
                 } else {
-                    console.log("aim_DownRightAir");
+                    // console.log("aim_DownRightAir");
                     if (!gameClearJudge() >= 1) {
                         aim_DownRightAir = false;
                     } else {
@@ -1109,7 +1112,7 @@ let now = new Date().getTime();
 function dubbleTapZoomPrevent(event) {
     now = new Date().getTime();
     if (now - lastTouchEnd <= 300) { // 300ms以内の連続タップを防ぐ
-        console.log(now - lastTouchEnd);
+        // console.log(now - lastTouchEnd);
         // ダブルタップ検出
         lastTouchEnd = now;
         return true;
