@@ -85,6 +85,7 @@ function vibration(v = 10) {
     } else {
         console.log(`vibration is not supported ${v}`)
     }
+    alert("a");
 }
 
 // window.onerror = function(message, source, lineno, colno, error) {
