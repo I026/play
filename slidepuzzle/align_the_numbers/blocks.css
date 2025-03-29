@@ -622,8 +622,15 @@ img {
     height: 1em;
 }
 .popup.blockCaseChangePopup .consoles .widthCtrl, .popup.blockCaseChangePopup .consoles .heightCtrl {
-    position: relative;
+    position: absolute;
     padding: 10px;
+    margin-top: 10px;
+}
+.popup.blockCaseChangePopup .consoles .widthCtrl {
+    transform: translateX(2em);
+}
+.popup.blockCaseChangePopup .consoles .heightCtrl {
+    transform: translateX(-2em);
 }
 .popup.blockCaseChangePopup .consoles .widthCtrl .up :hover,
 .popup.blockCaseChangePopup .consoles .widthCtrl .down :hover,
