@@ -868,17 +868,15 @@ img {
 @media screen and (max-height: 700px) {
     .popup .btns {
         bottom: 60px;
+        left: 100px;
     }
 }
 @media screen and (max-height: 550px), screen and (max-width: 270px) {
     .notification {
-        bottom: 10px;
+        /* bottom: 10px; */
         /* width: max-content; */
         max-width: 70vw;
         /* left: calc(50% - 30px); */
-    }
-    .topMenu .menuTitle {
-        opacity: 0;
     }
     .popup #topTitles {
         font-size: 1em;

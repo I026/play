@@ -130,9 +130,12 @@ const bottomBarChangeOpMessage       = `下部バーの内容 : `;
 const recordResetOpMessage           = `記録一覧`;
 const colorThemeOpMessage            = `カラーテーマ : `;
 const vibrationValidChangeOpMessage  = `デバイスの振動 : `;
+const vibrationImpossibleMessage     = `iOSでの振動はサポートされていません`;
 
 const validMessage                   = `有効`;
 const invalidMessage                 = `無効`;
+const lightThemeMessage              = `ライト`;
+const darkThemeMessage               = `ダーク`;
 
 const bottomBarLKey                  = `slidePuzzleBottomBar`;
 const vibrationValidLKey             = `slidePuzzleVibrationValid`;
@@ -174,44 +177,48 @@ function notificationPositionUpdate() {
     }, 500);
 }
 
-function notificationDisplay(text = "", duration) {
-    notificationPositionUpdate();
-    // すでに通知が表示されていない
-    if (!(notification.classList.contains("notificationDisplayAnimetion"))) {
-        notificationText.innerHTML = text;
-        // textが通知にある文字と同様
-        if (text == notificationText.innerHTML) {
-            notification.classList.remove("notificationHiddenAnimetion");
-            // notification.classList.remove("notificationHidden_D3sAnimetion");
-            notification.classList.add("notificationDisplayAnimetion");
-        }
-        // durationが存在する
-        if (typeof duration !== "undefined") {
-            const formattedDuration = Math.max(duration, 300)
-            // durationが0ではない
-            if (duration !== 0) {
-                setTimeout(() => {
-                    notificationHidden();
-                }, formattedDuration);
+function notificationDisplay(text, duration) {
+    if (text) {
+        notificationPositionUpdate();
+        // すでに通知が表示されていない
+        if (!(notification.classList.contains("notificationDisplayAnimetion"))) {
+            notificationText.innerHTML = text;
+            // textが通知にある文字と同様
+            if (text == notificationText.innerHTML) {
+                notification.classList.remove("notificationHiddenAnimetion");
+                // notification.classList.remove("notificationHidden_D3sAnimetion");
+                notification.classList.add("notificationDisplayAnimetion");
             }
-        // durationが存在しない
-        } else {
-            // setTimeout(() => {
-            //     // notification.classList.add("notificationHidden_D3sAnimetion");
-            //     notification.classList.add("notificationHidden_D3sAnimetion");
-            // }, 250);
-            setTimeout(() => {
-                if (text == notificationText.innerHTML) {
-                    notificationHidden();
+            // durationが存在する
+            if (typeof duration !== "undefined") {
+                const formattedDuration = Math.max(duration, 300)
+                // durationが0ではない
+                if (duration !== 0) {
+                    setTimeout(() => {
+                        notificationHidden();
+                    }, formattedDuration);
                 }
-            }, 3000);
+            // durationが存在しない
+            } else {
+                // setTimeout(() => {
+                //     // notification.classList.add("notificationHidden_D3sAnimetion");
+                //     notification.classList.add("notificationHidden_D3sAnimetion");
+                // }, 250);
+                setTimeout(() => {
+                    if (text == notificationText.innerHTML) {
+                        notificationHidden();
+                    }
+                }, 3000);
+            }
+        // すでに通知が表示されている
+        } else {
+            notificationHidden();
+            setTimeout(() => {
+                notificationDisplay(text, duration);
+            }, 250);
         }
-    // すでに通知が表示されている
     } else {
-        notificationHidden();
-        setTimeout(() => {
-            notificationDisplay(text, duration);
-        }, 250);
+        return notificationText.innerHTML;
     }
 }
 
@@ -563,7 +570,7 @@ function optionMenuItemsUpdate() {
     blockCaseChangeOp.querySelector("p").innerText = `${blockCaseChangeOpMessage}${blockCaseWidth} × ${blockCaseHeight}`;
     bottomBarChangeOp.querySelector("p").innerText = `${bottomBarChangeOpMessage}${bottomBarMessegeArray[bottomBarContent]}`;
     recordResetOp.querySelector("p").innerText = recordResetOpMessage;
-    colorThemeChangeOp.querySelector("p").innerText = `${colorThemeOpMessage}${darkThemeChange() ? "ダーク" : "ライト"}`;
+    colorThemeChangeOp.querySelector("p").innerText = `${colorThemeOpMessage}${darkThemeChange() ? darkThemeMessage : lightThemeMessage}`;
     vibrationValidChangeOp.querySelector("p").innerText = `${vibrationValidChangeOpMessage}${isVibrationValid ? validMessage : invalidMessage}`;
 }
 
@@ -1109,6 +1116,13 @@ vibrationValidChangeOp.addEventListener("click", () => {
     }
     localStorage.setItem(vibrationValidLKey, isVibrationValid ? "true" : "false");
     optionMenuItemsUpdate();
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        const notificationConventionalText = notificationDisplay();
+        notificationDisplay(vibrationImpossibleMessage);
+        setTimeout(() => {
+            notificationDisplay(notificationConventionalText);
+        }, 3000);
+    }
 });
 
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
