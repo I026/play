@@ -86,9 +86,11 @@ img {
     color: var(--documentBaseColor);
     transition: 1s;
 }
-.timeDisplayNumBlock {
+.timeDisplayNumBlocks span {
     display: inline-block;
     width: 1.3em;
+    justify-content: center;
+    text-align: center;
 }
 .topMenu .expandableMenuBtn {
     z-index: 100;

@@ -47,11 +47,34 @@ let sec = 0;
 let min = 0;
 let hr  = 0;
 
-let formattedSec = 0;
-let formattedMin = 0;
-let formattedHr = 0;
-const formattedTimesDefault = "00 : 00 : 00.00";
-let formattedTimes = formattedTimesDefault;
+let formattedSec = "00.00";
+let formattedMin = "00";
+let formattedHr  = "00";
+// const formattedTimesDefault = "00 : 00 : 00.00";
+
+function formattedHMSReset() {
+    formattedSec = "00.00";
+    formattedMin = "00";
+    formattedHr  = "00";
+}
+
+formattedHMSReset();
+
+function formattedTimes() {
+    console.log(String(formattedSec).split("."));
+    return `
+    <span class="timeDisplayNumBlocks">
+    <span>${
+        formattedHr
+    }</span> : <span>${
+        formattedMin
+    }</span> : <span>${
+        String(formattedSec).split(".")[0]
+    }</span>.<span>${
+        String(formattedSec).split(".")[1]
+    }</span>
+    </span>`;
+}
 
 let steps         = 0;
 let isOperated    = true;
@@ -287,7 +310,7 @@ function bottomBarContentDisplay(text) {
 }
 
 function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) {
-    const bottomBarArray = ["", appNameMessage, formattedTimes, steps];
+    const bottomBarArray = ["", appNameMessage, formattedTimes(), steps];
     if (bottomBarContent !== n && !ignoreThePresent) {
         bottomBarContent = n;
         bottomBarContentDisplay(bottomBarArray[n]);
@@ -328,7 +351,7 @@ bottomBarSteps.addEventListener("click", () => {
 
 function bottomBarContentUpdate() {
     if (bottomBarContent == 2) {
-        menuTitle.innerHTML = formattedTimes;
+        menuTitle.innerHTML = formattedTimes();
     } else if (bottomBarContent == 3) {
         menuTitle.innerHTML = steps;
     }
@@ -350,16 +373,9 @@ function timerStart(h = 0, m = 0, s = 0) {
                 hr += 1;
                 min = 0;
             }
-            formattedSec = (sec < 10 ? '0' + sec : String(sec)).substring(0, 5);
+            formattedSec = String(sec.toFixed(2)).padStart(5, "0");
             formattedMin = String(min).padStart(2, "0");
             formattedHr = String(hr).padStart(2, "0");
-            formattedTimes = `<span class="timeDisplayNumBlock">${formattedHr}</span> : <span class="timeDisplayNumBlock">${formattedMin}</span> : <span class="timeDisplayNumBlock">${formattedSec}</span>`;
-            // console.log(formattedTimes);
-            setTimeout(() => {
-                topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-                timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes}`;
-                stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
-            }, 200);
             bottomBarContentUpdate();
         }, 10);
         if (h == 0 && m == 0 && s == 0) {
@@ -617,6 +633,11 @@ okBtn.addEventListener("click", () => {
 });
 
 function popupDisplay(n = popup[0]) {
+    if (!timerNumberIsZero()) {
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+        timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
+        stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
+    }
     if (darkThemeChange()) {
         document.documentElement.style.setProperty("--documentBaseColor", "black");
     }
@@ -800,15 +821,14 @@ function swipe() {
         for (let i = 0; i < optionPopup.length; i += 1) {
             popupHidden(optionPopup[i]);
         }
-
-        if (!(isGameClear)) {
-            bottomBarContentUpdate();
-            if (gameClearJudge() == 0 && isOperated) {
-                gameClear();
-            }
-        }
         if (steps == 1) {
             timerStart();
+        }
+        if (!isGameClear) {
+            if (gameClearJudge() == 0 && isOperated) {
+                gameClear();
+                bottomBarContentUpdate();
+            }
         }
     }
     if (clearSteps + 1 == steps && isGameClear) {
@@ -1335,8 +1355,9 @@ expandableMenuBtn.addEventListener("click", () => {
 });
 
 function retry() {
+    formattedHMSReset();
     if (bottomBarContent == 2) {
-        bottomBarContentDisplay(formattedTimesDefault);
+        bottomBarContentDisplay(formattedTimes());
     } else if (bottomBarContent == 3) {
         bottomBarContentDisplay("0");
     }
