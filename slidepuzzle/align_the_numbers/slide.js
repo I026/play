@@ -1113,6 +1113,7 @@ vibrationValidChangeOp.addEventListener("click", () => {
         isVibrationValid = false;
     } else {
         isVibrationValid = true;
+        vibration(50)
     }
     localStorage.setItem(vibrationValidLKey, isVibrationValid ? "true" : "false");
     optionMenuItemsUpdate();
