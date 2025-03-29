@@ -741,7 +741,7 @@ function swipe() {
     steps += 1;
     // console.log(clearSteps);
     // 振動
-    vibration(5);
+    vibration(10);
     
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
@@ -1386,7 +1386,7 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
-    vibration(5);
+    vibration(10);
     swipeMovedBlock = 0;
     swipeRecognitionPx = swipeRecognitionPxDefault;
     blocks.removeEventListener("mousemove",swipeGetNowCoordinate);
@@ -1394,7 +1394,7 @@ function swipeRemoveEventListener() {
 }
 
 function swipeDetection(e) {
-    vibration(5);
+    vibration(10);
     swipeStartReset(e);
     blocks.addEventListener("mousemove",swipeGetNowCoordinate);
     blocks.addEventListener("touchmove",swipeGetNowCoordinate);
