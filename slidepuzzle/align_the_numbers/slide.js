@@ -81,9 +81,9 @@ function blockswipeDuration(n) {
 function vibration(v = 10) {
     if ("vibrate" in navigator) {
         navigator.vibrate(v);
-        console.log(`vibration ${v}`)
+        console.log(`v ${v}`)
     } else {
-        console.log(`vibration is not supported ${v}`)
+        console.log(`v : not supported ${v}`)
     }
 }
 
@@ -672,7 +672,7 @@ function gameClear() {
                     }, 400);
                 }
                 clearedBlockAnimationIndex += 1;
-                vibration(10);
+                vibration(5);
             } else {
                 clearInterval(clearedBlockAnimationInterval);
             }
@@ -745,7 +745,7 @@ function swipe() {
     steps += 1;
     // console.log(clearSteps);
     // 振動
-    vibration(10);
+    vibration(5);
     
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
