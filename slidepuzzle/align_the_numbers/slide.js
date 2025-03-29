@@ -225,7 +225,6 @@ function autoSaveToLocalStorage() {
 }
 
 let bottomBarContent = 1;
-const bottomBarArray = ["", appNameMessage, formattedTimes, steps];
 
 function bottomBarContentDisplay(text) {
     const animationDuration = 500;
@@ -239,6 +238,7 @@ function bottomBarContentDisplay(text) {
 }
 
 function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) {
+    const bottomBarArray = ["", appNameMessage, formattedTimes, steps];
     if (bottomBarContent !== n && !ignoreThePresent) {
         bottomBarContent = n;
         bottomBarContentDisplay(bottomBarArray[n]);
@@ -986,7 +986,8 @@ function recordRemove() {
                 // 押された項目に以下を追加
                 log.innerHTML += `
                 <div class="confirmDeletionDisplayAnimation">
-                    <img src="../medias/ng.svg" alt="Delete" ondragstart="return false;">
+                    <img src="../medias/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
+                    <img src="../medias/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">
                 </div>`;
                 log.querySelector(".confirmDeletionDisplayAnimation").addEventListener("click", () => {
                     localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split(" |")[0]}`);

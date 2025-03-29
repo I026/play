@@ -562,9 +562,40 @@ body {
 }
 .popup .table div div img {
     display: flex;
-    --size: .4em;
-    transform: translate(calc(var(--size) * .05), calc(var(--size) * .05));
-    height: calc(var(--size) * .9);
+    /* --size: .45em; */
+    /* transform: translate(calc(var(--size) * .05), calc(var(--size) * .05)); */
+    /* height: calc(var(--size) * .9); */
+    /* transform: translate(calc(.4em - var(--size)), calc(.4em - var(--size)));
+    height: calc(var(--size)); */
+    transform: translate(-.025em, -.025em);
+    height: .45em;
+    position: absolute;
+}
+@keyframes trashBoxLidOpen {
+    0% {
+        transform: translate(-.025em, -.025em);
+        rotate: 0;
+    }
+    100% {
+        transform: translate(-.035em, -.04em);
+        rotate: 5deg;
+    }
+}
+@keyframes trashBoxLidClose {
+    100% {
+        transform: translate(-.025em, -.025em);
+        rotate: 0;
+    }
+    0% {
+        transform: translate(-.035em, -.04em);
+        rotate: 5deg;
+    }
+}
+.popup .table div div img.trashBoxLid {
+    animation: trashBoxLidClose .2s ease-in-out both;
+}
+.popup .table div div img.trashBoxLid:hover {
+    animation: trashBoxLidOpen .2s ease-in-out both;
 }
 .popup .table div p {
     font-size: .35em;
