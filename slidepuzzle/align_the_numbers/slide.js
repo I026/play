@@ -279,7 +279,7 @@ function bottomBarContentDisplay(text) {
     const animationDuration = 500;
         menuTitle.classList.add("bottomBarChangeAnimation");
         setTimeout(() => {
-        menuTitle.innerText = text;
+        menuTitle.innerHTML = text;
     }, animationDuration / 2);
     setTimeout(() => {
         menuTitle.classList.remove("bottomBarChangeAnimation");
