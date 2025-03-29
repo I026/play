@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="icon" href="../medias/favicon.ico" id="favicon">
-    <link rel="manifest" href="../manifest.json">
+    <!-- <link rel="manifest" href="../manifest.json"> -->
     <title>SlidePuzzle</title>
 </head>
 <body>
@@ -129,6 +129,12 @@
     </div>
     <script src="slide.js"></script>
     <script>
+        if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
+            document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
+        } else {
+            document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest.json">`;
+        }
+
         document.querySelectorAll('img').forEach(function(img) {
             img.setAttribute('ondragstart', 'return false;');
         });

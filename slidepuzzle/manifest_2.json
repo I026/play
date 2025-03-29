@@ -2,8 +2,8 @@
 "name": "Slide Puzzle",
 "short_name": "Puzzle",
 "display": "fullscreen",
-"background_color": "white",
-"theme_color": "white",
+"background_color": "black",
+"theme_color": "black",
 "start_url": "https://i026.github.io/play/slidepuzzle/align_the_numbers/",
 "icons": [
   {
