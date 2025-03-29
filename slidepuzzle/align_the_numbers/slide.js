@@ -78,6 +78,11 @@ function blockswipeDuration(n) {
     }
 }
 
+function vibration(v) {
+    if ("vibrate" in navigator) {
+        navigator.vibrate(v);
+    }
+}
 
 // window.onerror = function(message, source, lineno, colno, error) {
 //     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
@@ -736,9 +741,7 @@ function swipe() {
     steps += 1;
     // console.log(clearSteps);
     // 振動
-    if ("vibrate" in navigator) {
-        navigator.vibrate(10);
-    }
+    vibration(5);
     
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
@@ -1383,6 +1386,7 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
+    vibration(5);
     swipeMovedBlock = 0;
     swipeRecognitionPx = swipeRecognitionPxDefault;
     blocks.removeEventListener("mousemove",swipeGetNowCoordinate);
@@ -1390,6 +1394,7 @@ function swipeRemoveEventListener() {
 }
 
 function swipeDetection(e) {
+    vibration(5);
     swipeStartReset(e);
     blocks.addEventListener("mousemove",swipeGetNowCoordinate);
     blocks.addEventListener("touchmove",swipeGetNowCoordinate);
