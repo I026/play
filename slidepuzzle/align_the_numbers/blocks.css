@@ -25,6 +25,8 @@
             )
         )
     );
+    --popupHeight: 75vh;
+    --topMenuHeight: 70px; 
     --blockColor: white;
     --blockBackgroundColor: black;
     --popupBackgroundColor: 220, 220, 220;
@@ -50,7 +52,7 @@ body {
 }
 .topMenu {
     position: absolute;
-    height: 70px;
+    height: var(--topMenuHeight);
     font-size: 2em;
     width: 100dvw;
     left: 0;
@@ -343,7 +345,7 @@ body {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     bottom: -75vh;
-    height: 75vh;
+    height: var(--popupHeight);
     width: calc(100vw - 20px);
     left: 10px;
     backdrop-filter: blur(4px);
@@ -489,9 +491,10 @@ body {
     width: 90%;
     user-select: none;
 }
-/* .popup .table {
-    transform: translateY(-15px);
-} */
+.popup .table {
+    height: calc(var(--popupHeight) - var(--topMenuHeight) * 2);
+    overflow: scroll;
+}
 .popup .table div {
     width: 90%;
     transform: translate(5%);
