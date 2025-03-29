@@ -85,7 +85,6 @@ function vibration(v = 10) {
     } else {
         console.log(`vibration is not supported ${v}`)
     }
-    alert("a");
 }
 
 // window.onerror = function(message, source, lineno, colno, error) {
@@ -1391,7 +1390,6 @@ function swipeGetNowCoordinate(e) {
 }
 
 function swipeRemoveEventListener() {
-    vibration(10);
     swipeMovedBlock = 0;
     swipeRecognitionPx = swipeRecognitionPxDefault;
     blocks.removeEventListener("mousemove",swipeGetNowCoordinate);
@@ -1399,7 +1397,6 @@ function swipeRemoveEventListener() {
 }
 
 function swipeDetection(e) {
-    vibration(10);
     swipeStartReset(e);
     blocks.addEventListener("mousemove",swipeGetNowCoordinate);
     blocks.addEventListener("touchmove",swipeGetNowCoordinate);
