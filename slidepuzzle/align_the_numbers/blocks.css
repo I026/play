@@ -38,13 +38,20 @@
     --documentBaseColor: black;
     --blockOutlineColor: transparent;
 }
+@font-face {
+    font-family: "Outfit_Local";
+    src: url("../fonts/Outfit-VariableFont_wght.ttf") format('woff2'),
+         url("../fonts/Outfit-VariableFont_wght.ttf") format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 * {
     user-select: none;
 }
 body {
     margin: 0;
     color: var(--blockColor);
-    font-family: "Outfit", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
+    font-family: "Outfit", "Outfit_Local", "Noto Sans JP", "SF Pro JP", "Arial", sans-serif;
     overflow: hidden;
     overscroll-behavior: none;
     padding-bottom: calc(env(safe-area-inset-bottom) * .75);
