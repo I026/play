@@ -346,7 +346,7 @@ body {
 .popup {
     position: fixed;
     color: black;
-    overflow-X: scroll;
+    overflow-Y: scroll;
     background-color: rgba(var(--popupBackgroundColor), .5);
     border-radius: 20px;
     border-bottom-left-radius: 0;
@@ -500,7 +500,8 @@ body {
 }
 .popup .table {
     height: calc(var(--popupHeight) - var(--topMenuHeight) * 2);
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .popup .table div {
     width: 90%;
