@@ -1393,6 +1393,7 @@ function calculateAcceleration(event, x, y) {
 }
 
 blocks.addEventListener("mousemove", (event) => {
+    blocks.style.cursor = "auto";
     calculateAcceleration(event, event.clientX, event.clientY);
 });
 
@@ -1488,6 +1489,7 @@ document.addEventListener("keydown",(event) => {
     if ((event.code === "KeyA" || event.code === "ArrowLeft")) {
         if (isOperated) {
             rightSwipe();
+            blocks.style.cursor = "none";
         }
     }
     if (event.code === "KeyE") {
@@ -1501,6 +1503,7 @@ document.addEventListener("keydown",(event) => {
         } else {
             if (isOperated) {
                 leftSwipe();
+                blocks.style.cursor = "none";
             }
         }
     }
@@ -1515,6 +1518,7 @@ document.addEventListener("keydown",(event) => {
         } else {
             if (isOperated) {
                 downSwipe();
+                blocks.style.cursor = "none";
             }
         }
     }
@@ -1529,6 +1533,7 @@ document.addEventListener("keydown",(event) => {
         } else {
             if (isOperated) {
                 upSwipe();
+                blocks.style.cursor = "none";
             }
         }
     }
@@ -1539,6 +1544,7 @@ document.addEventListener("keydown",(event) => {
     }
     if (event.code === "KeyF") {
         menuBtnToggle();
+        blocks.style.cursor = "auto";
     }
     if (event.code === "KeyC") {
         if (popup[0].classList.contains("popupDisplayAnimation")) {
