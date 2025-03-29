@@ -439,11 +439,11 @@ function getRecordArray() {
         if (localStorage.getItem(removeLocalStorageKey1)) {
             removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight}, ${localStorage.getItem(removeLocalStorageKey1).replaceAll(",", " :")}, ${localStorage.getItem(removeLocalStorageKey2)}`).split(","));
         }
-        if (removeBlockCaseWidth < blockCaseWidthMax) {
-            removeBlockCaseWidth += 1;
-        } else {
-            removeBlockCaseWidth = 1;
+        if (removeBlockCaseHeight < blockCaseHeightMax) {
             removeBlockCaseHeight += 1;
+        } else {
+            removeBlockCaseHeight = 1;
+            removeBlockCaseWidth += 1;
         }
     }
     return removeBlockCandidate
