@@ -500,6 +500,7 @@ function deviceDarkThemeMatch(e) {
 
 const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+// デバイスカラーテーマによって読み込むPWAのマニフェストファイルを変更
 if (deviceDarkThemeQuery.matches) {
     document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
 } else {

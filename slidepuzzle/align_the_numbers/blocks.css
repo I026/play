@@ -768,14 +768,14 @@ img {
         background-color: var(--blockBackgroundColor);
     }
     25% {
-        rotate: 1deg;
+        /* rotate: 1deg; */
     }
     50% {
         transform: scale(.95);
         background-color: var(--clearedBlockAnimationBC);
     }
     75% {
-        rotate: -1deg;
+        /* rotate: -1deg; */
     }
     100% {
         transform: scale(1);
