@@ -560,6 +560,7 @@ deviceDarkThemeMatch(deviceDarkThemeQuery);
 
 deviceDarkThemeQuery.addEventListener("change", (e) => {
     deviceDarkThemeMatch(e);
+    optionMenuItemsUpdate();
 });
 
 function optionMenuItemsUpdate() {
