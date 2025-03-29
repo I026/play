@@ -78,7 +78,7 @@ function blockswipeDuration(n) {
     }
 }
 
-function vibration(v) {
+function vibration(v = 10) {
     if ("vibrate" in navigator) {
         navigator.vibrate(v);
         console.log(`vibration ${v}`)
