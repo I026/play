@@ -735,6 +735,10 @@ function swipe() {
     block = blocks.querySelectorAll("div");
     steps += 1;
     // console.log(clearSteps);
+    // 振動
+    if ("vibrate" in navigator) {
+        navigator.vibrate(10);
+    }
     
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
