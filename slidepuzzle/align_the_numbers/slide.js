@@ -669,6 +669,7 @@ function gameClear() {
                     }, 400);
                 }
                 clearedBlockAnimationIndex += 1;
+                vibration(10);
             } else {
                 clearInterval(clearedBlockAnimationInterval);
             }
