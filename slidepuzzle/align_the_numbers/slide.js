@@ -475,12 +475,12 @@ function darkThemeChange(dark) {
         if (popup[0].classList.contains("popupDisplayAnimation")) {
             document.documentElement.style.setProperty("--documentBaseColor", "black");
         }
-        localStorage.setItem("slidePuzzleColorTheme", "true");
+        // localStorage.setItem("slidePuzzleColorTheme", "true");
     } else if (dark == false) {
         document.documentElement.style.setProperty("--documentBackgroundColor", "white");
         document.documentElement.style.setProperty("--blockOutlineColor", "transparent");
         document.documentElement.style.setProperty("--documentBaseColor", "black");
-        localStorage.setItem("slidePuzzleColorTheme", "false");
+        // localStorage.setItem("slidePuzzleColorTheme", "false");
     } else {
         if (document.documentElement.style.getPropertyValue("--documentBackgroundColor") === "white") {
             return false;
@@ -489,6 +489,22 @@ function darkThemeChange(dark) {
         }
     }
 }
+
+function deviceDarkThemeMatch(e) {
+    if (e.matches) {
+        darkThemeChange(true);
+    } else {
+        darkThemeChange(false);
+    }
+}
+
+const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+deviceDarkThemeMatch(deviceDarkThemeQuery);
+
+deviceDarkThemeQuery.addEventListener("change", (e) => {
+    deviceDarkThemeMatch(e);
+});
 
 function optionMenuItemsUpdate() {
     bottomBarNothing.innerText = bottomBarMessegeArray[0];
@@ -1184,16 +1200,14 @@ function recoverFromLocalStorage() {
     if (localStorage.getItem("slidePuzzleBottomBar")) {
         bottomBarContent = localStorage.getItem("slidePuzzleBottomBar") * 1;
         bottomBarContentChange(bottomBarContent);
-    } else {
-        localStorage.setItem("slidePuzzleColorTheme", "false");
     }
-    if (localStorage.getItem("slidePuzzleColorTheme")) {
-        if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
-            darkThemeChange(true);
-        } else {
-            darkThemeChange(false);
-        }
-    }
+    // if (localStorage.getItem("slidePuzzleColorTheme")) {
+    //     if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
+    //         darkThemeChange(true);
+    //     } else {
+    //         darkThemeChange(false);
+    //     }
+    // }
     if (localStorage.getItem("slidePuzzleProgressAutoSave")) {
         localStorageSaveContent = localStorage.getItem("slidePuzzleProgressAutoSave").split(",");
         if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {

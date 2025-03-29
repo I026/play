@@ -129,7 +129,7 @@
     </div>
     <script src="slide.js"></script>
     <script>
-        if (localStorage.getItem("slidePuzzleColorTheme") == "true") {
+        if (window.matchMedia("(prefers-color-scheme: dark)")) {
             document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
         } else {
             document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest.json">`;
