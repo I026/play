@@ -1,67 +1,64 @@
-self.addEventListener("fetch", (event) => {
-    console.log(event);
-});
-
-// バージョン
-const CACHE_VERSION = "1";
-const DISP_VERSION = "D1";
-
-// キャッシュ対象ディレクトリ
+const CACHE_NAME = "cache-v1";
 const resources = [
     "/align_the_numbers",
     "/medias"
 ];
 
-// キャッシュ追加
+// インストール時にキャッシュを追加
 self.addEventListener("install", function (event) {
-    console.log("ServiceWorkerInstall");
+    console.log("Service Worker installing...");
     event.waitUntil(
-        caches.open(CACHE_VERSION)
-        .then(function (cache) {
-            console.log("cache.addAll");
-            cache.addAll(resources);
+        caches.open(CACHE_NAME)
+        .then((cache) => {
+            console.log("Adding resources to cache");
+            return cache.addAll(resources);
+        })
+        .catch((error) => {
+            console.error("Failed to cache resources:", error);
         })
     );
 });
-// キャッシュ表示
+
+// フェッチ時のキャッシュ対応
 self.addEventListener("fetch", function (event) {
-    console.log("ServiceWorkerFetch");
+    console.log("Fetching:", event.request.url);
     event.respondWith(
-    // キャッシュが存在するか確認
-    caches.match(event.request)
-        .then(function (response) {
-        if (response) {
-            return response;
-        } else {
-            // キャッシュがないならキャッシュを追加
+        caches.match(event.request)
+        .then((response) => {
+            if (response) {
+                return response;
+            }
             return fetch(event.request)
-            .then(function (res) {
-                return caches.open(DISP_VERSION)
-                .then(function (cache) {
-                    console.log("cache.put");
-                    cache.put(event.request.url, res.clone());
+            .then((res) => {
+                return caches.open(CACHE_NAME)
+                .then((cache) => {
+                    if (event.request.method === "GET") {
+                        console.log("Caching new resource:", event.request.url);
+                        cache.put(event.request, res.clone());
+                    }
                     return res;
                 });
             })
-            .catch(function () {
-                // 何もしない
+            .catch(() => {
+                console.warn("Fetch failed and no cache available.");
             });
-        }
         })
-  );
+    );
 });
-// 古いキャッシュ削除
+
+// 古いキャッシュを削除
 self.addEventListener("activate", function (event) {
-    console.log("activateServiceWorker");
+    console.log("Activating new Service Worker...");
     event.waitUntil(
-    caches.keys()
-        .then(function (keyList) {
-        return Promise.all(keyList.map(function (key) {
-            if (key !== CACHE_VERSION && key !== DISP_VERSION) {
-            console.log("cache.delete");
-            return caches.delete(key);
-            }
-        }));
+        caches.keys().then((keyList) => {
+            return Promise.all(
+                keyList.map((key) => {
+                    if (key !== CACHE_NAME) {
+                        console.log("Deleting old cache:", key);
+                        return caches.delete(key);
+                    }
+                })
+            );
         })
     );
     return self.clients.claim();
