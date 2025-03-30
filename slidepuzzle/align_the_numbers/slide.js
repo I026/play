@@ -1157,7 +1157,7 @@ vibrationValidChangeOp.addEventListener("click", () => {
     }
     localStorage.setItem(vibrationValidLKey, isVibrationValid ? "true" : "false");
     optionMenuItemsUpdate();
-    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent) && isVibrationValid == true) {
         const notificationConventionalText = notificationDisplay();
         notificationDisplay(vibrationImpossibleMessage);
         setTimeout(() => {
