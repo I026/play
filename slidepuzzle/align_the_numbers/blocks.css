@@ -574,7 +574,7 @@ img {
         transform: translate(5%, 0);
     }
     100% {
-        transform: translate(5%, -.9em);
+        transform: translate(5%, -.8em);
     }
 }
 .recordFillLinesAnimation {
@@ -723,8 +723,6 @@ img {
 .popup.blockCaseChangePopup .consoles .up,
 .popup.blockCaseChangePopup .consoles .down {
     text-shadow:
-    0px 0px 10px rgba(200, 200, 200, .975),
-    0px 0px 10px rgba(200, 200, 200, .975),
     0px 0px 10px rgba(200, 200, 200, .975),
     0px 0px 10px rgba(200, 200, 200, .975),
     0px 0px 10px rgba(200, 200, 200, .975);

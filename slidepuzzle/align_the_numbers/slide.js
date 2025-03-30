@@ -43,25 +43,18 @@ const bottomBarSlidepuzzle   = document.querySelector(".optionPopup .bottomBarSl
 const bottomBarTime          = document.querySelector(".optionPopup .bottomBarTime");
 const bottomBarSteps         = document.querySelector(".optionPopup .bottomBarSteps");
 
-let sec = 0;
-let min = 0;
-let hr  = 0;
+let sec        = 0;
+let min        = 0;
+let hr         = 0;
+let elapsedSec = 0;
 
 let formattedSec = "00.00";
 let formattedMin = "00";
 let formattedHr  = "00";
 // const formattedTimesDefault = "00 : 00 : 00.00";
 
-function formattedHMSReset() {
-    formattedSec = "00.00";
-    formattedMin = "00";
-    formattedHr  = "00";
-}
-
-formattedHMSReset();
-
 function formattedTimes() {
-    console.log(String(formattedSec).split("."));
+    // console.log(String(formattedSec).split("."));
     return `
     <span class="timeDisplayNumBlocks">
     <span>${
@@ -316,7 +309,7 @@ function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) 
         bottomBarContentDisplay(bottomBarArray[n]);
     } else if (ignoreThePresent) {
         bottomBarContent = n;
-        menuTitle.innerText = bottomBarArray[n];
+        menuTitle.innerHTML = bottomBarArray[n];
     }
     localStorage.setItem("slidePuzzleBottomBar", bottomBarContent);
 }
@@ -357,27 +350,47 @@ function bottomBarContentUpdate() {
     }
 }
 
-function timerStart(h = 0, m = 0, s = 0) {
+function formattedDate(formatted = true) {
+    const now     = new Date();
+    if (formatted) {
+        const year    = now.getFullYear();
+        const month   = now.getMonth() + 1;
+        const day     = now.getDate();
+        const hours   = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        return(`${year}, ${month}, ${day}, ${hours}, ${minutes}, ${seconds}`);
+    } else {
+        return now;
+    }
+    // console.log(`${year} ${month} ${day} ${hours}:${minutes}:${seconds}`);
+}
+
+let timerStartDate;
+let timerStopDate;
+
+function timerHMSUpdate() {
+    elapsedSec = (performance.now() - timerStartDate) / 1000;
+    sec = elapsedSec % 60;
+    min = Math.floor(elapsedSec / 60);
+    hr  = Math.floor(elapsedSec / (60 * 60));
+    formattedSec = String(sec.toFixed(2)).padStart(5, "0");
+    formattedMin = String(min).padStart(2, "0");
+    formattedHr = String(hr).padStart(2, "0");
+}
+
+function timerStart(h = 0, m = 0, s = 0) { 
+    timerStartDate = performance.now() - (h * 1000 * 60 * 60) - (m * 1000 * 60) - (s * 1000);
     if (!isTimerActive) {
         isTimerActive = true;
         hr  = h * 1;
         min = m * 1;
         sec = s * 1;
         timerInterval = setInterval(() => {
-            sec += .01;
-            if (sec >= 60) {
-                min += 1;
-                sec  = 0;
-            }
-            if (min >= 60) {
-                hr += 1;
-                min = 0;
-            }
-            formattedSec = String(sec.toFixed(2)).padStart(5, "0");
-            formattedMin = String(min).padStart(2, "0");
-            formattedHr = String(hr).padStart(2, "0");
+            timerHMSUpdate();
+            console.log(elapsedSec);
             bottomBarContentUpdate();
-        }, 10);
+        }, Math.max(Math.random() * 75), 5);
         if (h == 0 && m == 0 && s == 0) {
             notificationDisplay(timerStartMassage);
         }
@@ -394,6 +407,8 @@ function timerStart(h = 0, m = 0, s = 0) {
 
 function timerStop() {
     if (isTimerActive) {
+        // timerStopDate = performance.now();
+        timerHMSUpdate();
         isTimerActive = false;
         clearInterval(timerInterval);
         clearInterval(autoSaveInterval);
@@ -410,9 +425,9 @@ function timerReset() {
     sec          = 0;
     min          = 0;
     hr           = 0;
-    formattedSec = 0;
-    formattedMin = 0;
-    formattedHr  = 0;
+    formattedSec = "00.00";
+    formattedMin = "00";
+    formattedHr  = "00";
 }
 
 function timerNumberIsZero() {
@@ -440,19 +455,6 @@ function opacityUndo(o = blocks, t = .5) {
         o.style.setProperty("animation-duration", `${t}s`);
         o.classList.add("opacityUndoAnimation");
     }
-}
-
-function getDate() {
-    const now     = new Date();
-    const year    = now.getFullYear();
-    const month   = now.getMonth() + 1;
-    const day     = now.getDate();
-    const hours   = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-
-    console.log(`${year} ${month} ${day} ${hours}:${minutes}:${seconds}`);
-    return(`${year}, ${month}, ${day}, ${hours}, ${minutes}, ${seconds}`);
 }
 
 let localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
@@ -1051,6 +1053,8 @@ bottomBarChangeOp.addEventListener("click", () => {
 
 function recordDisplayUpdate() {
     recordArrayDisplay.innerHTML = "";
+    recordArrayDisplay.scrollBy(100, 0);
+    // recordArrayDisplay.scrollBy(-parseFloat(getComputedStyle(recordArrayDisplay).fontSize) * .4, 0);
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>${getRecordArray()[i].join(" | ")}</p></div>`;
     }
@@ -1091,6 +1095,7 @@ function recordRemove() {
                     localStorage.removeItem(`slidePuzzlePlayLog_Steps${log.innerText.split(" |")[0]}`);
                     log.classList.add("deleteRecordAnimation");
                     let fillLine = false;
+                    recordArrayDisplay.scrollBy({ left: 0, top: -recordLogs[0].scrollHeight, behavior: "smooth" });
                     recordLogs.forEach((recordLogs) => {
                     if (fillLine) {
                         recordLogs.classList.add("recordFillLinesAnimation");
@@ -1355,7 +1360,7 @@ expandableMenuBtn.addEventListener("click", () => {
 });
 
 function retry() {
-    formattedHMSReset();
+    timerReset();
     if (bottomBarContent == 2) {
         bottomBarContentDisplay(formattedTimes());
     } else if (bottomBarContent == 3) {
@@ -1601,3 +1606,5 @@ document.addEventListener("keydown",(event) => {
         // gameClear();
     }
 });
+
+// タイマーの正確性UP
