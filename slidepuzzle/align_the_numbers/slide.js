@@ -379,6 +379,11 @@ function timerHMSUpdate() {
     formattedHr = String(hr).padStart(2, "0");
 }
 
+function timerIconHandsUpdate() {
+    timerIconHands = document.querySelector(".timerIcon.hands");
+    timerIconHands.style.rotate = `${formattedSec * 6}deg`;
+}
+
 function timerStart(h = 0, m = 0, s = 0) { 
     timerStartDate = performance.now() - (h * 1000 * 60 * 60) - (m * 1000 * 60) - (s * 1000);
     if (!isTimerActive) {
@@ -413,12 +418,6 @@ function timerStop() {
         clearInterval(timerInterval);
         clearInterval(autoSaveInterval);
     }
-    setTimeout(() => {
-        timerIconHands = document.querySelector(".timerIcon.hands");
-        if (timerIconHands) {
-            timerIconHands.style.rotate = `${formattedSec * 6}deg`;
-        }
-    }, 200);
 }
 
 function timerReset() {
@@ -639,6 +638,7 @@ function popupDisplay(n = popup[0]) {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
+        timerIconHandsUpdate();
     }
     if (darkThemeChange()) {
         document.documentElement.style.setProperty("--documentBaseColor", "black");
