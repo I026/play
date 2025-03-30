@@ -111,9 +111,8 @@ function vibration(v) {
         if (isVibrationValid) {
             if ("vibrate" in navigator) {
                 navigator.vibrate(v);
-                console.log(`v ${v}`)
             } else {
-                console.log(`v : not supported ${v}`)
+                console.log(`vibrate : not supported ${v}`)
             }
         }
     } else {
@@ -440,6 +439,19 @@ function timerReset() {
     formattedMin = "00";
     formattedHr  = "00";
 }
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // ページが非表示になったらタイマー停止
+        timerStop();
+    } else {
+        // ページが再表示されたら必要に応じてタイマーを再開
+        if (!isGameClear && isOperated && !timerNumberIsZero() && !popup[0].classList.contains("popupDisplayAnimation")) {
+            timerStart(formattedHr, formattedMin, formattedSec);
+            notificationDisplay(timerResetMassage);
+        }
+    }
+});
 
 function timerNumberIsZero() {
     if ((formattedHr * 1 + formattedMin * 1 + formattedSec * 1) == 0) {
