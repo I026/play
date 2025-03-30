@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="blocks.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="../medias/favicon.ico" id="favicon">
+    <!-- <link rel="manifest" href="../manifest.json"> -->
+    <title>SlidePuzzle</title>
+</head>
+<body>
+    <div id="blocks">
+    </div>
+    <div class="topMenu">
+        <span class="menuTitle">
+            <!-- SlidePuzzle -->
+        </span>
+        <div class="expandableMenuBtn">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        </div>
+    <div class="popup">
+        <div class="topTitles"><span id="topTitle"></span></div>
+        <button class="optionBtn"><img src="../medias/option.svg" alt="Option"></button>
+        <p>
+            <span id="timeDisplay"></span><br>
+            <span id="timeInfoDisplay"></span>
+        </p>
+        <p>
+            <span id="stepsDisplay"></span><br>
+            <span id="stepsInfoDisplay"></span>
+        </p>
+        <div class="btns">
+            <button id="retryBtn"><img src="../medias/retry.svg" alt="Retry" ondragstart="return false;"></button>
+            <!-- <div class="partition"></div> -->
+            <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
+        </div>
+    </div>
+    <div class="popup optionMenuPopup">
+        <div class="topTitles"><span>オプション</span></div>
+        <div class="table">
+            <div class="blockCaseChangeOp">
+                <p>ブロック数を変更</p>
+            </div>
+            <div class="bottomBarChangeOp">
+                <p>下部バーの内容を変更</p>
+            </div>
+            <div class="recordResetOp">
+                <p>記録一覧</p>
+            </div>
+            <div class="colorThemeChangeOp">
+                <p>カラーテーマ</p>
+            </div>
+            <div class="vibrationValidChangeOp">
+                <p>デバイスの振動</p>
+            </div>
+        </div>
+    </div>
+    <div class="popup blockCaseChangePopup optionPopup">
+        <div class="topTitles"><span>
+            ブロック数を変更
+        </span></div>
+        <div class="consoles">
+            <div class="sampleBlocks"></div>
+            <div class="widthCtrl">
+                <div class="up">
+                    <img src="../medias/arrow.svg" alt="WidthUp" ondragstart="return false;"><br>
+                </div>
+                <span class="number">4</span><br>
+                <div class="down">
+                    <img src="../medias/arrow.svg" alt="WidthDown" ondragstart="return false;">
+                </div>
+            </div>
+            <div>
+                <span class="operatorSymbols">×</span><br>
+            </div>
+            <div class="heightCtrl">
+                <div class="up">
+                    <img src="../medias/arrow.svg" alt="HeightUp" ondragstart="return false;"><br>
+                </div>
+                <span class="number">5</span><br>
+                <div class="down">
+                    <img src="../medias/arrow.svg" alt="HeightDown" ondragstart="return false;">
+                </div>
+            </div>
+        </div>
+        <div class="btns">
+            <button id="okBtn"><img src="../medias/ok.svg" alt="OK" ondragstart="return false;"></button>
+            <!-- <div class="partition"></div> -->
+            <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
+        </div>
+    </div>
+    <div class="popup bottomBarChangePopup optionPopup">
+        <div class="topTitles"><span>
+            下部バーの内容を変更
+        </span></div>
+        <div class="table">
+            <div>
+                <p class="bottomBarNothing">何も表示しない</p>
+            </div>
+            <div>
+                <p class="bottomBarSlidepuzzle">"SlidePuzzle"を表示</p>
+            </div>
+            <div>
+                <p class="bottomBarTime">タイムを表示</p>
+            </div>
+            <div>
+                <p class="bottomBarSteps">手数を表示</p>
+            </div>
+        </div>
+    </div>
+    <div class="popup recordResetPopup optionPopup">
+        <div class="topTitles"><span>
+            最速記録一覧
+        </span></div>
+        <div class="table" id="recordArrayDisplay">
+            <img src="../medias/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
+            <img src="../medias/trashBoxLid.svg" alt="Delete" ondragstart="return false;">
+        </div>
+        <!-- <div class="btns">
+            <button><img src="../medias/ok.svg" alt="OK" ondragstart="return false;"></button>
+        </div> -->
+    </div>
+    <div class="notification">
+        <div>
+            <span id="notificationText"></span>
+        </div>
+    </div>
+    <script src="slide.js"></script>
+    <script>
+        if (navigator.serviceWorker) {
+        navigator.serviceWorker.register ("../service-worker.js");
+        }
+    </script>
+</body>
+</html>
+<!-- 
+<img class="timerIcon" src="../medias/timer.svg">
+<img class="handIcon" src="../medias/hand.svg">
+ -->
+
+<!-- <div class="block1"><p>1</p></div>
+<div class="block2"><p>2</p></div>
+<div class="block3"><p>3</p></div>
+<div class="block4"><p>4</p></div>
+<br>
+<div class="block5"><p>5</p></div>
+<div class="block6"><p>6</p></div>
+<div class="block7"><p>7</p></div>
+<div class="block8"><p>8</p></div>
+<br>
+<div class="block9"><p>9</p></div>
+<div class="block10"><p>10</p></div>
+<div class="block11"><p>11</p></div>
+<div class="block12"><p>12</p></div>
+<br>
+<div class="block13"><p>13</p></div>
+<div class="block14"><p>14</p></div>
+<div class="block15"><p>15</p></div>
+<div class="block16"><p>16</p></div>
+<br>
+<div class="block17"><p>17</p></div>
+<div class="block18"><p>18</p></div>
+<div class="block19"><p>19</p></div>
+<div class="block20"><p>20</p></div>
+<br>
+<div class="block21"><p>21</p></div>
+<div class="block22"><p>22</p></div>
+<div class="block23"><p>23</p></div>
+<div class="block24"><p>24</p></div>
+<br>
+<div class="block25"><p>25</p></div>
+<div class="block26"><p>26</p></div>
+<div class="block27"><p>27</p></div>
+<div class="air"><p>&nbsp;</p></div> -->

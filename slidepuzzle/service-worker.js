@@ -1,9 +1,9 @@
 const CACHE_NAME = "cache-v1";
-const OFFLINE_PAGE = "/align_the_numbers/index.html";
+const OFFLINE_PAGE = "/sort/index.html";
 const resources = [
-    "/align_the_numbers/index.html",
-    "/align_the_numbers/block.css",
-    "/align_the_numbers/slide.js",
+    "/sort/index.html",
+    "/sort/block.css",
+    "/sort/slide.js",
     "/medias/arrow.svg",
     "/medias/continue.svg",
     "/medias/favicon.ico",
