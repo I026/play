@@ -464,6 +464,28 @@ img {
     height: 100%;
     width: 100%;
 }
+@keyframes optionMenuPopupDisplayOptionBtn {
+    0% {
+        rotate: 0deg;
+    }
+    100% {
+        rotate: 90deg;
+    }
+}
+.optionMenuPopupDisplayOptionBtnAnimation {
+    animation: optionMenuPopupDisplayOptionBtn .5s ease-in-out both;
+}
+@keyframes optionMenuPopupHiddenOptionBtn {
+    0% {
+        rotate: 90deg;
+    }
+    100% {
+        rotate: 0deg;
+    }
+}
+.optionMenuPopupHiddenOptionBtnAnimation {
+    animation: optionMenuPopupHiddenOptionBtn .5s ease-in-out both;
+}
 .popup .btns {
     position: absolute;
     display: flex;

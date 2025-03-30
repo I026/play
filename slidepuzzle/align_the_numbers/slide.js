@@ -665,6 +665,10 @@ function popupDisplay(n = popup[0]) {
             }
         }
     }
+    if (n == optionMenuPopup) {
+        optionBtn.querySelector("img").classList.remove("optionMenuPopupHiddenOptionBtnAnimation");
+        optionBtn.querySelector("img").classList.add("optionMenuPopupDisplayOptionBtnAnimation");
+    }
 }
 
 
@@ -696,6 +700,10 @@ function popupHidden(n = popup[0]) {
             }
             timeDisplay.classList.remove("changeAcceptanceAnimation");
         }
+    }
+    if (n == optionMenuPopup) {
+        optionBtn.querySelector("img").classList.remove("optionMenuPopupDisplayOptionBtnAnimation");
+        optionBtn.querySelector("img").classList.add("optionMenuPopupHiddenOptionBtnAnimation");
     }
 }
 
@@ -1037,6 +1045,12 @@ function blockShuffle() {
 
 optionBtn.addEventListener("click", () => {
     popupToggle(popup[1]);
+});
+
+menuTitle.addEventListener("click", () => {
+    if (popup[0].classList.contains("popupDisplayAnimation") && !optionMenuPopup.classList.contains("popupDisplayAnimation")) {
+        popupToggle(bottomBarChangePopup);
+    }
 });
 
 topTitles.addEventListener("click", () => {
