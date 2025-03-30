@@ -87,6 +87,15 @@ window.addEventListener("scroll", () => {
     window.scrollTo({top: 0});
 });
 
+function imgUserOperationLock() {
+    document.querySelectorAll("img").forEach(function(img) {
+        img.setAttribute("ondragstart", "return false;");
+        img.setAttribute("oncontextmenu", "return false;");
+    });
+}
+
+imgUserOperationLock();
+
 function blockswipeDuration(n) {
     if (n) {
         document.documentElement.style.setProperty("--swipeAnimetionDuration", `${n / 1000}s`);
@@ -669,6 +678,7 @@ function popupDisplay(n = popup[0]) {
         optionBtn.querySelector("img").classList.remove("optionMenuPopupHiddenOptionBtnAnimation");
         optionBtn.querySelector("img").classList.add("optionMenuPopupDisplayOptionBtnAnimation");
     }
+    imgUserOperationLock();
 }
 
 
@@ -949,6 +959,7 @@ function recordDisplay() {
         timeInfoDisplay.innerText  = "";
         stepsInfoDisplay.innerText = "";
     }
+    imgUserOperationLock();
 }
 
 function blockShuffle() {
