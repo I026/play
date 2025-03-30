@@ -92,8 +92,8 @@ button:focus {
 .timeDisplayNumBlocks span {
     display: inline-block;
     width: 1.3em;
-    justify-content: center;
-    text-align: center;
+    justify-content: right;
+    text-align: right;
 }
 .topMenu .expandableMenuBtn {
     z-index: 100;

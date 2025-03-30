@@ -1078,8 +1078,6 @@ bottomBarChangeOp.addEventListener("click", () => {
 
 function recordDisplayUpdate() {
     recordArrayDisplay.innerHTML = "";
-    recordArrayDisplay.scrollBy(100, 0);
-    // recordArrayDisplay.scrollBy(-parseFloat(getComputedStyle(recordArrayDisplay).fontSize) * .4, 0);
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>${getRecordArray()[i].join(" | ")}</p></div>`;
     }
@@ -1627,9 +1625,7 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
-    if (event.code === "KeyZ") {
-        // gameClear();
-    }
+    // if (event.code === "KeyZ") {
+    //     gameClear();
+    // }
 });
-
-// タイマーの正確性UP
