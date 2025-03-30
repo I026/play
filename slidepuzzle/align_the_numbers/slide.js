@@ -390,7 +390,7 @@ function timerStart(h = 0, m = 0, s = 0) {
             timerHMSUpdate();
             console.log(elapsedSec);
             bottomBarContentUpdate();
-        }, Math.max(Math.random() * 75), 5);
+        }, 47);
         if (h == 0 && m == 0 && s == 0) {
             notificationDisplay(timerStartMassage);
         }
