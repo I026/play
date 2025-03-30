@@ -402,7 +402,7 @@ function timerStart(h = 0, m = 0, s = 0) {
         sec = s * 1;
         timerInterval = setInterval(() => {
             timerHMSUpdate();
-            console.log(elapsedSec);
+            // console.log(elapsedSec);
             bottomBarContentUpdate();
         }, 47);
         if (h == 0 && m == 0 && s == 0) {
