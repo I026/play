@@ -381,7 +381,7 @@ let timerStopDate;
 function timerHMSUpdate() {
     elapsedSec = (performance.now() - timerStartDate) / 1000;
     sec = elapsedSec % 60;
-    min = Math.floor(elapsedSec / 60);
+    min = Math.floor(elapsedSec / 60) % 60;
     hr  = Math.floor(elapsedSec / (60 * 60));
     formattedSec = String(sec.toFixed(2)).padStart(5, "0");
     formattedMin = String(min).padStart(2, "0");
