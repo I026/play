@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="blocks.css">
+    <link rel="stylesheet" href="../systems/css/blocks.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="icon" href="../medias/favicon.ico" id="favicon">
+    <link rel="icon" href="../systems/imgs/favicon.ico" id="favicon">
     <!-- <link rel="manifest" href="../manifest.json"> -->
     <title>SlidePuzzle</title>
 </head>
@@ -26,7 +26,7 @@
         </div>
     <div class="popup">
         <div class="topTitles"><span id="topTitle"></span></div>
-        <button class="optionBtn"><img src="../medias/option.svg" alt="Option"></button>
+        <button class="optionBtn"><img src="../systems/imgs/option.svg" alt="Option"></button>
         <p>
             <span id="timeDisplay"></span><br>
             <span id="timeInfoDisplay"></span>
@@ -36,9 +36,9 @@
             <span id="stepsInfoDisplay"></span>
         </p>
         <div class="btns">
-            <button id="retryBtn"><img src="../medias/retry.svg" alt="Retry" ondragstart="return false;"></button>
+            <button id="retryBtn"><img src="../systems/imgs/retry.svg" alt="Retry" ondragstart="return false;"></button>
             <!-- <div class="partition"></div> -->
-            <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
+            <!-- <button id="continueBtn"><img src="../systems/imgs/continue.svg" alt="Retry"></button> -->
         </div>
     </div>
     <div class="popup optionMenuPopup">
@@ -69,11 +69,11 @@
             <div class="sampleBlocks"></div>
             <div class="widthCtrl">
                 <div class="up">
-                    <img src="../medias/arrow.svg" alt="WidthUp" ondragstart="return false;"><br>
+                    <img src="../systems/imgs/arrow.svg" alt="WidthUp" ondragstart="return false;"><br>
                 </div>
                 <span class="number">4</span><br>
                 <div class="down">
-                    <img src="../medias/arrow.svg" alt="WidthDown" ondragstart="return false;">
+                    <img src="../systems/imgs/arrow.svg" alt="WidthDown" ondragstart="return false;">
                 </div>
             </div>
             <div>
@@ -81,18 +81,18 @@
             </div>
             <div class="heightCtrl">
                 <div class="up">
-                    <img src="../medias/arrow.svg" alt="HeightUp" ondragstart="return false;"><br>
+                    <img src="../systems/imgs/arrow.svg" alt="HeightUp" ondragstart="return false;"><br>
                 </div>
                 <span class="number">5</span><br>
                 <div class="down">
-                    <img src="../medias/arrow.svg" alt="HeightDown" ondragstart="return false;">
+                    <img src="../systems/imgs/arrow.svg" alt="HeightDown" ondragstart="return false;">
                 </div>
             </div>
         </div>
         <div class="btns">
-            <button id="okBtn"><img src="../medias/ok.svg" alt="OK" ondragstart="return false;"></button>
+            <button id="okBtn"><img src="../systems/imgs/ok.svg" alt="OK" ondragstart="return false;"></button>
             <!-- <div class="partition"></div> -->
-            <!-- <button id="continueBtn"><img src="../medias/continue.svg" alt="Retry"></button> -->
+            <!-- <button id="continueBtn"><img src="../systems/imgs/continue.svg" alt="Retry"></button> -->
         </div>
     </div>
     <div class="popup bottomBarChangePopup optionPopup">
@@ -119,11 +119,11 @@
             最速記録一覧
         </span></div>
         <div class="table" id="recordArrayDisplay">
-            <img src="../medias/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
-            <img src="../medias/trashBoxLid.svg" alt="Delete" ondragstart="return false;">
+            <img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
+            <img src="../systems/imgs/trashBoxLid.svg" alt="Delete" ondragstart="return false;">
         </div>
         <!-- <div class="btns">
-            <button><img src="../medias/ok.svg" alt="OK" ondragstart="return false;"></button>
+            <button><img src="../systems/imgs/ok.svg" alt="OK" ondragstart="return false;"></button>
         </div> -->
     </div>
     <div class="notification">
@@ -131,7 +131,7 @@
             <span id="notificationText"></span>
         </div>
     </div>
-    <script src="slide.js"></script>
+    <script src="../systems/js/slide.js"></script>
     <script>
         if (navigator.serviceWorker) {
             navigator.serviceWorker.register ("../service-worker.js");
@@ -140,8 +140,8 @@
 </body>
 </html>
 <!-- 
-<img class="timerIcon" src="../medias/timer.svg">
-<img class="handIcon" src="../medias/hand.svg">
+<img class="timerIcon" src="../systems/imgs/timer.svg">
+<img class="handIcon" src="../systems/imgs/hand.svg">
  -->
 
 <!-- <div class="block1"><p>1</p></div>

@@ -164,8 +164,8 @@ const darkThemeMessage               = `ダーク`;
 const bottomBarLKey                  = `slidePuzzleBottomBar`;
 const vibrationValidLKey             = `slidePuzzleVibrationValid`;
 
-const timerIconImg                   = `<img class="timerIcon" src="../medias/timer_flame.svg"> <img class="timerIcon hands" src="../medias/timer_hands.svg">`;
-const stepsIconImg                   = `<img class="handIcon" src="../medias/hand.svg">`;
+const timerIconImg                   = `<img class="timerIcon" src="../systems/imgs/timer_flame.svg"> <img class="timerIcon hands" src="../systems/imgs/timer_hands.svg">`;
+const stepsIconImg                   = `<img class="handIcon" src="../systems/imgs/hand.svg">`;
 
 function selectionPrevention(o) {
     let tentative;
@@ -594,9 +594,9 @@ const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
 // デバイスカラーテーマによって読み込むPWAのマニフェストファイルを変更
 if (deviceDarkThemeQuery.matches) {
-    document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest_2.json">`;
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest_2.json">`;
 } else {
-    document.querySelector("head").innerHTML += `<link rel="manifest" href="../manifest.json">`;
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest.json">`;
 }
 
 deviceDarkThemeMatch(deviceDarkThemeQuery);
@@ -1124,8 +1124,8 @@ function recordRemove() {
                 // 押された項目に以下を追加
                 log.innerHTML += `
                 <div class="confirmDeletionDisplayAnimation">
-                    <img src="../medias/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
-                    <img src="../medias/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">
+                    <img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
+                    <img src="../systems/imgs/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">
                 </div>`;
                 log.querySelector(".confirmDeletionDisplayAnimation").addEventListener("click", () => {
                     localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split(" |")[0]}`);

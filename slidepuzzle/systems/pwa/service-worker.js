@@ -1,22 +1,22 @@
 const CACHE_NAME = "cache-v1";
-const OFFLINE_PAGE = "/sort/index.html";
+const OFFLINE_PAGE = "../../sort/index.html";
 const resources = [
-    "/sort/index.html",
-    "/sort/block.css",
-    "/sort/slide.js",
-    "/medias/arrow.svg",
-    "/medias/continue.svg",
-    "/medias/favicon.ico",
-    "/medias/hand.svg",
-    "/medias/icon.png",
-    "/medias/ng.svg",
-    "/medias/option.svg",
-    "/medias/retry.svg",
-    "/medias/timer_flame.svg",
-    "/medias/timer_hands.svg",
-    "/medias/trashBoxBase.svg",
-    "/medias/trashBoxLid.svg",
-    "/fonts/Outfit-VariableFont_wght.ttf",
+    "../../sort/index.html",
+    "../css/block.css",
+    "../js/slide.js",
+    "../imgs/arrow.svg",
+    "../imgs/continue.svg",
+    "../imgs/favicon.ico",
+    "../imgs/hand.svg",
+    "../imgs/icon.png",
+    "../imgs/ng.svg",
+    "../imgs/option.svg",
+    "../imgs/retry.svg",
+    "../imgs/timer_flame.svg",
+    "../imgs/timer_hands.svg",
+    "../imgs/trashBoxBase.svg",
+    "../imgs/trashBoxLid.svg",
+    "../fonts/Outfit-VariableFont_wght.ttf",
     OFFLINE_PAGE
 ];
 
