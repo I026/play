@@ -448,7 +448,7 @@ document.addEventListener("visibilitychange", () => {
         // ページが再表示されたら必要に応じてタイマーを再開
         if (!isGameClear && isOperated && !timerNumberIsZero() && !popup[0].classList.contains("popupDisplayAnimation")) {
             timerStart(formattedHr, formattedMin, formattedSec);
-            notificationDisplay(timerResetMassage);
+            notificationDisplay(timerRestartMassage);
         }
     }
 });
