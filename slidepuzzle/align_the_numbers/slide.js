@@ -1483,26 +1483,28 @@ function swipeGetNowCoordinate(e) {
             if (swipeMovedBlock >= 2) {
                 swipeRecognitionPx = swipeRecognitionPxDefault / Math.min(swipeMovedBlock, 10);
             }
-            // console.log(swipeRecognitionPx);
-            if (Math.abs(difiX) > swipeRecognitionPx) {
-                if (difiX > swipeRecognitionPx) {
-                    leftSwipe();
-                }
-                if (difiX < -swipeRecognitionPx) {
-                    rightSwipe();
-                }
-                swipeStartReset(e);
-                swipeMovedBlock += 1;
-            } else if (Math.abs(difiY) > swipeRecognitionPx) {
-                if (difiY > swipeRecognitionPx) {
-                    upSwipe();
-                }
-                if (difiY < -swipeRecognitionPx) {
-                    downSwipe();
-                }
-                swipeStartReset(e);
-                swipeMovedBlock += 1;
-            }            
+            if (e.buttons & 1) {
+                // console.log(swipeRecognitionPx);
+                if (Math.abs(difiX) > swipeRecognitionPx) {
+                    if (difiX > swipeRecognitionPx) {
+                        leftSwipe();
+                    }
+                    if (difiX < -swipeRecognitionPx) {
+                        rightSwipe();
+                    }
+                    swipeStartReset(e);
+                    swipeMovedBlock += 1;
+                } else if (Math.abs(difiY) > swipeRecognitionPx) {
+                    if (difiY > swipeRecognitionPx) {
+                        upSwipe();
+                    }
+                    if (difiY < -swipeRecognitionPx) {
+                        downSwipe();
+                    }
+                    swipeStartReset(e);
+                    swipeMovedBlock += 1;
+                }            
+            }
         }
     }
     nowX = e.clientX ?? e.touches[0].clientX;
