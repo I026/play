@@ -166,6 +166,9 @@ const vibrationValidLKey             = `slidePuzzleVibrationValid`;
 
 const timerIconImg                   = `<img class="timerIcon" src="../systems/imgs/timer_flame.svg"> <img class="timerIcon hands" src="../systems/imgs/timer_hands.svg">`;
 const stepsIconImg                   = `<img class="handIcon" src="../systems/imgs/hand.svg">`;
+const trashBoxIconImg                = `<img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
+                                        <img src="../systems/imgs/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">`;
+
 
 function selectionPrevention(o) {
     let tentative;
@@ -1124,8 +1127,7 @@ function recordRemove() {
                 // 押された項目に以下を追加
                 log.innerHTML += `
                 <div class="confirmDeletionDisplayAnimation">
-                    <img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
-                    <img src="../systems/imgs/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">
+                    ${trashBoxIconImg}
                 </div>`;
                 log.querySelector(".confirmDeletionDisplayAnimation").addEventListener("click", () => {
                     localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split(" |")[0]}`);
