@@ -406,6 +406,7 @@ function timerStart(h = 0, m = 0, s = 0) {
             timerHMSUpdate();
             // console.log(elapsedSec);
             bottomBarContentUpdate();
+            window.scrollTo(0, 0);
         }, 47);
         if (h == 0 && m == 0 && s == 0) {
             notificationDisplay(timerStartMassage);
@@ -843,10 +844,7 @@ function swipe() {
     temp.replaceWith(block[targetBlock]);
     block = blocks.querySelectorAll("div");
     steps += 1;
-    // console.log(clearSteps);
-    // 振動
     vibration(1);
-    
     if (isOperated) {
         if ((popup[0].classList.contains("popupDisplayAnimation"))) {
             opacityUndo();
