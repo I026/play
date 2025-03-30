@@ -1486,7 +1486,7 @@ function swipeGetNowCoordinate(e) {
             if (swipeMovedBlock >= 2) {
                 swipeRecognitionPx = swipeRecognitionPxDefault / Math.min(swipeMovedBlock, 10);
             }
-            if (e.buttons & 1) {
+            if (e.buttons & 1 || e.touches[0]) {
                 // console.log(swipeRecognitionPx);
                 if (Math.abs(difiX) > swipeRecognitionPx) {
                     if (difiX > swipeRecognitionPx) {
