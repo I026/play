@@ -792,7 +792,7 @@ function challengesJudgeAndDisplayUpdate() {
         function listGenerate(text) {
             challengesListTable.innerHTML += `
             <div class="c_${i + 1}">
-                <p>${text} 以内に</p>
+                <p>${text} 以内で</p>
             </div>
             `;
         }
