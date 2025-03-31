@@ -172,7 +172,7 @@ const trashBoxIconImg                = `<img src="../systems/imgs/trashBoxBase.s
 
 function selectionPrevention(o) {
     let tentative;
-      tentative = o.innerHTML;
+    tentative   = o.innerHTML;
     o.innerHTML = "";
     o.innerHTML = tentative;
 }
@@ -364,22 +364,6 @@ function bottomBarContentUpdate() {
     }
 }
 
-function formattedDate(formatted = true) {
-    const now     = new Date();
-    if (formatted) {
-        const year    = now.getFullYear();
-        const month   = now.getMonth() + 1;
-        const day     = now.getDate();
-        const hours   = now.getHours();
-        const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
-        return(`${year}, ${month}, ${day}, ${hours}, ${minutes}, ${seconds}`);
-    } else {
-        return now;
-    }
-    // console.log(`${year} ${month} ${day} ${hours}:${minutes}:${seconds}`);
-}
-
 let timerStartDate;
 let timerStopDate;
 
@@ -485,6 +469,22 @@ function opacityUndo(o = blocks, t = .5) {
     }
 }
 
+function formattedDate(formatted = true) {
+    const now     = new Date();
+    if (formatted) {
+        const year    = now.getFullYear();
+        const month   = now.getMonth() + 1;
+        const day     = now.getDate();
+        const hours   = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        return(`${year}, ${month}, ${day}, ${hours}, ${minutes}, ${seconds}`);
+    } else {
+        return now;
+    }
+    // console.log(`${year} ${month} ${day} ${hours}:${minutes}:${seconds}`);
+}
+
 let localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
 let localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
 
@@ -492,7 +492,7 @@ function saveToLocalStorage() {
     console.log("saveToLocalStorage");
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    function newRecordJudgeAndSave(key, threshold, saveContent, display, text) {
+    function newRecordJudgeAndSave(key, threshold, saveContent, date, display, text) {
         console.log("newRecordJudgeAndSave");
         // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
@@ -520,8 +520,8 @@ function saveToLocalStorage() {
     }
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
     const localStorageKey2SaveContent = steps;
-    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, timeInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`);
-    newRecordJudgeAndSave(localStorageKey2, [steps], localStorageKey2SaveContent, stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
+    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, formattedDate(), timeInfoDisplay,  `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`);
+    newRecordJudgeAndSave(localStorageKey2, [steps],                                   localStorageKey2SaveContent, formattedDate(), stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
 }
 
 function getRecordArray() {
@@ -1134,7 +1134,7 @@ function recordRemove() {
                     localStorage.removeItem(`slidePuzzlePlayLog_Steps${log.innerText.split(" |")[0]}`);
                     log.classList.add("deleteRecordAnimation");
                     let fillLine = false;
-                    recordArrayDisplay.scrollBy({ left: 0, top: -recordLogs[0].scrollHeight, behavior: "smooth" });
+                    recordArrayDisplay.scrollBy({ left: 0, top: -recordLogs[0].scrollHeight - 11, behavior: "smooth" });
                     recordLogs.forEach((recordLogs) => {
                     if (fillLine) {
                         recordLogs.classList.add("recordFillLinesAnimation");
@@ -1147,7 +1147,7 @@ function recordRemove() {
                         recordDisplayUpdate();
                         log.remove();
                         recordRemove();
-                    }, 500);
+                    }, 240);
                 });
             }
 
@@ -1643,7 +1643,8 @@ document.addEventListener("keydown",(event) => {
             blockNumberChange();
         }
     }
-    // if (event.code === "KeyZ") {
-    //     gameClear();
-    // }
+    if (event.code === "KeyZ") {
+        // gameClear();
+        // localStorage.setItem(`slidePuzzlePlayLog_Time${Math.floor(Math.random() * 20)} × ${Math.floor(Math.random() * 20)}`, "00:00:00.00");
+    }
 });

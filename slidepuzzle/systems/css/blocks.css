@@ -603,7 +603,7 @@ button:focus {
     }
 }
 .recordFillLinesAnimation {
-    animation: recordFillLines .5s ease-in-out;
+    animation: recordFillLines .25s ease-in-out;
 }
 .popup .table div div {
     position: absolute;
