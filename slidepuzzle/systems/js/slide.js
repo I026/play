@@ -8,10 +8,12 @@ let retryBtn                 = document.getElementById("retryBtn");
 let okBtn                    = document.getElementById("okBtn");
 const expandableMenuBtn      = document.querySelector(".expandableMenuBtn");
 const optionPopup            = document.querySelectorAll(".optionPopup");
-const optionMenuPopup        = popup[1];
-const blockCaseChangePopup   = popup[2];
-const bottomBarChangePopup   = popup[3];
-const recordResetPopup       = popup[4];
+const optionMenuPopup        = document.querySelector(".optionMenuPopup");
+const blockCaseChangePopup   = document.querySelector(".blockCaseChangePopup");
+const bottomBarChangePopup   = document.querySelector(".bottomBarChangePopup");
+const recordResetPopup       = document.querySelector(".recordResetPopup");
+const challengesListPopup    = document.querySelector(".challengesListPopup");
+const challengesListOp       = document.querySelector(".challengesListOp");
 const blockCaseChangeOp      = document.querySelector(".blockCaseChangeOp");
 const bottomBarChangeOp      = document.querySelector(".bottomBarChangeOp");
 const recordResetOp          = document.querySelector(".recordResetOp");
@@ -53,20 +55,28 @@ let formattedMin = "00";
 let formattedHr  = "00";
 // const formattedTimesDefault = "00 : 00 : 00.00";
 
-function formattedTimes() {
-    // console.log(String(formattedSec).split("."));
-    return `
-    <span class="timeDisplayNumBlocks">
-    <span>${
-        formattedHr
-    }</span> : <span>${
-        formattedMin
-    }</span> : <span>${
-        String(formattedSec).split(".")[0]
-    }</span>.<span>${
-        String(formattedSec).split(".")[1]
-    }</span>
-    </span>`;
+function formattedTimes(h, m, s) {
+    // console.log(String(formattedSec).split("."));alert(h)
+    if (h == undefined && m == undefined && s == undefined) {
+        return `
+        <span class="timeDisplayNumBlocks">
+        <span>${
+            formattedHr
+        }</span> : <span>${
+            formattedMin
+        }</span> : <span>${
+            String(formattedSec).split(".")[0]
+        }</span>.<span>${
+            String(formattedSec).split(".")[1]
+        }</span>
+        </span>`;
+    } else {
+        return [
+            String(h).padStart(2, "0"),
+            String(m).padStart(2, "0"),
+            (s * 1).toFixed(2).padStart(5, "0")
+        ];
+    }
 }
 
 let steps         = 0;
@@ -168,6 +178,7 @@ const timerIconImg                   = `<img class="timerIcon" src="../systems/i
 const stepsIconImg                   = `<img class="handIcon" src="../systems/imgs/hand.svg">`;
 const trashBoxIconImg                = `<img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
                                         <img src="../systems/imgs/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">`;
+const okIconImg                   = `<img src="../systems/imgs/ok.svg" alt="OK" ondragstart="return false;">`;
 
 
 function selectionPrevention(o) {
@@ -372,7 +383,7 @@ function timerHMSUpdate() {
     sec = elapsedSec % 60;
     min = Math.floor(elapsedSec / 60) % 60;
     hr  = Math.floor(elapsedSec / (60 * 60));
-    formattedSec = String(sec.toFixed(2)).padStart(5, "0");
+    formattedSec = (sec * 1).toFixed(2).padStart(5, "0")
     formattedMin = String(min).padStart(2, "0");
     formattedHr = String(hr).padStart(2, "0");
 }
@@ -698,6 +709,7 @@ function popupDisplay(n = popup[0]) {
         optionBtn.querySelector("img").classList.remove("optionMenuPopupHiddenOptionBtnAnimation");
         optionBtn.querySelector("img").classList.add("optionMenuPopupDisplayOptionBtnAnimation");
     }
+    challengesJudgeAndDisplayUpdate();
     imgUserOperationLock();
 }
 
@@ -746,6 +758,153 @@ blocks.addEventListener("click", () => {
     }
 });
 
+function challengesJudgeAndDisplayUpdate() {
+    formattedTimes();
+    const challengesArray = [
+        [3, 3,   0, 0, 20],
+        [3, 3,   40],
+        [3, 4,   0, 0, 30],
+        [3, 4,   60],
+        [4, 4,   0, 1, 20],
+        [4, 4,   80],
+        [5, 5,   0, 2, 30],
+        [5, 5,   200],
+        [6, 6,   0, 4, 0],
+        [6, 6,   400],
+        [7, 7,   0, 6, 0],
+        [7, 7,   700],
+        [8, 8,   0, 8, 0],
+        [8, 8,   1200],
+        [10, 10, 0, 15, 0],
+        [10, 10, 2500],
+        [12, 12, 0, 25, 0],
+        [12, 12, 5000],
+        [15, 15, 0, 40, 0],
+        [15, 15, 10000],
+        [20, 20, 1, 30, 0],
+        [20, 20, 20000]
+                        ];
+    const challengesListTable = challengesListPopup.querySelector(".table");
+    challengesListTable.innerHTML = "";
+    for (let i = 0; challengesArray.length > i; i += 1) {
+        const challenge = challengesArray[i];
+
+        function listGenerate(text) {
+            challengesListTable.innerHTML += `
+            <div class="c_${i + 1}">
+                <p>${text} 以内に</p>
+            </div>
+            `;
+        }
+
+        if (challenge.length == 3) {
+            listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]}手`)
+        } else {
+            // listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]} : ${challenge[3]} : ${challenge[4]}`)
+            const formattedTimesArray = formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1);
+            listGenerate(`${challenge[0]} × ${challenge[1]} を${formattedTimesArray[0]} : ${formattedTimesArray[1]} : ${formattedTimesArray[2]}`)
+        }
+        function clearIconGenerate(c) {
+            challengesListPopup.querySelector(c).innerHTML += `
+            <div class="challengeClearIcon">
+                ${okIconImg}
+            </div>`;
+        }
+        // challengesArray[i]
+        for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
+            if (getRecordArray()[i_ls][0] == `${challenge[0]} × ${challenge[1]}`) {
+                if (challenge.length == 3) {
+                    if (getRecordArray()[i_ls][2] < challenge[2] * 1) {
+                        clearIconGenerate(`.c_${i + 1}`);
+                    }
+                } else {
+                    const splitedRecordArray = getRecordArray()[i_ls][1].split(" : ");
+                    if (splitedRecordArray[0] * 10000 + splitedRecordArray[1] * 100 + splitedRecordArray[2] * 1 < challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1) {
+                        clearIconGenerate(`.c_${i + 1}`);
+                    }
+                }
+            }
+        }
+
+        // for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
+        //     if (challenge.length == 3) {
+        //         if (getRecordArray()[i_ls][2] * 1 <= challenge[2] * 1) {
+        //             clearIconGenerate();
+        //             console.log(i);
+        //         }
+        //     } else {
+        //         if (getRecordArray()[i_ls][1].replaceAll(" : ", "") * 1 <= challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1) {
+        //             clearIconGenerate();
+        //             console.log(i);
+        //         }
+        //     }
+        // }
+
+        // const w = challenge[0];
+        // const h = challenge[1];
+        // let t = challenge[2];
+        // let isStep = false;
+
+        // if (challenge[3] == "s") {
+        //     isStep = true;
+        // }
+
+        // if (challengesListTable.querySelector(`.c_${w}x${h}_in_${t}`) == null) {
+        //     challengesListTable.innerHTML += `
+        //     <div class="c_${w}x${h}_in_${t}">
+        //         <p>${w} × ${h} : ${t}${isStep ? "手" : "秒"}</p>
+        //     </div>`;
+        // }
+        
+        // const c_3x3_in_00_00_15 = challengesListPopup.querySelector(".c_3x3_in_00_00_15");
+        // const c_4x4_in_00_00_300 = challengesListPopup.querySelector(".c_4x4_in_00_00_300");
+
+        // function challengeClearDisplay(object, display = true) {
+        //     if (display) {
+        //         if (object.querySelector(".challengeClearIcon") == null) {
+        //             object.innerHTML += `
+        //             <div class="challengeClearIcon">
+        //                 ${okIconImg}
+        //             </div>`;
+        //         }
+        //     } else {
+        //         // object.querySelector(".challengeClearIcon").remove();
+        //     }
+        // }
+        
+        // for (let i = 0; i < challengesListPopup.querySelectorAll(".challengeClearIcon").length; i += 1) {
+        //     challengesListPopup.querySelectorAll(".challengeClearIcon")[i].remove();
+        // }
+
+        // for (let i = 0; i < getRecordArray().length; i += 1) {
+        //     const judgeRecord    = getRecordArray()[i];
+        //     const judgeTimeArray = judgeRecord[1].split(":");
+        //     const judgeTimes     = judgeTimeArray[0] * 10000 + judgeTimeArray[1] * 100 + judgeTimeArray[2] * 1;
+        //     const judgeSteps     = judgeRecord[2] * 1;
+
+        //     function challenge_Time(w, h, t, display) {
+        //         if (judgeRecord[0] == `${w} × ${h}` && judgeTimes <= t) {
+        //             challengeClearDisplay(display);
+        //         }
+        //     }
+
+        //     function challenge_Steps(w, h, step, display) {
+        //         if (judgeRecord[0] == `${w} × ${h}` && judgeSteps <= step) {
+        //             challengeClearDisplay(display);
+        //         }
+        //     }
+
+        //     if (isStep) {
+        //         challenge_Steps(w, h, t, challengesListTable.querySelector(`.c_${w}x${h}_in_${t}`));
+        //     } else {
+        //         challenge_Time(w, h, t, challengesListTable.querySelector(`.c_${w}x${h}_in_${t}`));
+        //     }
+        // }
+    }
+}
+
+challengesJudgeAndDisplayUpdate();
+
 function gameClear() {
     const clearedBlockBCArray = [
         "skyblue",
@@ -763,6 +922,7 @@ function gameClear() {
     document.documentElement.style.setProperty("--clearedBlockAnimationBC", clearedBlockBCArraySelect);
     timerStop();
     saveToLocalStorage();
+    challengesJudgeAndDisplayUpdate();
     const clearedBlockInterval = 75;
     function clearedBlockAnimationX(n = 0) {
         let clearedBlockAnimationIndex = 0;
@@ -1083,6 +1243,10 @@ menuTitle.addEventListener("click", () => {
 
 topTitles.addEventListener("click", () => {
     popupToggle(blockCaseChangePopup);
+});
+
+challengesListOp.addEventListener("click", () => {
+    popupToggle(challengesListPopup);
 });
 
 blockCaseChangeOp.addEventListener("click", () => {
