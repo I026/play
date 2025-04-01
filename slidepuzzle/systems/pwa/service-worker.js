@@ -37,6 +37,8 @@ self.addEventListener("install", function (event) {
             );
         })
     );
+    // 新しいService Workerがインストールされたら即座にアクティベート
+    self.skipWaiting();
 });
 
 // フェッチ時のキャッシュ対応
@@ -65,13 +67,27 @@ self.addEventListener("fetch", function (event) {
 self.addEventListener("activate", function (event) {
     console.log("Activating new Service Worker...");
     event.waitUntil(
-        caches.keys().then((keyList) => {
-            return Promise.all(
-                keyList
-                    .filter((key) => key !== CACHE_NAME)
-                    .map((key) => caches.delete(key))
-            );
-        })
+        Promise.all([
+            // 古いキャッシュの削除
+            caches.keys().then((keyList) => {
+                return Promise.all(
+                    keyList
+                        .filter((key) => key !== CACHE_NAME)
+                        .map((key) => caches.delete(key))
+                );
+            }),
+            // クライアントの即時更新
+            self.clients.claim().then(() => {
+                // すべてのクライアントに更新を通知
+                self.clients.matchAll().then((clients) => {
+                    clients.forEach((client) => {
+                        client.postMessage({
+                            type: 'UPDATE_AVAILABLE',
+                            message: '新しいバージョンが利用可能です。ページを更新します。'
+                        });
+                    });
+                });
+            })
+        ])
     );
-    return self.clients.claim();
 });
