@@ -780,9 +780,9 @@ function challengesJudgeAndDisplayUpdate() {
         [12, 12, 0, 25, 0],
         [12, 12, 5000],
         [15, 15, 0, 40, 0],
-        [15, 15, 10000],
+        [15, 15, 7500],
         [20, 20, 1, 30, 0],
-        [20, 20, 20000]
+        [20, 20, 10000]
                         ];
     const challengesListTable = challengesListPopup.querySelector(".table");
     challengesListTable.innerHTML = "";
