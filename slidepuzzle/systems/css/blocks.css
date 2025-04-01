@@ -611,7 +611,7 @@ button:focus {
     position: absolute;
     display: flex;
     right: 5px;
-    bottom: 35%;
+    bottom: 5px;
     border-radius: 100vh;
     width: .4em;
     height: .4em;

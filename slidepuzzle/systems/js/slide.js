@@ -168,7 +168,8 @@ const colorThemeOpMessage            = `カラーテーマ : `;
 const vibrationValidChangeOpMessage  = `デバイスの振動 : `;
 const vibrationImpossibleMessage     = `iOSでの振動はサポートされていません`;
 const sortAssistValidChangeOpMessage = `SortAssist : `;
-
+const sortAssistNameMessage          = `SortAssist`;
+const sortAssistShortNameMessage     = `Assist`;
 const validMessage                   = `有効`;
 const invalidMessage                 = `無効`;
 const lightThemeMessage              = `ライト`;
@@ -182,8 +183,13 @@ const timerIconImg                   = `<img class="timerIcon" src="../systems/i
 const stepsIconImg                   = `<img class="handIcon" src="../systems/imgs/hand.svg">`;
 const trashBoxIconImg                = `<img src="../systems/imgs/trashBoxBase.svg" alt="Delete" ondragstart="return false;">
                                         <img src="../systems/imgs/trashBoxLid.svg" class="trashBoxLid" ondragstart="return false;">`;
-const okIconImg                   = `<img src="../systems/imgs/ok.svg" alt="OK" ondragstart="return false;">`;
+const okIconImg                      = `<img src="../systems/imgs/ok.svg" alt="OK" ondragstart="return false;">`;
 
+const getRecordArray_CaseSize        = 0;
+const getRecordArray_Time            = 1;
+const getRecordArray_TimeAssist      = 2;
+const getRecordArray_Steps           = 3;
+const getRecordArray_StepsAssist     = 4;
 
 function selectionPrevention(o) {
     let tentative;
@@ -553,12 +559,7 @@ function getRecordArray() {
         const removeLocalStorageKey1 = (`slidePuzzlePlayLog_Time${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         const removeLocalStorageKey2 = (`slidePuzzlePlayLog_Steps${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         if (localStorage.getItem(removeLocalStorageKey1)) {
-            removeBlockCandidate.push((`
-${removeBlockCaseWidth} × ${removeBlockCaseHeight},
-${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},
-${localStorage.getItem(removeLocalStorageKey1).split(" | ")[1] == "true" ? true : false},
-${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},
-${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
+            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[1] == "true" ? true : false},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
         }
         if (removeBlockCaseHeight < blockCaseHeightMax) {
             removeBlockCaseHeight += 1;
@@ -810,9 +811,9 @@ function challengesJudgeAndDisplayUpdate() {
         [10, 10, 2500],
         [12, 12, 0, 25, 0],
         [12, 12, 5000],
-        [15, 15, 0, 40, 0],
+        [15, 15, 0, 30, 0],
         [15, 15, 7500],
-        [20, 20, 1, 30, 0],
+        [20, 20, 0, 40, 0],
         [20, 20, 10000]
                         ];
     const challengesListTable = challengesListPopup.querySelector(".table");
@@ -850,22 +851,26 @@ function challengesJudgeAndDisplayUpdate() {
             }
         }
 
-        function clearIconGenerate(c) {
+        function clearIconGenerate(c, assist = false) {
+            console.log(challengesListPopup.querySelector(c).querySelector("p"));
+            challengesListPopup.querySelector(c).querySelector("p").innerText += assist ? `(${sortAssistShortNameMessage})` : "";
+            
             challengesListPopup.querySelector(c).innerHTML += `
             <div class="challengeClearIcon">
                 ${okIconImg}
-            </div>`;
+            </div>
+            `;
         }
         for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
             if (getRecordArray()[i_ls][0] == `${challenge[0]} × ${challenge[1]}`) {
                 if (challenge.length == 3) {
-                    if (getRecordArray()[i_ls][2] < challenge[2] * 1) {
-                        clearIconGenerate(`.c_${i + 1}`);
+                    if (getRecordArray()[i_ls][getRecordArray_Steps] < challenge[2] * 1) {
+                        clearIconGenerate(`.c_${i + 1}`, getRecordArray()[i_ls][getRecordArray_StepsAssist] == "true" ? true : false);
                     }
                 } else {
-                    const splitedRecordArray = getRecordArray()[i_ls][1].split(" : ");
+                    const splitedRecordArray = getRecordArray()[i_ls][getRecordArray_Time].split(" : ");
                     if (splitedRecordArray[0] * 10000 + splitedRecordArray[1] * 100 + splitedRecordArray[2] * 1 < challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1) {
-                        clearIconGenerate(`.c_${i + 1}`);
+                        clearIconGenerate(`.c_${i + 1}`, getRecordArray()[i_ls][getRecordArray_StepsAssist] == "true" ? true : false);
                     }
                 }
             }
@@ -1258,11 +1263,11 @@ function recordDisplayUpdate() {
     recordArrayDisplay.innerHTML = "";
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>
-        ${getRecordArray()[i][0]}<br>
-        ${formatTimesS(getRecordArray()[i][1].split(" : ")[0], getRecordArray()[i][1].split(" : ")[1], getRecordArray()[i][1].split(" : ")[2])} | 
-        ${getRecordArray()[i][2].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}<br>
-        ${getRecordArray()[i][3]}手 | 
-        ${getRecordArray()[i][4].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
+        ${getRecordArray()[i][getRecordArray_CaseSize]}<br>
+        ${formatTimesS(getRecordArray()[i][getRecordArray_Time].split(" : ")[0], getRecordArray()[i][1].split(" : ")[1], getRecordArray()[i][1].split(" : ")[2])} | 
+        ${getRecordArray()[i][getRecordArray_TimeAssist].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}<br>
+        ${getRecordArray()[i][getRecordArray_Steps]}手 | 
+        ${getRecordArray()[i][getRecordArray_StepsAssist].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
         </p></div>`;
         // == "true" ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
     }
