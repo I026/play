@@ -793,7 +793,6 @@ function challengesJudgeAndDisplayUpdate() {
         const challenge = challengesArray[i];
 
         if (challengesListTable.querySelectorAll("div.challenge").length + 1 !== challengesArray.length) {
-            console.log(challengesListTable.querySelectorAll("div.challenge").length , challengesArray.length);
             function listGenerate(text) {
                 challengesListTable.innerHTML += `
                 <div class="c_${i + 1} challenge">
