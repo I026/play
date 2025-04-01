@@ -37,6 +37,7 @@
     --documentBackgroundColor: white;
     --documentBaseColor: black;
     --blockOutlineColor: transparent;
+    --blockSortAssistOutlineWidth: 5px;
 }
 @font-face {
     font-family: "Outfit_Local";
@@ -272,6 +273,7 @@ button:focus {
     outline-color: var(--blockOutlineColor);
     outline-offset: -1.5px;
     margin: 1.5px;
+    transition: .5s ease-in-out background-color;
 }
 #blocks div.air {
     /* background-color: rgb(242, 242, 242); */

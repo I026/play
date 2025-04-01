@@ -19,6 +19,7 @@ const bottomBarChangeOp      = document.querySelector(".bottomBarChangeOp");
 const recordResetOp          = document.querySelector(".recordResetOp");
 const colorThemeChangeOp     = document.querySelector(".colorThemeChangeOp");
 const vibrationValidChangeOp = document.querySelector(".vibrationValidChangeOp");
+const sortAssistValidChangeOp = document.querySelector(".sortAssistValidChangeOp");
 const recordArrayDisplay     = document.getElementById("recordArrayDisplay");
 const widthCtrl              = blockCaseChangePopup.querySelector(".widthCtrl");
 const heightCtrl             = blockCaseChangePopup.querySelector(".heightCtrl");
@@ -79,9 +80,10 @@ function formattedTimes(h, m, s) {
     }
 }
 
-let steps         = 0;
-let isOperated    = true;
-let isTimerActive = false;
+let steps             = 0;
+let isOperated        = true;
+let isTimerActive     = false;
+let isSortAssistValid = false;
 
 let blockCaseWidth  = 3;
 let blockCaseHeight = 3;
@@ -165,6 +167,7 @@ const recordResetOpMessage           = `記録一覧`;
 const colorThemeOpMessage            = `カラーテーマ : `;
 const vibrationValidChangeOpMessage  = `デバイスの振動 : `;
 const vibrationImpossibleMessage     = `iOSでの振動はサポートされていません`;
+const sortAssistValidChangeOpMessage = `SortAssist : `;
 
 const validMessage                   = `有効`;
 const invalidMessage                 = `無効`;
@@ -173,6 +176,7 @@ const darkThemeMessage               = `ダーク`;
 
 const bottomBarLKey                  = `slidePuzzleBottomBar`;
 const vibrationValidLKey             = `slidePuzzleVibrationValid`;
+const sortAssistValidLKey            = `slidePuzzleSortAssistValid`;
 
 const timerIconImg                   = `<img class="timerIcon" src="../systems/imgs/timer_flame.svg"> <img class="timerIcon hands" src="../systems/imgs/timer_hands.svg">`;
 const stepsIconImg                   = `<img class="handIcon" src="../systems/imgs/hand.svg">`;
@@ -508,7 +512,7 @@ function saveToLocalStorage() {
         console.log("newRecordJudgeAndSave");
         // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
-            const keyArray          = localStorage.getItem(key).split(",");
+            const keyArray          = localStorage.getItem(key).split(" | ")[0].split(",");
             const combinedKey       = keyArray.join("").replaceAll(" ","") * 1;
             const combinedThreshold = threshold.join("") * 1;
             // もし現在の比較対象よりlocalStorageのデータの方が良い記録なら
@@ -520,14 +524,14 @@ function saveToLocalStorage() {
                 // 新記録テキストを表示､新記録を保存
                 display.innerHTML = "";
                 display.innerHTML = text;
-                localStorage.setItem(key, saveContent);
+                localStorage.setItem(key, `${saveContent} | ${isSortAssistValid}`);
             }
         // もしlocalStorageにKeyがない
         } else {
             // 新記録テキストを表示､新記録を保存
             display.innerHTML = "";
             display.innerHTML = text;
-            localStorage.setItem(key, saveContent);
+            localStorage.setItem(key, `${saveContent} | ${isSortAssistValid}`);
         }
     }
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
@@ -544,7 +548,7 @@ function getRecordArray() {
         const removeLocalStorageKey1 = (`slidePuzzlePlayLog_Time${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         const removeLocalStorageKey2 = (`slidePuzzlePlayLog_Steps${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         if (localStorage.getItem(removeLocalStorageKey1)) {
-            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight}, ${localStorage.getItem(removeLocalStorageKey1).replaceAll(",", " :")}, ${localStorage.getItem(removeLocalStorageKey2)}`).split(","));
+            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
         }
         if (removeBlockCaseHeight < blockCaseHeightMax) {
             removeBlockCaseHeight += 1;
@@ -631,6 +635,7 @@ function optionMenuItemsUpdate() {
     recordResetOp.querySelector("p").innerText = recordResetOpMessage;
     colorThemeChangeOp.querySelector("p").innerText = `${colorThemeOpMessage}${darkThemeChange() ? darkThemeMessage : lightThemeMessage}`;
     vibrationValidChangeOp.querySelector("p").innerText = `${vibrationValidChangeOpMessage}${isVibrationValid ? validMessage : invalidMessage}`;
+    sortAssistValidChangeOp.querySelector("p").innerText = `${sortAssistValidChangeOpMessage}${isSortAssistValid ? validMessage : invalidMessage}`;
 }
 
 function popupToggle(n = popup[0]) {
@@ -769,11 +774,11 @@ function challengesJudgeAndDisplayUpdate() {
         [4, 4,   0, 1, 20],
         [4, 4,   80],
         [5, 5,   0, 2, 30],
-        [5, 5,   200],
+        [5, 5,   150],
         [6, 6,   0, 4, 0],
-        [6, 6,   400],
+        [6, 6,   250],
         [7, 7,   0, 6, 0],
-        [7, 7,   700],
+        [7, 7,   350],
         [8, 8,   0, 8, 0],
         [8, 8,   1200],
         [10, 10, 0, 15, 0],
@@ -857,6 +862,7 @@ function challengesJudgeAndDisplayUpdate() {
 challengesJudgeAndDisplayUpdate();
 
 function gameClear() {
+    allBlockBCBlack();
     const clearedBlockBCArray = [
         "skyblue",
         "cornflowerblue",
@@ -947,6 +953,27 @@ function gameClearJudge() {
     }
 }
 
+function allBlockBCBlack() {
+    for (let i = 0; i < blockCaseWidth * blockCaseHeight - 1; i += 1) {
+        blocks.querySelector(`.block${i + 1}`).style.backgroundColor = "black";
+    }
+}
+
+function sortAssist() {
+    let judgeIndex = 0;
+    let secberCleared = 0;
+    // 検証する番目のブロックに検証する番目のclassがある (位置が合致している数)
+    while (judgeIndex == secberCleared) {
+        if (block[judgeIndex].classList.contains(`block${judgeIndex + 1}`)) {
+            secberCleared += 1;
+        }
+        judgeIndex += 1;
+    }
+    if (gameClearJudge() !== 0) {
+        blocks.querySelector(`.block${Math.min(secberCleared + 1, blockCaseWidth * blockCaseHeight - 1)}`).style.backgroundColor = "gray";
+    }
+}
+
 let clearSteps;
 function swipe() {
     swipeRecognitionPxDefaultRecognitionPxUpdate();
@@ -982,11 +1009,12 @@ function swipe() {
     if (clearSteps + 1 == steps && isGameClear) {
         notificationDisplay(unrecordedMassage, 0);
     }
-    // console.log(`
-    //     Step : ${steps}
-    //     Target : ${targetBlock}
-    //     ${formattedHr} : ${formattedMin} : ${formattedSec}
-    //     `);
+
+    // Assist
+    if (isOperated && isSortAssistValid) {
+        allBlockBCBlack();
+        sortAssist();
+    }
 }
 
 function swipeAnimetion(block,animetion) {
@@ -1079,8 +1107,8 @@ function recordDisplay() {
     localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-         timeDisplay.innerHTML = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2)}`;
+         timeDisplay.innerHTML = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).split(" | ")[0].replaceAll(",", " : ")}`;
+        stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2).split(" | ")[0]}`;
     } else {
         timeDisplay.innerHTML      = noRecordMassage;
         stepsDisplay.innerText     = "";
@@ -1211,7 +1239,13 @@ bottomBarChangeOp.addEventListener("click", () => {
 function recordDisplayUpdate() {
     recordArrayDisplay.innerHTML = "";
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
-        recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>${getRecordArray()[i].join(" | ")}</p></div>`;
+        recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>
+        ${getRecordArray()[i][0]} | 
+        ${getRecordArray()[i][1]} | 
+        ${getRecordArray()[i][2]} | 
+        ${getRecordArray()[i][3].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
+        </p></div>`;
+        // == "true" ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
     }
 }
 
@@ -1306,6 +1340,17 @@ vibrationValidChangeOp.addEventListener("click", () => {
             }
         }, 3000);
     }
+});
+
+sortAssistValidChangeOp.addEventListener("click", () => {
+    isSortAssistValid = !isSortAssistValid;
+    if (!isSortAssistValid) {
+        allBlockBCBlack();
+    } else {
+        sortAssist();
+    }
+    localStorage.setItem(sortAssistValidLKey, isSortAssistValid ? "true" : "false");
+    optionMenuItemsUpdate();
 });
 
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
@@ -1466,6 +1511,13 @@ function recoverFromLocalStorage() {
             isVibrationValid = true;
         } else {
             isVibrationValid = false;
+        }
+    }
+    if (localStorage.getItem(sortAssistValidLKey)) {
+        if (localStorage.getItem(sortAssistValidLKey) == "true") {
+            isSortAssistValid = true;
+        } else {
+            isSortAssistValid = false;
         }
     }
     optionMenuItemsUpdate();
