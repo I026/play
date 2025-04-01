@@ -594,7 +594,7 @@ button:focus {
     }
 }
 .deleteRecordAnimation {
-    animation: deleteRecord .5s ease-in-out both;
+    animation: deleteRecord .25s ease-in-out both;
 }
 @keyframes recordFillLines {
     0% {

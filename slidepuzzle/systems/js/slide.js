@@ -1211,6 +1211,9 @@ function blockShuffle() {
                         opacityUndo();
                     }
                     opacityUndo(retryBtn);
+                    if (isSortAssistValid) {
+                        sortAssist();
+                    }
                 // シャッフル完成(Airの位置のみ未完成)
                 } else {
                     // console.log("aim_DownRightAir");
@@ -1519,7 +1522,6 @@ heightDown.addEventListener("click", () => {
 
 function recoverFromLocalStorage() {
     console.log("recoverFromLocalStorage");
-    HTMLTitleUpdate();
     let localStorageSaveContent;
     if (localStorage.getItem(bottomBarLKey)) {
         bottomBarContent = localStorage.getItem(bottomBarLKey) * 1;
@@ -1552,6 +1554,7 @@ function recoverFromLocalStorage() {
         if (!(localStorageSaveContent[6] * 1 == blockCaseWidth && localStorageSaveContent[7] * 1 == blockCaseHeight)) {
             blockCaseWidth = localStorageSaveContent[6] * 1;
             blockCaseHeight = localStorageSaveContent[7] * 1;
+            HTMLTitleUpdate();
             document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
             document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
         }
