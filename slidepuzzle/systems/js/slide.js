@@ -549,7 +549,12 @@ function getRecordArray() {
         const removeLocalStorageKey1 = (`slidePuzzlePlayLog_Time${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         const removeLocalStorageKey2 = (`slidePuzzlePlayLog_Steps${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         if (localStorage.getItem(removeLocalStorageKey1)) {
-            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
+            removeBlockCandidate.push((`
+${removeBlockCaseWidth} × ${removeBlockCaseHeight},
+${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},
+${localStorage.getItem(removeLocalStorageKey1).split(" | ")[1] == "true" ? true : false},
+${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},
+${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
         }
         if (removeBlockCaseHeight < blockCaseHeightMax) {
             removeBlockCaseHeight += 1;
@@ -765,6 +770,21 @@ blocks.addEventListener("click", () => {
     }
 });
 
+function formatTimesS(h, m, s) {
+    let formattedTimesString = "";
+    // 時間が0である
+    if (h * 1 !== 0) {
+        formattedTimesString += `${h}h`;
+    }
+    if (m * 1 !== 0) {
+        formattedTimesString += `${m}m`;
+    }
+    if (s * 1 !== 0) {
+        formattedTimesString += `${s}s`;
+    }
+    return formattedTimesString;
+}
+
 function challengesJudgeAndDisplayUpdate() {
     formattedTimes();
     const challengesArray = [
@@ -820,19 +840,8 @@ function challengesJudgeAndDisplayUpdate() {
                     challenge[3] * 1,
                     challenge[4] * 1
                 ];
-                let formattedTimesString = "";
-                // 時間が0である
-                if (formattedTimesArray[0] !== 0) {
-                    formattedTimesString += `${formattedTimesArray[0]}h`;
-                }
-                if (formattedTimesArray[1] !== 0) {
-                    formattedTimesString += `${formattedTimesArray[1]}m`;
-                }
-                if (formattedTimesArray[2] !== 0) {
-                    formattedTimesString += `${formattedTimesArray[2]}s`;
-                }
                 listGenerate(`
-                    ${challenge[0]} × ${challenge[1]} | ${formattedTimesString}
+                    ${challenge[0]} × ${challenge[1]} | ${formatTimesS(formattedTimesArray[0], formattedTimesArray[1], formattedTimesArray[2])}
                     `)
             }
         }
@@ -1242,10 +1251,11 @@ function recordDisplayUpdate() {
     recordArrayDisplay.innerHTML = "";
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>
-        ${getRecordArray()[i][0]} | 
-        ${getRecordArray()[i][1]} | 
-        ${getRecordArray()[i][2]} | 
-        ${getRecordArray()[i][3].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
+        ${getRecordArray()[i][0]}<br>
+        ${formatTimesS(getRecordArray()[i][1].split(" : ")[0], getRecordArray()[i][1].split(" : ")[1], getRecordArray()[i][1].split(" : ")[2])} | 
+        ${getRecordArray()[i][2].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}<br>
+        ${getRecordArray()[i][3]}手 | 
+        ${getRecordArray()[i][4].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
         </p></div>`;
         // == "true" ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
     }
@@ -1281,8 +1291,8 @@ function recordRemove() {
                     ${trashBoxIconImg}
                 </div>`;
                 log.querySelector(".confirmDeletionDisplayAnimation").addEventListener("click", () => {
-                    localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split(" |")[0]}`);
-                    localStorage.removeItem(`slidePuzzlePlayLog_Steps${log.innerText.split(" |")[0]}`);
+                    localStorage.removeItem(`slidePuzzlePlayLog_Time${log.innerText.split("\n")[0]}`);
+                    localStorage.removeItem(`slidePuzzlePlayLog_Steps${log.innerText.split("\n")[0]}`);
                     log.classList.add("deleteRecordAnimation");
                     let fillLine = false;
                     recordArrayDisplay.scrollBy({ left: 0, top: -recordLogs[0].scrollHeight - 11, behavior: "smooth" });
@@ -1591,6 +1601,7 @@ function retry() {
     timerStop();
     popupHidden();
     opacityMitigation(retryBtn);
+    opacityUndo(sortAssistValidChangeOp.querySelector("p"));
 }
 
 retryBtn.addEventListener("click", () => {
