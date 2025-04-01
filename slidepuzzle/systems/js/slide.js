@@ -423,6 +423,7 @@ function timerStart(h = 0, m = 0, s = 0) {
             }
         },  Math.floor(Math.random(1) * 1000) / 10 + 100);
     }
+    opacityMitigation(sortAssistValidChangeOp.querySelector("p"));
 }
 
 function timerStop() {
@@ -863,6 +864,7 @@ challengesJudgeAndDisplayUpdate();
 
 function gameClear() {
     allBlockBCBlack();
+    opacityUndo(sortAssistValidChangeOp.querySelector("p"));
     const clearedBlockBCArray = [
         "skyblue",
         "cornflowerblue",
@@ -1343,14 +1345,16 @@ vibrationValidChangeOp.addEventListener("click", () => {
 });
 
 sortAssistValidChangeOp.addEventListener("click", () => {
-    isSortAssistValid = !isSortAssistValid;
-    if (!isSortAssistValid) {
-        allBlockBCBlack();
-    } else {
-        sortAssist();
+    if (steps == 0 || isGameClear) {
+        isSortAssistValid = !isSortAssistValid;
+        if (!isSortAssistValid) {
+            allBlockBCBlack();
+        } else {
+            sortAssist();
+        }
+        localStorage.setItem(sortAssistValidLKey, isSortAssistValid ? "true" : "false");
+        optionMenuItemsUpdate();
     }
-    localStorage.setItem(sortAssistValidLKey, isSortAssistValid ? "true" : "false");
-    optionMenuItemsUpdate();
 });
 
 function numberMatchCheck_Up(n = heightNumber, cn = blockCaseHeightMax) {
