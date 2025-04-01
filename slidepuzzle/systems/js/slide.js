@@ -786,32 +786,37 @@ function challengesJudgeAndDisplayUpdate() {
         [20, 20, 10000]
                         ];
     const challengesListTable = challengesListPopup.querySelector(".table");
-    challengesListTable.innerHTML = "";
+    challengesListTable.querySelectorAll(".challenge").forEach(challenge => {
+        challenge.remove();
+    });
     for (let i = 0; challengesArray.length > i; i += 1) {
         const challenge = challengesArray[i];
 
-        function listGenerate(text) {
-            challengesListTable.innerHTML += `
-            <div class="c_${i + 1}">
-                <p>${text} 以内で</p>
-            </div>
-            `;
+        if (challengesListTable.querySelectorAll("div.challenge").length + 1 !== challengesArray.length) {
+            console.log(challengesListTable.querySelectorAll("div.challenge").length , challengesArray.length);
+            function listGenerate(text) {
+                challengesListTable.innerHTML += `
+                <div class="c_${i + 1} challenge">
+                    <p>${text} 以内で</p>
+                </div>
+                `;
+            }
+
+            if (challenge.length == 3) {
+                listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]}手`)
+            } else {
+                // listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]} : ${challenge[3]} : ${challenge[4]}`)
+                const formattedTimesArray = formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1);
+                listGenerate(`${challenge[0]} × ${challenge[1]} を${formattedTimesArray[0]} : ${formattedTimesArray[1]} : ${formattedTimesArray[2]}`)
+            }
         }
 
-        if (challenge.length == 3) {
-            listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]}手`)
-        } else {
-            // listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]} : ${challenge[3]} : ${challenge[4]}`)
-            const formattedTimesArray = formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1);
-            listGenerate(`${challenge[0]} × ${challenge[1]} を${formattedTimesArray[0]} : ${formattedTimesArray[1]} : ${formattedTimesArray[2]}`)
-        }
         function clearIconGenerate(c) {
             challengesListPopup.querySelector(c).innerHTML += `
             <div class="challengeClearIcon">
                 ${okIconImg}
             </div>`;
         }
-        // challengesArray[i]
         for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
             if (getRecordArray()[i_ls][0] == `${challenge[0]} × ${challenge[1]}`) {
                 if (challenge.length == 3) {
