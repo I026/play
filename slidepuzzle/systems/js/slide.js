@@ -291,6 +291,7 @@ function blocksGenerate() {
     }
     document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
     document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
+    document.querySelector("head title").innerHTML = `${appNameMessage} | ${blockCaseWidth} × ${blockCaseHeight}`;
 }
 
 blocksGenerate();
