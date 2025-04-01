@@ -279,6 +279,10 @@ function blockNumberCtrlUpdate() {
 
 blockNumberCtrlUpdate();
 
+function HTMLTitleUpdate() {
+    document.querySelector("head title").innerHTML = `${appNameMessage} | ${blockCaseWidth} × ${blockCaseHeight}`;
+}
+
 function blocksGenerate() {
     blocks.innerHTML = "";
     let genNumber = 0;
@@ -295,7 +299,7 @@ function blocksGenerate() {
     }
     document.documentElement.style.setProperty("--blockCaseWidth", blockCaseWidth);
     document.documentElement.style.setProperty("--blockCaseHeight", blockCaseHeight);
-    document.querySelector("head title").innerHTML = `${appNameMessage} | ${blockCaseWidth} × ${blockCaseHeight}`;
+    HTMLTitleUpdate();
 }
 
 blocksGenerate();
@@ -1515,6 +1519,7 @@ heightDown.addEventListener("click", () => {
 
 function recoverFromLocalStorage() {
     console.log("recoverFromLocalStorage");
+    HTMLTitleUpdate();
     let localStorageSaveContent;
     if (localStorage.getItem(bottomBarLKey)) {
         bottomBarContent = localStorage.getItem(bottomBarLKey) * 1;
