@@ -919,13 +919,6 @@ img {
     .popup .btns {
         height: 70px;
         width: 70px;
-        /* left: calc(80vw);
-        top: calc(40vh); */
-        justify-items: center;
-        bottom: 0;
-        transform: translate(-50%, 6px);
-        bottom: 0px;
-        /* left: 100px; */
     }
 }
 @media screen and (max-height: 650px) {

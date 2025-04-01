@@ -802,11 +802,32 @@ function challengesJudgeAndDisplayUpdate() {
             }
 
             if (challenge.length == 3) {
-                listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]}手`)
+                listGenerate(`${challenge[0]} × ${challenge[1]} | ${challenge[2]}手`)
             } else {
-                // listGenerate(`${challenge[0]} × ${challenge[1]} を${challenge[2]} : ${challenge[3]} : ${challenge[4]}`)
-                const formattedTimesArray = formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1);
-                listGenerate(`${challenge[0]} × ${challenge[1]} を${formattedTimesArray[0]} : ${formattedTimesArray[1]} : ${formattedTimesArray[2]}`)
+                // const formattedTimesArray = [
+                //     formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1)[0],
+                //     formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1)[1],
+                //     formattedTimes(challenge[2] * 1, challenge[3] * 1, challenge[4] * 1)[2].split(".")[0]
+                // ];
+                const formattedTimesArray = [
+                    challenge[2] * 1,
+                    challenge[3] * 1,
+                    challenge[4] * 1
+                ];
+                let formattedTimesString = "";
+                // 時間が0である
+                if (formattedTimesArray[0] !== 0) {
+                    formattedTimesString += `${formattedTimesArray[0]}h`;
+                }
+                if (formattedTimesArray[1] !== 0) {
+                    formattedTimesString += `${formattedTimesArray[1]}m`;
+                }
+                if (formattedTimesArray[2] !== 0) {
+                    formattedTimesString += `${formattedTimesArray[2]}s`;
+                }
+                listGenerate(`
+                    ${challenge[0]} × ${challenge[1]} | ${formattedTimesString}
+                    `)
             }
         }
 
