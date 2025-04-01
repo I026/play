@@ -903,7 +903,7 @@ img {
 .notificationHiddenAnimetion {
     animation: notificationHidden .25s ease-out both;
 }
-@media screen and (max-height: 550px), screen and (max-width: 270px) {
+@media screen and (max-height: 500px), screen and (max-width: 450px) {
     .notification {
         /* bottom: 10px; */
         /* width: max-content; */
@@ -925,7 +925,7 @@ img {
         bottom: 0;
         transform: translate(-50%, 6px);
         bottom: 0px;
-        left: 100px;
+        /* left: 100px; */
     }
 }
 @media screen and (max-height: 650px) {
