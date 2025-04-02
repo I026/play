@@ -540,49 +540,49 @@ function saveToLocalStorage() {
         console.log("newRecordJudgeAndSave");
         // 特定のstorageにあるすべての項目
         const combinedThreshold = threshold.join("") * 1;
-        
         function keyArray(n) {
             return localStorage.getItem(key).split(" | ")[n].split(",");
         }
-        
+        // 特定のstorageにあるすべての項目を結合
         function combinedKey(n = 0) {
             return keyArray(n).join("").replaceAll(" ","") * 1;
         }
-
-        display.innerHTML = "";
+        // 比較対象の項目を結合 (数値に変換)
         // もしlocalStorageにKeyがある
+        display.innerHTML = "";
         if (localStorage.getItem(key)) {
-            // 現在の記録と既存の記録を取得
-            const currentRecord = combinedKey(isSortAssistValid ? 1 : 0) * 1;
-            const existingRecord = combinedKey(isSortAssistValid ? 0 : 1) * 1;
-            
-            // 0を除いた記録の中で最良の記録かどうかを判定
-            if (currentRecord !== 0) {
-                // 既存の記録が0でない場合のみ比較
-                if (existingRecord !== 0 && currentRecord < existingRecord) {
-                    display.innerHTML = text;
-                }
-                // 既存の記録が0の場合、現在の記録は有効な記録として扱う
-                else if (existingRecord === 0) {
-                    display.innerHTML = text;
+            // もし現在の比較対象が最高の記録なら
+            // alert(combinedKey(isSortAssistValid ? 1 : 0) + " " + combinedThreshold);
+            if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
+                // 新記録を保存
+                console.log("newRecord");
+                display.innerHTML = text;
+                if (isSortAssistValid) {
+                    // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
+                    localStorage.setItem(key, `${localStorage.getItem(key).split(" | ")[0]} | ${saveContent}`);
+                } else {
+                    // SortAssist が off なら 今回の記録 | 従来の記録 を保存
+                    localStorage.setItem(key, `${saveContent} | ${localStorage.getItem(key).split(" | ").length == 1 ? 0 : localStorage.getItem(key).split(" | ")[1]}`);
                 }
             }
-            
-            // 記録の保存処理
-            if (isSortAssistValid) {
-                localStorage.setItem(key, `${localStorage.getItem(key).split(" | ")[0]} | ${saveContent}`);
-            } else {
-                localStorage.setItem(key, `${saveContent} | ${localStorage.getItem(key).split(" | ").length == 1 ? 0 : localStorage.getItem(key).split(" | ")[1]}`);
-            }
+        // もしlocalStorageにKeyがない
         } else {
-            // 新規記録の場合
+            // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
             if (isSortAssistValid) {
                 localStorage.setItem(key, `0 | ${saveContent}`);
             } else {
+                // SortAssist が off なら 今回の記録 | 従来の記録 を保存
                 localStorage.setItem(key, `${saveContent} | 0`);
             }
             display.innerHTML = text;
         }
+        localStorage.getItem(key).split(" | ")[0].split(",");
+
+        // Assistの有無に関わらず、最速や最少であれば表示
+        // 最速時間より短い or 最少手数より少ない or どちらかが0の場合
+        // if ((Math.min(combinedKey(0), combinedKey(1)) >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
+        //     display.innerHTML = text;
+        // }
     }
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
