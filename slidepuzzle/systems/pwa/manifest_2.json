@@ -4,8 +4,8 @@
 "display": "fullscreen",
 "background_color": "black",
 "theme_color": "black",
-"start_url": "/play/slidepuzzle/sort/",
-"scope": "/play/slidepuzzle/",
+"start_url": "https://i026.github.io/play/slidepuzzle/sort/",
+"scope": "https://i026.github.io/play/slidepuzzle/",
 "icons": [
   {
     "src": "../imgs/icon.png",
