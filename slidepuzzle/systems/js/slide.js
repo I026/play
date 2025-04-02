@@ -1101,8 +1101,8 @@ function sortAssist() {
     if (gameClearJudge() !== 0) {
         const assistBlock1 = blocks.querySelector(`.block${Math.min(secberCleared + 1, blockCaseWidth * blockCaseHeight - 1)}`);
         const assistBlock2 = blocks.querySelector(`.block${Math.min(secberCleared + 2, blockCaseWidth * blockCaseHeight - 1)}`);
-        assistBlock1.style.boxShadow = `0 0 ${Math.min(blockCaseWidth, blockCaseHeight) * 20}px ${Math.min(blockCaseWidth, blockCaseHeight) * 10}px gray inset`;
-        assistBlock2.style.boxShadow = `0 0 ${Math.min(blockCaseWidth, blockCaseHeight) * 10}px ${Math.min(blockCaseWidth, blockCaseHeight) * 5}px gray inset`;
+        assistBlock1.style.boxShadow = `0 0 ${200 / Math.min(blockCaseWidth, blockCaseHeight)}px ${100 / Math.min(blockCaseWidth, blockCaseHeight)}px gray inset`;
+        assistBlock2.style.boxShadow = `0 0 ${100 / Math.min(blockCaseWidth, blockCaseHeight)}px ${50 / Math.min(blockCaseWidth, blockCaseHeight)}px gray inset`;
     }
 }
 
@@ -1277,7 +1277,7 @@ function recordDisplay() {
         }
         imgUserOperationLock();
     } else {
-        topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight}${isSortAssistValid ? "<br><span style='font-size: .75em;'>(Assist)</span>" : ""}`;
+        topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight}`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
         timerIconHandsUpdate();
