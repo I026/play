@@ -1268,7 +1268,7 @@ function recordDisplay() {
         }
         imgUserOperationLock();
     } else {
-        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}${isSortAssistValid ? "(Assist)" : ""}`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
         timerIconHandsUpdate();
@@ -1513,6 +1513,7 @@ sortAssistValidChangeOp.addEventListener("click", () => {
         } else {
             sortAssist();
         }
+        // recordDisplay();
         localStorage.setItem(sortAssistValidLKey, isSortAssistValid ? "true" : "false");
         optionMenuItemsUpdate();
     }
