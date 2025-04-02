@@ -515,6 +515,22 @@ function formattedDate(formatted = true) {
 let localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
 let localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
 
+function localStorageFormat(key, assist) {
+    if (localStorage.getItem(key)) {
+        if (localStorage.getItem(key).split(" | ")[assist ? 1 : 0].split(",") == "true") {
+            localStorage.setItem(key, `0 | ${localStorage.getItem(key).split(" | ")[0]}`);
+        }
+        if (localStorage.getItem(key).split(" | ")[assist ? 1 : 0].split(",") == "false") {
+            localStorage.setItem(key, `${localStorage.getItem(key).split(" | ")[0]} | 0`);
+        }
+    }
+}
+
+localStorageFormat(localStorageKey1, 0);
+localStorageFormat(localStorageKey1, 1);
+localStorageFormat(localStorageKey2, 0);
+localStorageFormat(localStorageKey2, 1);
+
 function saveToLocalStorage() {
     console.log("saveToLocalStorage");
     function newRecordJudgeAndSave(key, threshold, saveContent, date, display, text) {
