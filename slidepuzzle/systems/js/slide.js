@@ -60,9 +60,9 @@ const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
 // デバイスカラーテーマによって読み込むPWAのマニフェストファイルを変更
 if (deviceDarkThemeQuery.matches) {
-    document.querySelector("head .manifestFile").href = "../pwa/manifest_2.json";
+    document.querySelector("head .manifestFile").href = "../systems/pwa/manifest_2.json";
 } else {
-    document.querySelector("head .manifestFile").href = "../pwa/manifest.json";
+    document.querySelector("head .manifestFile").href = "../systems/pwa/manifest.json";
 }
 
 function formattedTimes(h, m, s) {
