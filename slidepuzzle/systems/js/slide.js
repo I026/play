@@ -445,6 +445,7 @@ function timerStop() {
         isTimerActive = false;
         clearInterval(timerInterval);
         clearInterval(autoSaveInterval);
+        bottomBarContentUpdate();
     }
 }
 
@@ -801,7 +802,7 @@ function popupHidden(n = popup[0]) {
             menuSticks[2].classList.add("menuStickRotateReverse2Animation");
             menuSticks[1].classList.add("menuStickEraseReverseAnimation");
             if (!isGameClear && isOperated && !timerNumberIsZero()) {
-                timerStart(formattedHr,formattedMin,formattedSec)
+                timerStart(formattedHr,formattedMin,formattedSec);
                 notificationDisplay(timerRestartMassage);
             }
             timeDisplay.classList.remove("changeAcceptanceAnimation");
@@ -1199,6 +1200,7 @@ function downSwipe() {
 let shuffleRoop;
 
 function recordDisplay() {
+    timerStop();
     if (timerNumberIsZero()) {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
