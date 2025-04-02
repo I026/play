@@ -546,6 +546,7 @@ function saveToLocalStorage() {
         }
         // 比較対象の項目を結合 (数値に変換)
         // もしlocalStorageにKeyがある
+        display.innerHTML = "";
         if (localStorage.getItem(key)) {
             // もし現在の比較対象が最高の記録なら
             // alert(combinedKey(isSortAssistValid ? 1 : 0) + " " + combinedThreshold);
@@ -572,10 +573,9 @@ function saveToLocalStorage() {
         }
         localStorage.getItem(key).split(" | ")[0].split(",");
 
-        display.innerHTML = "";
-
         // Assistの有無に関わらず、最速や最少であれば表示
-        if ((combinedKey(0) * 1 >= combinedThreshold * 1) && (combinedKey(1) * 1 >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
+        // 最速時間より短い or 最少手数より少ない or どちらかが0の場合
+        if ((Math.min(combinedKey(0), combinedKey(1)) >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
             display.innerHTML = text;
         }
     }
