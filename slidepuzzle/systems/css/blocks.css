@@ -920,7 +920,7 @@ img {
 .notificationHiddenAnimetion {
     animation: notificationHidden .25s ease-out both;
 }
-@media screen and (max-height: 750px), screen and (max-width: 450px) {
+@media screen and (max-height: 500px), screen and (max-width: 450px) {
     .notification {
         /* bottom: 10px; */
         /* width: max-content; */
@@ -933,14 +933,24 @@ img {
     /* .popup p {
         transform: translateY(-20px);
     } */
+    /* .popup .btns { */
+        /* height: 70px; */
+        /* width: 70px; */
+        /* bottom: 10px; */
+    /* } */
+}
+@media screen and (max-height: 650px) {
+    .popup .btns {
+        left: calc(80vw);
+    }
+}
+@media screen and (max-height: 750px) {
     .popup .btns {
         height: 70px;
         width: 70px;
-        left: calc(80vw);
-        bottom: 10px;
     }
 }
-@media screen and (max-height: 600px) {
+@media screen and (max-height: 700px) {
     .popup p {
         transform: translateY(0);
         font-size: 1.2em;
