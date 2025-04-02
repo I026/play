@@ -6,7 +6,6 @@
 "theme_color": "white",
 "start_url": "/play/slidepuzzle/sort/",
 "scope": "/play/slidepuzzle/",
-"orientation": "portrait",
 "icons": [
   {
     "src": "../imgs/icon.png",

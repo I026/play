@@ -56,6 +56,15 @@ let formattedMin = "00";
 let formattedHr  = "00";
 // const formattedTimesDefault = "00 : 00 : 00.00";
 
+const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+// デバイスカラーテーマによって読み込むPWAのマニフェストファイルを変更
+if (deviceDarkThemeQuery.matches) {
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest_2.json">`;
+} else {
+    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest.json">`;
+}
+
 function formattedTimes(h, m, s) {
     // console.log(String(formattedSec).split("."));alert(h)
     if (h == undefined && m == undefined && s == undefined) {
@@ -696,15 +705,6 @@ function deviceDarkThemeMatch(e) {
     } else {
         darkThemeChange(false);
     }
-}
-
-const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-// デバイスカラーテーマによって読み込むPWAのマニフェストファイルを変更
-if (deviceDarkThemeQuery.matches) {
-    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest_2.json">`;
-} else {
-    document.querySelector("head").innerHTML += `<link rel="manifest" href="../pwa/manifest.json">`;
 }
 
 deviceDarkThemeMatch(deviceDarkThemeQuery);
