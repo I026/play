@@ -175,6 +175,8 @@ const invalidMessage                 = `無効`;
 const lightThemeMessage              = `ライト`;
 const darkThemeMessage               = `ダーク`;
 
+const challengesListMessage          = `以内で`;
+
 const bottomBarLKey                  = `slidePuzzleBottomBar`;
 const vibrationValidLKey             = `slidePuzzleVibrationValid`;
 const sortAssistValidLKey            = `slidePuzzleSortAssistValid`;
@@ -865,7 +867,7 @@ function challengesJudgeAndDisplayUpdate() {
             function listGenerate(text) {
                 challengesListTable.innerHTML += `
                 <div class="c_${i + 1} challenge">
-                    <p>${text} 以内で</p>
+                    <p>${text} ${challengesListMessage}</p>
                 </div>
                 `;
             }
@@ -891,13 +893,16 @@ function challengesJudgeAndDisplayUpdate() {
 
         function clearIconGenerate(c, assist = false) {
             console.log(challengesListPopup.querySelector(c).querySelector("p"));
-            challengesListPopup.querySelector(c).querySelector("p").innerText += assist ? `(${sortAssistShortNameMessage})` : "";
-            
+
             challengesListPopup.querySelector(c).innerHTML += `
             <div class="challengeClearIcon">
-                ${okIconImg}
+            ${okIconImg}
             </div>
             `;
+            if (assist) { 
+                challengesListPopup.querySelector(c).querySelector(".challengeClearIcon").innerHTML += `<span>(${sortAssistShortNameMessage})</span>`;
+                challengesListPopup.querySelector(c).querySelector(".challengeClearIcon").classList.add("assist");
+            }
         }
         for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
             if (getRecordArray()[i_ls][0] == `${challenge[0]} × ${challenge[1]}`) {

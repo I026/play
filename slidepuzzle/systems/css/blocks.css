@@ -611,7 +611,7 @@ button:focus {
     position: absolute;
     display: flex;
     right: 5px;
-    bottom: 5px;
+    bottom: 3px;
     border-radius: 100vh;
     width: .4em;
     height: .4em;
@@ -622,6 +622,20 @@ button:focus {
 }
 .popup .table div .challengeClearIcon {
     background-color: rgb(100, 170, 100);
+}
+.popup .table div .challengeClearIcon.assist {
+    --outlineWidth: 3px;
+    background-color: transparent;
+    outline: var(--outlineWidth) solid rgb(100, 170, 100);
+    outline-offset: calc(var(--outlineWidth) * -.5);
+}
+.popup .table div .challengeClearIcon span {
+    font-size: .2em;
+    position: absolute;
+    text-align: right;
+    right: 0;
+    bottom: 0;
+    transform: translateX(-50px);
 }
 .popup .table div div img {
     display: flex;
