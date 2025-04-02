@@ -1402,11 +1402,11 @@ function recordListUpdate() {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>
         ${getRecordArray()[i][getRecordArray_CaseSize]}<br>
         ${sortAssistShortNameMessage} : ${invalidMessage} | 
-        ${getRecordArray()[i][getRecordArray_Time]        == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_Time]      .split(" : ")[0], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[1], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[2])} | 
-        ${getRecordArray()[i][getRecordArray_Steps]       == 0 ? noRecordMassage : `${getRecordArray()[i][getRecordArray_Steps]}手`}<br>
+        ${getRecordArray()[i][getRecordArray_Time]        == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_Time]      .split(" : ")[0], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[1], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[2])}
+        ${getRecordArray()[i][getRecordArray_Steps]       == 0 ? ""              : ` | ${getRecordArray()[i][getRecordArray_Steps]}手`}<br>
         ${sortAssistShortNameMessage} : ${validMessage} | 
-        ${getRecordArray()[i][getRecordArray_TimeAssist]  == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[0], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[1], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[2])} | 
-        ${getRecordArray()[i][getRecordArray_StepsAssist] == 0 ? noRecordMassage : `${getRecordArray()[i][getRecordArray_StepsAssist]}手`}
+        ${getRecordArray()[i][getRecordArray_TimeAssist]  == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[0], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[1], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[2])}
+        ${getRecordArray()[i][getRecordArray_StepsAssist] == 0 ? ""              : ` | ${getRecordArray()[i][getRecordArray_StepsAssist]}手`}
         </p></div>`;
         // == "true" ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
     }
