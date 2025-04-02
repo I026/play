@@ -150,7 +150,7 @@ const timerRestartMassage            = `タイマーを再開しました`;
 const timerStopMassage               = `タイマーを停止しました`;
 const gameClearMassage               = `タイマーを終了しました`;
 const unrecordedMassage              = `クリアを記録するには､<br>リトライしてください`;
-const noRecordMassage                = `まだ記録がありません`;
+const noRecordMassage                = `記録がありません`;
 const recordFastestMassage           = `での最速`;
 const recordLeastMassage             = `での最少`;
 const blockLimitPlusMassage          = `これ以上増やせません`;
@@ -517,37 +517,57 @@ let localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCas
 
 function saveToLocalStorage() {
     console.log("saveToLocalStorage");
-    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
-    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     function newRecordJudgeAndSave(key, threshold, saveContent, date, display, text) {
         console.log("newRecordJudgeAndSave");
+        // 特定のstorageにあるすべての項目
+        const combinedThreshold = threshold.join("") * 1;
+        function keyArray(n) {
+            return localStorage.getItem(key).split(" | ")[n].split(",");
+        }
+        // 特定のstorageにあるすべての項目を結合
+        function combinedKey(n = 0) {
+            return keyArray(n).join("").replaceAll(" ","") * 1;
+        }
+        // 比較対象の項目を結合 (数値に変換)
         // もしlocalStorageにKeyがある
         if (localStorage.getItem(key)) {
-            const keyArray          = localStorage.getItem(key).split(" | ")[0].split(",");
-            const combinedKey       = keyArray.join("").replaceAll(" ","") * 1;
-            const combinedThreshold = threshold.join("") * 1;
-            // もし現在の比較対象よりlocalStorageのデータの方が良い記録なら
-            if (combinedKey * 1 <= combinedThreshold * 1) {
-                // displayを消去
-                display.innerHTML = "";
-            // もしlocalStorageより現在の比較対象のデータの方が良い記録なら
-            } else {
-                // 新記録テキストを表示､新記録を保存
-                display.innerHTML = "";
-                display.innerHTML = text;
-                localStorage.setItem(key, `${saveContent} | ${isSortAssistValid}`);
+            // もし現在の比較対象が最高の記録なら
+            // alert(combinedKey(isSortAssistValid ? 1 : 0) + " " + combinedThreshold);
+            if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
+                // 新記録を保存
+                console.log("newRecord");
+                if (isSortAssistValid) {
+                    // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
+                    localStorage.setItem(key, `${localStorage.getItem(key).split(" | ")[0]} | ${saveContent}`);
+                } else {
+                    // SortAssist が off なら 今回の記録 | 従来の記録 を保存
+                    localStorage.setItem(key, `${saveContent} | ${localStorage.getItem(key).split(" | ").length == 1 ? 0 : localStorage.getItem(key).split(" | ")[1]}`);
+                }
             }
         // もしlocalStorageにKeyがない
         } else {
-            // 新記録テキストを表示､新記録を保存
-            display.innerHTML = "";
+            // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
+            if (isSortAssistValid) {
+                localStorage.setItem(key, `0 | ${saveContent}`);
+            } else {
+                // SortAssist が off なら 今回の記録 | 従来の記録 を保存
+                localStorage.setItem(key, `${saveContent} | 0`);
+            }
+        }
+        localStorage.getItem(key).split(" | ")[0].split(",");
+
+        display.innerHTML = "";
+
+        // Assistの有無に関わらず、最速や最少であれば表示
+        if ((combinedKey(0) * 1 >= combinedThreshold * 1) && (combinedKey(1) * 1 >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
             display.innerHTML = text;
-            localStorage.setItem(key, `${saveContent} | ${isSortAssistValid}`);
         }
     }
+    localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+    localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
     const localStorageKey2SaveContent = steps;
-    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, formattedDate(), timeInfoDisplay,  `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`);
+    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, formattedDate(), timeInfoDisplay,  `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`); 
     newRecordJudgeAndSave(localStorageKey2, [steps],                                   localStorageKey2SaveContent, formattedDate(), stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
 }
 
@@ -559,7 +579,13 @@ function getRecordArray() {
         const removeLocalStorageKey1 = (`slidePuzzlePlayLog_Time${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         const removeLocalStorageKey2 = (`slidePuzzlePlayLog_Steps${removeBlockCaseWidth} × ${removeBlockCaseHeight}`)
         if (localStorage.getItem(removeLocalStorageKey1)) {
-            removeBlockCandidate.push((`${removeBlockCaseWidth} × ${removeBlockCaseHeight},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},${localStorage.getItem(removeLocalStorageKey1).split(" | ")[1] == "true" ? true : false},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},${localStorage.getItem(removeLocalStorageKey2).split(" | ")[1] == "true" ? true : false}`).split(","));
+            removeBlockCandidate.push((`
+${removeBlockCaseWidth} × ${removeBlockCaseHeight},
+${localStorage.getItem(removeLocalStorageKey1).split(" | ")[0].replaceAll(",", " :")},
+${localStorage.getItem(removeLocalStorageKey1).split(" | ").length != 2 ? 0 : localStorage.getItem(removeLocalStorageKey1).split(" | ")[1].replaceAll(",", " :")},
+${localStorage.getItem(removeLocalStorageKey2).split(" | ")[0]},
+${localStorage.getItem(removeLocalStorageKey2).split(" | ").length != 2 ? 0 : localStorage.getItem(removeLocalStorageKey2).split(" | ")[1]}
+`).replaceAll("\n", "").split(","));
         }
         if (removeBlockCaseHeight < blockCaseHeightMax) {
             removeBlockCaseHeight += 1;
@@ -568,7 +594,7 @@ function getRecordArray() {
             removeBlockCaseWidth += 1;
         }
     }
-    return removeBlockCandidate
+    return removeBlockCandidate;
 }
 
 // getRecordArray();
@@ -691,15 +717,11 @@ okBtn.addEventListener("click", () => {
 });
 
 function popupDisplay(n = popup[0]) {
-    if (!timerNumberIsZero()) {
-        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-        timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
-        stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
-        timerIconHandsUpdate();
-    }
+    recordDisplay();
     if (darkThemeChange()) {
         document.documentElement.style.setProperty("--documentBaseColor", "black");
     }
+    recordListUpdate();
     optionMenuItemsUpdate();
     sampleblocksGenerate();
     if (!(n.classList.contains("popupDisplayAnimation"))) {
@@ -775,7 +797,7 @@ blocks.addEventListener("click", () => {
     }
 });
 
-function formatTimesS(h, m, s) {
+function formatTimes_String(h, m, s) {
     let formattedTimesString = "";
     // 時間が0である
     if (h * 1 !== 0) {
@@ -846,7 +868,7 @@ function challengesJudgeAndDisplayUpdate() {
                     challenge[4] * 1
                 ];
                 listGenerate(`
-                    ${challenge[0]} × ${challenge[1]} | ${formatTimesS(formattedTimesArray[0], formattedTimesArray[1], formattedTimesArray[2])}
+                    ${challenge[0]} × ${challenge[1]} | ${formatTimes_String(formattedTimesArray[0], formattedTimesArray[1], formattedTimesArray[2])}
                     `)
             }
         }
@@ -864,13 +886,39 @@ function challengesJudgeAndDisplayUpdate() {
         for (let i_ls = 0; i_ls < getRecordArray().length; i_ls += 1) {
             if (getRecordArray()[i_ls][0] == `${challenge[0]} × ${challenge[1]}`) {
                 if (challenge.length == 3) {
-                    if (getRecordArray()[i_ls][getRecordArray_Steps] < challenge[2] * 1) {
-                        clearIconGenerate(`.c_${i + 1}`, getRecordArray()[i_ls][getRecordArray_StepsAssist] == "true" ? true : false);
+                    // 手数のみの場合
+                    // Assistの有無に関わらず、手数が短い場合
+                    // (challenge : Challenge検証番目の配列)
+                    if (getRecordArray()[i_ls][getRecordArray_Steps] * 1       < challenge[2] * 1 ||
+                        getRecordArray()[i_ls][getRecordArray_StepsAssist] * 1 < challenge[2] * 1) {
+                        if (getRecordArray()[i_ls][getRecordArray_Steps] < challenge[2] * 1 && (getRecordArray()[i_ls][getRecordArray_Steps] * 1 !== 0)) {
+                            // Assist不使用で適合
+                            clearIconGenerate(`.c_${i + 1}`, false);
+                        } else if (getRecordArray()[i_ls][getRecordArray_StepsAssist] < challenge[2] * 1 && (getRecordArray()[i_ls][getRecordArray_StepsAssist] * 1 !== 0)) {
+                            // Assist使用で適合
+                            clearIconGenerate(`.c_${i + 1}`, true);
+                        }
                     }
                 } else {
-                    const splitedRecordArray = getRecordArray()[i_ls][getRecordArray_Time].split(" : ");
-                    if (splitedRecordArray[0] * 10000 + splitedRecordArray[1] * 100 + splitedRecordArray[2] * 1 < challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1) {
-                        clearIconGenerate(`.c_${i + 1}`, getRecordArray()[i_ls][getRecordArray_StepsAssist] == "true" ? true : false);
+                    // 時間のみの場合
+                    // 特定の過去の記録の配列
+                    const splitedRecordArray       = getRecordArray()[i_ls][getRecordArray_Time].split(" : ");
+                    // 特定の過去のAssist使用時の記録の配列
+                    const splitedRecordArrayAssist = getRecordArray()[i_ls][getRecordArray_TimeAssist].split(" : ");
+                    // Assist不使用の記録がクリアできるか
+                    const normalTimeCleared        = splitedRecordArray[0] * 10000       + splitedRecordArray[1] * 100       + splitedRecordArray[2] * 1       < challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1;
+                    // Assist使用の記録がクリアできるか 
+                    const assistTimeCleared        = splitedRecordArrayAssist[0] * 10000 + splitedRecordArrayAssist[1] * 100 + splitedRecordArrayAssist[2] * 1 < challenge[2] * 10000 + challenge[3] * 100 + challenge[4] * 1;
+
+                    // Assistの使用に関わらず適合
+                    if (normalTimeCleared || assistTimeCleared) {
+                        if (normalTimeCleared && (normalTimeCleared * 1 !== 0)) {
+                            // Assist不使用で適合
+                            clearIconGenerate(`.c_${i + 1}`, false);
+                        } else if (assistTimeCleared && (assistTimeCleared * 1 !== 0)) {
+                            // Assist使用で適合
+                            clearIconGenerate(`.c_${i + 1}`, true);
+                        }
                     }
                 }
             }
@@ -1123,19 +1171,44 @@ function downSwipe() {
 let shuffleRoop;
 
 function recordDisplay() {
-    topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-    localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
-    localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
-    if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-         timeDisplay.innerHTML = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${localStorage.getItem(localStorageKey1).split(" | ")[0].replaceAll(",", " : ")}`;
-        stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${localStorage.getItem(localStorageKey2).split(" | ")[0]}`;
+    if (timerNumberIsZero()) {
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+        localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
+        localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
+        if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
+            timeDisplay.innerHTML = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${
+                (localStorage.getItem(localStorageKey1).split(" | ")[1] == "0" || // Assist ありが0 または
+                (localStorage.getItem(localStorageKey1).split(" | ")[0] * 1 <
+                localStorage.getItem(localStorageKey1).split(" | ")[1] * 1 && // Assist なしの方が良い かつ
+                localStorage.getItem(localStorageKey1).split(" | ")[0] != "0")) // Assist なしが0でない
+                ?
+                localStorage.getItem(localStorageKey1).split(" | ")[0].replaceAll(",", " : ")
+                :
+                `${localStorage.getItem(localStorageKey1).split(" | ")[1].replaceAll(",", " : ")}<br><span style="font-size: .7em;">(${sortAssistShortNameMessage})</span>`
+            }`;
+            stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${
+                (localStorage.getItem(localStorageKey2).split(" | ")[1] == "0" || // Assist ありが0 または
+                (localStorage.getItem(localStorageKey2).split(" | ")[0] * 1 <
+                localStorage.getItem(localStorageKey2).split(" | ")[1] * 1 && // Assist なしの方が良い かつ
+                localStorage.getItem(localStorageKey2).split(" | ")[0] != "0")) // Assist なしが0でない
+                ?
+                localStorage.getItem(localStorageKey2).split(" | ")[0]  // Assist なしの記録を表示
+                :
+                `${localStorage.getItem(localStorageKey2).split(" | ")[1]}<br><span style="font-size: .7em;">(${sortAssistShortNameMessage})</span>`  // Assist ありの記録を表示
+            }`;
+        } else {
+            timeDisplay.innerHTML      = noRecordMassage;
+            stepsDisplay.innerText     = "";
+            timeInfoDisplay.innerText  = "";
+            stepsInfoDisplay.innerText = "";
+        }
+        imgUserOperationLock();
     } else {
-        timeDisplay.innerHTML      = noRecordMassage;
-        stepsDisplay.innerText     = "";
-        timeInfoDisplay.innerText  = "";
-        stepsInfoDisplay.innerText = "";
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+        timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
+        stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
+        timerIconHandsUpdate();
     }
-    imgUserOperationLock();
 }
 
 function blockShuffle() {
@@ -1259,22 +1332,24 @@ bottomBarChangeOp.addEventListener("click", () => {
     popupToggle(bottomBarChangePopup);
 });
 
-function recordDisplayUpdate() {
+function recordListUpdate() {
     recordArrayDisplay.innerHTML = "";
     for (let i = 0; i < getRecordArray().length; i += 1 ) {
         recordArrayDisplay.innerHTML += `<div class="recordLogs"><p>
         ${getRecordArray()[i][getRecordArray_CaseSize]}<br>
-        ${formatTimesS(getRecordArray()[i][getRecordArray_Time].split(" : ")[0], getRecordArray()[i][1].split(" : ")[1], getRecordArray()[i][1].split(" : ")[2])} | 
-        ${getRecordArray()[i][getRecordArray_TimeAssist].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}<br>
-        ${getRecordArray()[i][getRecordArray_Steps]}手 | 
-        ${getRecordArray()[i][getRecordArray_StepsAssist].includes("true") ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
+        ${sortAssistShortNameMessage} : ${invalidMessage} | 
+        ${getRecordArray()[i][getRecordArray_Time]        == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_Time]      .split(" : ")[0], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[1], getRecordArray()[i][getRecordArray_Time]      .split(" : ")[2])} | 
+        ${getRecordArray()[i][getRecordArray_Steps]       == 0 ? noRecordMassage : `${getRecordArray()[i][getRecordArray_Steps]}手`}<br>
+        ${sortAssistShortNameMessage} : ${validMessage} | 
+        ${getRecordArray()[i][getRecordArray_TimeAssist]  == 0 ? noRecordMassage : formatTimes_String(getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[0], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[1], getRecordArray()[i][getRecordArray_TimeAssist].split(" : ")[2])} | 
+        ${getRecordArray()[i][getRecordArray_StepsAssist] == 0 ? noRecordMassage : `${getRecordArray()[i][getRecordArray_StepsAssist]}手`}
         </p></div>`;
         // == "true" ? `${sortAssistValidChangeOpMessage}${validMessage}` : `${sortAssistValidChangeOpMessage}${invalidMessage}`}
     }
 }
 
 function recordRemove() {
-    recordDisplayUpdate();
+    recordListUpdate();
     const recordLogs = document.querySelectorAll(".recordLogs");
     recordLogs.forEach(log => {
         log.addEventListener("click", () => {
@@ -1317,7 +1392,7 @@ function recordRemove() {
                     }
                     });
                     setTimeout(() => {
-                        recordDisplayUpdate();
+                        recordListUpdate();
                         log.remove();
                         recordRemove();
                     }, 240);
@@ -1839,7 +1914,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyZ") {
-        // gameClear();
+        gameClear();
         // localStorage.setItem(`slidePuzzlePlayLog_Time${Math.floor(Math.random() * 20)} × ${Math.floor(Math.random() * 20)}`, "00:00:00.00");
     }
 });
