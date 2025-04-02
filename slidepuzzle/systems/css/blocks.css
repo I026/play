@@ -960,7 +960,7 @@ img {
 }
 @media screen and (min-height: 600px) {
     .popup.blockCaseChangePopup .consoles {
-        margin-top: calc(15vh);
+        margin-top: calc(7.5vh);
     }
 }
 @keyframes bottomBarChange {
