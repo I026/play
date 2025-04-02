@@ -575,9 +575,8 @@ function saveToLocalStorage() {
         }
         localStorage.getItem(key).split(" | ")[0].split(",");
 
-        // Assistの有無に関わらず、最速や最少であれば表示
-        // 最速時間より短い or 最少手数より少ない or どちらかが0の場合
-        if ((Math.min(combinedKey(0), combinedKey(1)) >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
+        // (Assistの有無に関わらず、最速時間より短い or Assistの有無に関わらず、最少手数より少ない) and どちらかが0でない なら textを表示
+        if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
             display.innerHTML = text;
         }
     }
