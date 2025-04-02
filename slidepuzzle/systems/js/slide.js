@@ -1208,7 +1208,7 @@ function recordDisplay() {
                 // Assistなしの時間が存在しない場合
                 getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Time].replaceAll(" : ", "") == 0 ?
                     // Assistありの時間を表示
-                    getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist] :
+                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
                     // Assistありの記録が存在しない場合
                     getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist].replaceAll(" : ", "") == 0 ?
                         // Assistなしの記録を表示
@@ -1222,7 +1222,7 @@ function recordDisplay() {
                 // Assistなしの手数が存在しない場合
                 getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Steps].replaceAll(" : ", "") == 0 ?
                     // Assistありの手数を表示
-                    getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist] :
+                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
                     // Assistありの手数が存在しない場合
                     getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist].replaceAll(" : ", "") == 0 ?
                             // Assistなしの手数を表示
