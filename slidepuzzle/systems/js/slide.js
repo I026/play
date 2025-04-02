@@ -354,7 +354,10 @@ function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) 
     // opacityUndo(bottomBarChangePopup.querySelectorAll("p")[bottomBarContent]);
     opacityUndo(bottomBarChangePopup.querySelectorAll("p")[bottomBarContent]);
     opacityMitigation(bottomBarChangePopup.querySelectorAll("p")[n]);
-    const bottomBarArray = ["", appNameMessage, formattedTimes(), steps];
+    const bottomBarArray = ["",
+        appNameMessage,
+        formattedTimes(),
+        steps];
     if (bottomBarContent !== n && !ignoreThePresent) {
         bottomBarContent = n;
         bottomBarContentDisplay(bottomBarArray[n]);
