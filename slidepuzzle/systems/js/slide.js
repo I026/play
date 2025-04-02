@@ -545,18 +545,40 @@ function saveToLocalStorage() {
         }
         // 特定のstorageにあるすべての項目を結合
         function combinedKey(n = 0) {
+            // n が 0 なら Assist未使用時
+            // n が 1 なら Assist使用時
             return keyArray(n).join("").replaceAll(" ","") * 1;
         }
         // 比較対象の項目を結合 (数値に変換)
         // もしlocalStorageにKeyがある
         display.innerHTML = "";
         if (localStorage.getItem(key)) {
+
+            // 今回のプレイが最高記録(Assistの有無に関わらずすべての記録を元に比較)であれば表示
+            // もしAssist未使用時の記録が0なら
+            (() => { // Assistの有無に関わらず最高記録を比較し､新記録テキストを表示
+                if (combinedKey(0) == 0) {
+                    // 今回のプレイが最高記録であれば表示
+                    if (combinedKey(1) * 1 > combinedThreshold * 1) {
+                        display.innerHTML = text;
+                    }
+                } else if (combinedKey(1) == 0) {
+                    // 今回のプレイが最高記録であれば表示
+                    if (combinedKey(0) * 1 > combinedThreshold * 1) {
+                        display.innerHTML = text;
+                    }
+                } else {
+                    if (combinedKey(0) * 1 > combinedThreshold * 1 && combinedKey(1) * 1 > combinedThreshold * 1) {
+                        display.innerHTML = text;
+                    }
+                }
+            })
+
             // もし現在の比較対象が最高の記録なら
-            // alert(combinedKey(isSortAssistValid ? 1 : 0) + " " + combinedThreshold);
-            if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
+            // もしSortAssistが無効なら左側と比較 もしSortAssistが有効なら右側と比較
+            if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 > combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
                 // 新記録を保存
                 console.log("newRecord");
-                display.innerHTML = text;
                 if (isSortAssistValid) {
                     // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
                     localStorage.setItem(key, `${localStorage.getItem(key).split(" | ")[0]} | ${saveContent}`);
@@ -565,6 +587,7 @@ function saveToLocalStorage() {
                     localStorage.setItem(key, `${saveContent} | ${localStorage.getItem(key).split(" | ").length == 1 ? 0 : localStorage.getItem(key).split(" | ")[1]}`);
                 }
             }
+
         // もしlocalStorageにKeyがない
         } else {
             // SortAssist が on  なら 従来の記録 | 今回の記録 を保存し
