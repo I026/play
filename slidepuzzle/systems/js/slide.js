@@ -552,7 +552,6 @@ function saveToLocalStorage() {
         display.innerHTML = "";
         if (localStorage.getItem(key)) {
             // もし現在の比較対象が最高の記録なら
-            // alert(combinedKey(isSortAssistValid ? 1 : 0) + " " + combinedThreshold);
             if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
                 // 新記録を保存
                 console.log("newRecord");
@@ -576,8 +575,12 @@ function saveToLocalStorage() {
         }
         localStorage.getItem(key).split(" | ")[0].split(",");
 
-        // (Assistの有無に関わらず、最速時間より短い or Assistの有無に関わらず、最少手数より少ない) and どちらかが0でない なら textを表示
-        if ((combinedKey(isSortAssistValid ? 1 : 0) * 1 >= combinedThreshold * 1) || (combinedKey(isSortAssistValid ? 1 : 0) * 1 == 0)) {
+        // 0を除いた記録の中で最良の記録かどうかを判定
+        const currentRecord  = combinedKey(isSortAssistValid ? 1 : 0) * 1;
+        const existingRecord = combinedKey(isSortAssistValid ? 0 : 1) * 1;
+        
+        // 現在の記録が0でない、かつ(既存の記録が0であるか、現在の記録が既存の記録より良い)場合にtextを表示
+        if (currentRecord !== 0 && (existingRecord === 0 || currentRecord < existingRecord)) {
             display.innerHTML = text;
         }
     }
