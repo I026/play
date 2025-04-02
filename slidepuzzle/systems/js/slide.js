@@ -983,9 +983,7 @@ function challengesJudgeAndDisplayUpdate() {
 
 challengesJudgeAndDisplayUpdate();
 
-function gameClear() {
-    allBlockBCBlack();
-    opacityUndo(sortAssistValidChangeOp.querySelector("p"));
+function gameClearBlockAnimationColor() {
     const clearedBlockBCArray = [
         "skyblue",
         "cornflowerblue",
@@ -999,7 +997,13 @@ function gameClear() {
         "chocolate"
     ]
     const clearedBlockBCArraySelect = clearedBlockBCArray[Math.min(Math.round(((((blockCaseWidth + blockCaseHeight) / 2)) / ((blockCaseWidthMax - blockCaseWidthMin + blockCaseHeightMax - blockCaseHeightMin) / 2)) * clearedBlockBCArray.length) - 1, clearedBlockBCArray.length - 1)]
-    document.documentElement.style.setProperty("--clearedBlockAnimationBC", clearedBlockBCArraySelect);
+    return clearedBlockBCArraySelect;
+}
+
+function gameClear() {
+    allBlockBCBlack();
+    opacityUndo(sortAssistValidChangeOp.querySelector("p"));
+    document.documentElement.style.setProperty("--clearedBlockAnimationBC", gameClearBlockAnimationColor());
     timerStop();
     saveToLocalStorage();
     challengesJudgeAndDisplayUpdate();
@@ -1078,7 +1082,9 @@ function gameClearJudge() {
 
 function allBlockBCBlack() {
     for (let i = 0; i < blockCaseWidth * blockCaseHeight - 1; i += 1) {
-        blocks.querySelector(`.block${i + 1}`).style.backgroundColor = "black";
+        const target = blocks.querySelector(`.block${i + 1}`);
+        target.style.backgroundColor = "black";
+        target.style.boxShadow = "0 0 0px 0px gray inset";
     }
 }
 
@@ -1093,7 +1099,10 @@ function sortAssist() {
         judgeIndex += 1;
     }
     if (gameClearJudge() !== 0) {
-        blocks.querySelector(`.block${Math.min(secberCleared + 1, blockCaseWidth * blockCaseHeight - 1)}`).style.backgroundColor = "gray";
+        const assistBlock1 = blocks.querySelector(`.block${Math.min(secberCleared + 1, blockCaseWidth * blockCaseHeight - 1)}`);
+        const assistBlock2 = blocks.querySelector(`.block${Math.min(secberCleared + 2, blockCaseWidth * blockCaseHeight - 1)}`);
+        assistBlock1.style.boxShadow = `0 0 ${Math.min(blockCaseWidth, blockCaseHeight) * 20}px ${Math.min(blockCaseWidth, blockCaseHeight) * 10}px gray inset`;
+        assistBlock2.style.boxShadow = `0 0 ${Math.min(blockCaseWidth, blockCaseHeight) * 10}px ${Math.min(blockCaseWidth, blockCaseHeight) * 5}px gray inset`;
     }
 }
 
@@ -1268,7 +1277,7 @@ function recordDisplay() {
         }
         imgUserOperationLock();
     } else {
-        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}${isSortAssistValid ? "(Assist)" : ""}`;
+        topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight}${isSortAssistValid ? "<br><span style='font-size: .75em;'>(Assist)</span>" : ""}`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
         timerIconHandsUpdate();

@@ -274,6 +274,7 @@ button:focus {
     outline-offset: -1.5px;
     margin: 1.5px;
     transition: .25s ease-in-out background-color;
+    transition: .25s ease-in-out box-shadow;
 }
 #blocks div.air {
     /* background-color: rgb(242, 242, 242); */
