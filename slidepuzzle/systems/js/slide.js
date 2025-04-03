@@ -1120,8 +1120,8 @@ function sortAssist() {
     if (gameClearJudge() !== 0) {
         const assistBlock1 = blocks.querySelector(`.block${Math.min(secberCleared + 1, blockCaseWidth * blockCaseHeight - 1)}`);
         const assistBlock2 = blocks.querySelector(`.block${Math.min(secberCleared + 2, blockCaseWidth * blockCaseHeight - 1)}`);
-        assistBlock1.style.boxShadow = `0 0 ${200 / Math.min(blockCaseWidth, blockCaseHeight)}px ${100 / Math.min(blockCaseWidth, blockCaseHeight)}px gray inset`;
-        assistBlock2.style.boxShadow = `0 0 ${100 / Math.min(blockCaseWidth, blockCaseHeight)}px ${50 / Math.min(blockCaseWidth, blockCaseHeight)}px gray inset`;
+        assistBlock1.style.boxShadow = `0 0 calc(var(--blockSide) / 2) calc(var(--blockSide) / 4) gray inset`;
+        assistBlock2.style.boxShadow = `0 0 calc(var(--blockSide) / 8) calc(var(--blockSide) / 16) gray inset`;
     }
 }
 
@@ -1534,12 +1534,14 @@ vibrationValidChangeOp.addEventListener("click", () => {
 });
 
 sortAssistValidChangeOp.addEventListener("click", () => {
-    if (steps == 0 || isGameClear) {
+    if (steps == 0 || isGameClear || timerNumberIsZero()) {
         isSortAssistValid = !isSortAssistValid;
         if (!isSortAssistValid) {
             allBlockBCBlack();
         } else {
-            sortAssist();
+            if (steps == 0 || isGameClear) {
+                sortAssist();
+            }
         }
         // recordDisplay();
         localStorage.setItem(sortAssistValidLKey, isSortAssistValid ? "true" : "false");
@@ -2007,7 +2009,7 @@ document.addEventListener("keydown",(event) => {
         }
     }
     if (event.code === "KeyZ") {
-        gameClear();
+        // gameClear();
         // localStorage.setItem(`slidePuzzlePlayLog_Time${Math.floor(Math.random() * 20)} × ${Math.floor(Math.random() * 20)}`, "00:00:00.00");
     }
 });

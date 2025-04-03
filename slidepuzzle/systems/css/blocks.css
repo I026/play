@@ -265,6 +265,7 @@ button:focus {
     margin: 0;
 }
 #blocks div {
+    /* animation: clearedBlock .4s ease-in-out infinite; */
     height: var(--blockSide);
     width: var(--blockSide);
     background-color: var(--blockBackgroundColor);
@@ -830,13 +831,16 @@ img {
         transform: scale(1);
         rotate: 0deg;
         background-color: var(--blockBackgroundColor);
+        box-shadow: none;
     }
     25% {
         /* rotate: 1deg; */
     }
     50% {
         transform: scale(.95);
-        background-color: var(--clearedBlockAnimationBC);
+        /* background-color: var(--clearedBlockAnimationBC); */
+        /* box-shadow: 0 0 calc(var(--blockSide) * .025) calc(var(--blockSide) * .025) var(--clearedBlockAnimationBC); */
+        box-shadow: 0 0 calc(var(--blockSide) * .5) calc(var(--blockSide) * .5) var(--clearedBlockAnimationBC) inset;
     }
     75% {
         /* rotate: -1deg; */
@@ -845,6 +849,7 @@ img {
         transform: scale(1);
         rotate: 0deg;
         background-color: var(--blockBackgroundColor);
+        box-shadow: none;
     }
 }
 .clearedBlockAnimation {
