@@ -153,8 +153,8 @@ function vibration(v) {
 const appNameMessage                 = `SlidePuzzle`;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフルを開始します`;
-const shuffleCompletionMassage       = `動かすとタイマーを開始します`;
-const timerStartMassage              = `タイマーを開始しました <br>左上から順番に揃えてください`;
+const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します<br>タップでシャッフルを取り消します</span>`;
+const timerStartMassage              = `タイマーを開始しました`;
 const timerRestartMassage            = `タイマーを再開しました`;
 const timerStopMassage               = `タイマーを停止しました`;
 const gameClearMassage               = `タイマーを終了しました`;
@@ -497,12 +497,16 @@ function timerStart(h = 0, m = 0, s = 0) {
         hr  = h * 1;
         min = m * 1;
         sec = s * 1;
-        timerInterval = setInterval(() => {
+        function timerUpdate() {
             timerHMSUpdate();
             bottomBarArrayUpdate();
             bottomBarContentUpdate();
             window.scrollTo(0, 0);
-        }, 47);
+        }
+        timerUpdate();
+        timerInterval = setInterval(() => {
+            timerUpdate();
+        }, 39);
         if (h == 0 && m == 0 && s == 0) {
             notificationDisplay(timerStartMassage);
         }
@@ -1333,6 +1337,25 @@ function recordDisplay() {
     }
 }
 
+function waitForElementContent(element, expectedValue, callback) {
+    // MutationObserverの設定
+    const observer = new MutationObserver((mutations, obs) => {
+        if (element.innerHTML == expectedValue) {
+            // 条件が満たされたらcallback
+            callback();
+            // 監視を停止
+            obs.disconnect();
+        }
+    });
+
+    // 監視の開始
+    observer.observe(element, {
+        childList: true,     // 子要素の変更を監視
+        characterData: true, // テキストの変更を監視
+        subtree: true        // 子孫要素も監視
+    });
+}
+
 function blockShuffle() {
     steps       = 0;
     isOperated  = false;
@@ -1404,8 +1427,15 @@ function blockShuffle() {
                     clearInterval(shuffleRoop);
                     aim_DownRightAir = false;
                     isOperated = true;
-                    notificationDisplay(shuffleCompletionMassage, 0);
                     blockswipeDuration(blockswipeDurationDefault);
+                    notificationDisplay(shuffleCompletionMassage, 0);
+                    waitForElementContent(notificationText, shuffleCompletionMassage, () => {
+                        notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "auto";
+                        notificationText.querySelector(".shuffle_Undo").addEventListener("click", () => {
+                            recoverFromLocalStorage();
+                            notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "none";
+                        });
+                    });
                     steps = 0;
                     if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
                         opacityUndo();
