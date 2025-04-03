@@ -568,23 +568,39 @@ function saveToLocalStorage() {
 
             // 今回のプレイが最高記録(Assistの有無に関わらずすべての記録を元に比較)であれば表示
             // もしAssist未使用時の記録が0なら
-            (() => { // Assistの有無に関わらず最高記録を比較し､新記録テキストを表示
-                if (combinedKey(0) == 0) {
-                    // 今回のプレイが最高記録であれば表示
-                    if (combinedKey(1) * 1 > combinedThreshold * 1) {
-                        display.innerHTML = text;
-                    }
-                } else if (combinedKey(1) == 0) {
-                    // 今回のプレイが最高記録であれば表示
-                    if (combinedKey(0) * 1 > combinedThreshold * 1) {
-                        display.innerHTML = text;
-                    }
-                } else {
-                    if (combinedKey(0) * 1 > combinedThreshold * 1 && combinedKey(1) * 1 > combinedThreshold * 1) {
-                        display.innerHTML = text;
-                    }
+            // (() => { // Assistの有無に関わらず最高記録を比較し､新記録テキストを表示
+            //     if (combinedKey(0) == 0) {
+            //         // 今回のプレイが最高記録であれば表示
+            //         if (combinedKey(1) * 1 > combinedThreshold * 1) {
+            //             display.innerHTML = text;
+            //         }
+            //     } else if (combinedKey(1) == 0) {
+            //         // 今回のプレイが最高記録であれば表示
+            //         if (combinedKey(0) * 1 > combinedThreshold * 1) {
+            //             display.innerHTML = text;
+            //         }
+            //     } else {
+            //         if (combinedKey(0) * 1 > combinedThreshold * 1 && combinedKey(1) * 1 > combinedThreshold * 1) {
+            //             display.innerHTML = text;
+            //         }
+            //     }
+            // })
+
+            // 今回のプレイが最高記録(Assistの有無に関わらず今回のプレイと同じ横×縦の記録を元に比較)であれば表示
+
+            if (combinedKey(0) * 1 == 0) { // もしAssist未使用時の記録が0なら
+                if (combinedKey(1) * 1 > combinedThreshold * 1) { // もしAssist使用時の記録が今回の記録より短いなら
+                    display.innerHTML = text;
                 }
-            })
+            } else if (combinedKey(1) * 1 == 0) { // もしAssist使用時の記録が0なら
+                if (combinedKey(0) * 1 > combinedThreshold * 1) { // もしAssist未使用時の記録が今回の記録より短いなら
+                    display.innerHTML = text;
+                }
+            } else { // もしAssist未使用時の記録もAssist使用時の記録も0でないなら
+                if ((combinedKey(0) * 1 > combinedThreshold * 1) && (combinedKey(1) * 1 > combinedThreshold * 1)) { // もしAssist未使用時の記録もAssist使用時の記録も 今回の記録より短いなら
+                    display.innerHTML = text;
+                }
+            }
 
             // もし現在の比較対象が最高の記録なら
             // もしSortAssistが無効なら左側と比較 もしSortAssistが有効なら右側と比較
