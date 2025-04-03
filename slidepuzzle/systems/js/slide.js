@@ -466,7 +466,9 @@ function formatTimes_String(h, m, s) {
     if (m * 1 !== 0) {
         formattedTimesString += `${m * 1}m `;
     }
-    formattedTimesString += `${s}s `;
+    if (s * 1 !== 0) {
+        formattedTimesString += `${s}s `;
+    }
     return formattedTimesString;
 }
 
