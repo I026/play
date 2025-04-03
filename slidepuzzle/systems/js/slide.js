@@ -361,7 +361,7 @@ function bottomBarArrayUpdate() {
         steps,
         `<span class="timeDisplayNumBlocks">
             <span>
-                ${formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[0] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[0]}
+                ${formatTimes_String(formattedHr, formattedMin, formattedSec) == 0 ? "00.00s" : (formatTimes_String(formattedHr, formattedMin, formattedSec)).split(" ")[0] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[0]}
             </span>
             <span>
                 ${formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[1] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[1]}
@@ -499,6 +499,7 @@ function timerStart(h = 0, m = 0, s = 0) {
         sec = s * 1;
         timerInterval = setInterval(() => {
             timerHMSUpdate();
+            bottomBarArrayUpdate();
             bottomBarContentUpdate();
             window.scrollTo(0, 0);
         }, 47);
