@@ -452,6 +452,9 @@ button:focus {
 .popup #topTitles :hover {
     cursor: pointer;
 }
+.subText {
+    font-size: .7em;
+}
 .popup div #topTitle {
     font-size: 1.5em;
     background-color: transparent;

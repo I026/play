@@ -16,6 +16,7 @@ const challengesListPopup    = document.querySelector(".challengesListPopup");
 const challengesListOp       = document.querySelector(".challengesListOp");
 const blockCaseChangeOp      = document.querySelector(".blockCaseChangeOp");
 const bottomBarChangeOp      = document.querySelector(".bottomBarChangeOp");
+const bottomBarTimeStepsOp   = document.querySelector(".bottomBarTimeStepsOp");
 const recordResetOp          = document.querySelector(".recordResetOp");
 const colorThemeChangeOp     = document.querySelector(".colorThemeChangeOp");
 const vibrationValidChangeOp = document.querySelector(".vibrationValidChangeOp");
@@ -45,7 +46,7 @@ const bottomBarNothing       = document.querySelector(".optionPopup .bottomBarNo
 const bottomBarSlidepuzzle   = document.querySelector(".optionPopup .bottomBarSlidepuzzle");
 const bottomBarTime          = document.querySelector(".optionPopup .bottomBarTime");
 const bottomBarSteps         = document.querySelector(".optionPopup .bottomBarSteps");
-
+const bottomBarTimeSteps     = document.querySelector(".optionPopup .bottomBarTimeSteps");
 let sec        = 0;
 let min        = 0;
 let hr         = 0;
@@ -54,7 +55,6 @@ let elapsedSec = 0;
 let formattedSec = "00.00";
 let formattedMin = "00";
 let formattedHr  = "00";
-// const formattedTimesDefault = "00 : 00 : 00.00";
 
 const deviceDarkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -168,10 +168,11 @@ const blockLimitMinusMassage         = `これ以上減らせません`;
 const bottomBarMessegeArray          = [`何も表示しない`, 
                                         `"${appNameMessage}"を表示`,
                                         `タイムを表示`,
-                                        `手数を表示`];
+                                        `手数を表示`,
+                                        `タイムと手数を表示`];
 
 const blockCaseChangeOpMessage       = `ブロック数 : `;
-const bottomBarChangeOpMessage       = `下部バーの内容 : `;
+const bottomBarChangeOpMessage       = `下部バー : `;
 const recordResetOpMessage           = `記録一覧`;
 const colorThemeOpMessage            = `カラーテーマ : `;
 const vibrationValidChangeOpMessage  = `デバイスの振動 : `;
@@ -338,26 +339,75 @@ function autoSaveToLocalStorage() {
 
 let bottomBarContent = 1;
 
+const bottomBarContentAnimationDuration = 500;
+
 function bottomBarContentDisplay(text) {
     notificationPositionUpdate();
-    const animationDuration = 500;
         menuTitle.classList.add("bottomBarChangeAnimation");
         setTimeout(() => {
         menuTitle.innerHTML = text;
-    }, animationDuration / 2);
+    }, bottomBarContentAnimationDuration / 2);
     setTimeout(() => {
         menuTitle.classList.remove("bottomBarChangeAnimation");
-    }, animationDuration);
+    }, bottomBarContentAnimationDuration);
+}
+
+let bottomBarArray;
+
+function bottomBarArrayUpdate() {
+    bottomBarArray = ["",
+        appNameMessage,
+        formattedTimes(),
+        steps,
+        `<span class="timeDisplayNumBlocks">
+            <span>
+                ${formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[0] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[0]}
+            </span>
+            <span>
+                ${formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[1] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[1]}
+            </span>
+            <span>
+                ${formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[2] == undefined ? "" : formatTimes_String(formattedHr, formattedMin, formattedSec).split(" ")[2]}
+            </span>
+            <span></span>
+            <span>
+                ${steps}
+            </span>
+        </span>
+        `];
+}
+
+bottomBarArrayUpdate();
+
+function bottomBarContentUpdate(animation = false) {
+    bottomBarArrayUpdate();
+    
+    setTimeout(() => {
+        if (bottomBarContent == 2) {
+            menuTitle.innerHTML = bottomBarArray[2];
+        } else if (bottomBarContent == 3) {
+            menuTitle.innerHTML = bottomBarArray[3];
+        } else if (bottomBarContent == 4) {
+            menuTitle.innerHTML = bottomBarArray[4];
+        }
+    }, animation ? bottomBarContentAnimationDuration : 0);
+    
+    if (animation) {
+        if (bottomBarContent == 2) {
+            bottomBarContentDisplay(bottomBarArray[2]);
+        } else if (bottomBarContent == 3) {
+            bottomBarContentDisplay(bottomBarArray[3]);
+        } else if (bottomBarContent == 4) {
+            bottomBarContentDisplay(bottomBarArray[4]);
+        }
+    }
+    
 }
 
 function bottomBarContentChange(n = bottomBarContent, ignoreThePresent = false) {
     // opacityUndo(bottomBarChangePopup.querySelectorAll("p")[bottomBarContent]);
     opacityUndo(bottomBarChangePopup.querySelectorAll("p")[bottomBarContent]);
     opacityMitigation(bottomBarChangePopup.querySelectorAll("p")[n]);
-    const bottomBarArray = ["",
-        appNameMessage,
-        formattedTimes(),
-        steps];
     if (bottomBarContent !== n && !ignoreThePresent) {
         bottomBarContent = n;
         bottomBarContentDisplay(bottomBarArray[n]);
@@ -396,12 +446,24 @@ bottomBarSteps.addEventListener("click", () => {
     }
 });
 
-function bottomBarContentUpdate() {
-    if (bottomBarContent == 2) {
-        menuTitle.innerHTML = formattedTimes();
-    } else if (bottomBarContent == 3) {
-        menuTitle.innerHTML = steps;
+bottomBarTimeSteps.addEventListener("click", () => {
+    // bottomBarContentTimeSteps();
+    if (bottomBarContent !== 4) {
+        bottomBarContentChange(4);
     }
+});
+
+function formatTimes_String(h, m, s) {
+    let formattedTimesString = "";
+    // 時間が0である
+    if (h * 1 !== 0) {
+        formattedTimesString += `${h * 1}h `;
+    }
+    if (m * 1 !== 0) {
+        formattedTimesString += `${m * 1}m `;
+    }
+    formattedTimesString += `${s}s `;
+    return formattedTimesString;
 }
 
 let timerStartDate;
@@ -431,7 +493,6 @@ function timerStart(h = 0, m = 0, s = 0) {
         sec = s * 1;
         timerInterval = setInterval(() => {
             timerHMSUpdate();
-            // console.log(elapsedSec);
             bottomBarContentUpdate();
             window.scrollTo(0, 0);
         }, 47);
@@ -452,7 +513,6 @@ function timerStart(h = 0, m = 0, s = 0) {
 
 function timerStop() {
     if (isTimerActive) {
-        // timerStopDate = performance.now();
         timerHMSUpdate();
         isTimerActive = false;
         clearInterval(timerInterval);
@@ -468,6 +528,7 @@ function timerReset() {
     formattedSec = "00.00";
     formattedMin = "00";
     formattedHr  = "00";
+    bottomBarContentUpdate();
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -566,26 +627,6 @@ function saveToLocalStorage() {
         display.innerHTML = "";
         if (localStorage.getItem(key)) {
 
-            // 今回のプレイが最高記録(Assistの有無に関わらずすべての記録を元に比較)であれば表示
-            // もしAssist未使用時の記録が0なら
-            // (() => { // Assistの有無に関わらず最高記録を比較し､新記録テキストを表示
-            //     if (combinedKey(0) == 0) {
-            //         // 今回のプレイが最高記録であれば表示
-            //         if (combinedKey(1) * 1 > combinedThreshold * 1) {
-            //             display.innerHTML = text;
-            //         }
-            //     } else if (combinedKey(1) == 0) {
-            //         // 今回のプレイが最高記録であれば表示
-            //         if (combinedKey(0) * 1 > combinedThreshold * 1) {
-            //             display.innerHTML = text;
-            //         }
-            //     } else {
-            //         if (combinedKey(0) * 1 > combinedThreshold * 1 && combinedKey(1) * 1 > combinedThreshold * 1) {
-            //             display.innerHTML = text;
-            //         }
-            //     }
-            // })
-
             // 今回のプレイが最高記録(Assistの有無に関わらず今回のプレイと同じ横×縦の記録を元に比較)であれば表示
 
             if (combinedKey(0) * 1 == 0) { // もしAssist未使用時の記録が0なら
@@ -628,19 +669,13 @@ function saveToLocalStorage() {
             display.innerHTML = text;
         }
         localStorage.getItem(key).split(" | ")[0].split(",");
-
-        // Assistの有無に関わらず、最速や最少であれば表示
-        // 最速時間より短い or 最少手数より少ない or どちらかが0の場合
-        // if ((Math.min(combinedKey(0), combinedKey(1)) >= combinedThreshold * 1) || (combinedKey(0) * 1 == 0 || combinedKey(1) * 1 == 0)) {
-        //     display.innerHTML = text;
-        // }
     }
     localStorageKey1 = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
     localStorageKey2 = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
     const localStorageKey1SaveContent = `${formattedHr}, ${formattedMin}, ${formattedSec}`;
     const localStorageKey2SaveContent = steps;
-    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, formattedDate(), timeInfoDisplay,  `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`); 
-    newRecordJudgeAndSave(localStorageKey2, [steps],                                   localStorageKey2SaveContent, formattedDate(), stepsInfoDisplay, `<span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
+    newRecordJudgeAndSave(localStorageKey1, [formattedHr, formattedMin, formattedSec], localStorageKey1SaveContent, formattedDate(), timeInfoDisplay,  `<span class="subText">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span>`); 
+    newRecordJudgeAndSave(localStorageKey2, [steps],                                   localStorageKey2SaveContent, formattedDate(), stepsInfoDisplay, `<span class="subText">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span>`);
 }
 
 function getRecordArray(x, y) {
@@ -738,6 +773,7 @@ function optionMenuItemsUpdate() {
     bottomBarSlidepuzzle.innerText = bottomBarMessegeArray[1];
     bottomBarTime.innerText = bottomBarMessegeArray[2];
     bottomBarSteps.innerText = bottomBarMessegeArray[3];
+    bottomBarTimeSteps.innerText = bottomBarMessegeArray[4];
     blockCaseChangeOp.querySelector("p").innerText = `${blockCaseChangeOpMessage}${blockCaseWidth} × ${blockCaseHeight}`;
     bottomBarChangeOp.querySelector("p").innerText = `${bottomBarChangeOpMessage}${bottomBarMessegeArray[bottomBarContent]}`;
     recordResetOp.querySelector("p").innerText = recordResetOpMessage;
@@ -867,21 +903,6 @@ blocks.addEventListener("click", () => {
         menuBtnToggle();
     }
 });
-
-function formatTimes_String(h, m, s) {
-    let formattedTimesString = "";
-    // 時間が0である
-    if (h * 1 !== 0) {
-        formattedTimesString += `${h}h`;
-    }
-    if (m * 1 !== 0) {
-        formattedTimesString += `${m}m`;
-    }
-    if (s * 1 !== 0) {
-        formattedTimesString += `${s}s`;
-    }
-    return formattedTimesString;
-}
 
 function challengesJudgeAndDisplayUpdate() {
     formattedTimes();
@@ -1260,32 +1281,32 @@ function recordDisplay() {
         localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
         localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
         if (localStorage.getItem(localStorageKey1) && localStorage.getItem(localStorageKey2)) {
-            timeDisplay.innerHTML  = `${timerIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${
+            timeDisplay.innerHTML  = `${timerIconImg} <span class="subText">${blockCaseWidth} × ${blockCaseHeight}${recordFastestMassage}</span> :<br>${
                 // Assistなしの時間が存在しない場合
                 getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Time].replaceAll(" : ", "") == 0 ?
                     // Assistありの時間を表示
-                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
+                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist]}<br><span class="subText">(${sortAssistShortNameMessage})</span>` :
                     // Assistありの記録が存在しない場合
                     getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist].replaceAll(" : ", "") == 0 ?
                         // Assistなしの記録を表示
                         getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Time] :
                         // そうではなければ(いずれも該当しない､両方の数字が存在するなら)短い方を表示する
                         getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Time].replaceAll(" : ", "") * 1 > getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist].replaceAll(" : ", "") * 1 ?
-                            `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
+                            `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_TimeAssist]}<br><span class="subText">(${sortAssistShortNameMessage})</span>` :
                             getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Time]
             }`;
-            stepsDisplay.innerHTML = `${stepsIconImg} <span style="font-size: .7em;">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${
+            stepsDisplay.innerHTML = `${stepsIconImg} <span class="subText">${blockCaseWidth} × ${blockCaseHeight}${recordLeastMassage}</span> :<br>${
                 // Assistなしの手数が存在しない場合
                 getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Steps].replaceAll(" : ", "") == 0 ?
                     // Assistありの手数を表示
-                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
+                    `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist]}<br><span class="subText">(${sortAssistShortNameMessage})</span>` :
                     // Assistありの手数が存在しない場合
                     getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist].replaceAll(" : ", "") == 0 ?
                             // Assistなしの手数を表示
                             getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Steps] :
                             // そうではなければ(いずれも該当しない､両方の数字が存在するなら)短い方を表示する
                             getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Steps].replaceAll(" : ", "") * 1 > getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist].replaceAll(" : ", "") * 1 ?
-                                `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist]}<br><span style="font-size: .75em;">(${sortAssistShortNameMessage})</span>` :
+                                `${getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_StepsAssist]}<br><span class="subText">(${sortAssistShortNameMessage})</span>` :
                                 getRecordArray(blockCaseWidth, blockCaseHeight)[getRecordArray_Steps]
             }`;
         } else {
@@ -1296,7 +1317,7 @@ function recordDisplay() {
         }
         imgUserOperationLock();
     } else {
-        topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight}`;
+        topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight} <span class="subText">${isSortAssistValid ? sortAssistShortNameMessage : ""}</span>`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
         timerIconHandsUpdate();
@@ -1763,12 +1784,6 @@ expandableMenuBtn.addEventListener("click", () => {
 });
 
 function retry() {
-    timerReset();
-    if (bottomBarContent == 2) {
-        bottomBarContentDisplay(formattedTimes());
-    } else if (bottomBarContent == 3) {
-        bottomBarContentDisplay("0");
-    }
     isGameClear = false;
     isOperated = false;
     setTimeout(() => {
@@ -1779,8 +1794,9 @@ function retry() {
     setTimeout(() => {
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         timerReset();
+        bottomBarContentUpdate();
     }, 200);
-    blocksGenerate();
+    bottomBarContentUpdate(true);
     timerStop();
     popupHidden();
     opacityMitigation(retryBtn);
