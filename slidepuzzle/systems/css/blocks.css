@@ -946,21 +946,21 @@ img {
         /* bottom: 10px; */
     /* } */
 }
-@media screen and (max-height: 650px) {
+@media screen and (max-height: 500px) {
     .popup .btns {
         left: calc(80vw);
     }
 }
-@media screen and (max-height: 750px) {
+@media screen and (max-height: 670px) {
     .popup .btns {
         height: 70px;
         width: 70px;
     }
 }
-@media screen and (max-height: 700px) {
+@media screen and (max-height: 650px) {
     .popup p {
         transform: translateY(0);
-        font-size: 1.2em;
+        font-size: 1.5em;
         margin-top: 10px;
         margin-bottom: 0;
     }
