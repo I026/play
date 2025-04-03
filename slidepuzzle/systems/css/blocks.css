@@ -858,7 +858,7 @@ img {
     animation: clearedBlock .4s ease-in-out both;
 }
 .notification {
-    --fontSize: 1.2em;
+    --fontSize: 1.05em;
     --padding: .5em;
     padding: var(--padding);
     padding-left: calc(var(--padding) * 1.25);
