@@ -1795,10 +1795,10 @@ function retry() {
     setTimeout(() => {
         timeInfoDisplay.innerText = "";
         stepsInfoDisplay.innerText = "";
+        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
     }, 500);
     blockShuffle();
     bottomBarContentUpdate(true);
-    topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
     timerReset();
     timerStop();
     popupHidden();
