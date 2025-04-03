@@ -382,7 +382,7 @@ bottomBarArrayUpdate();
 function bottomBarContentUpdate(animation = false) {
     bottomBarArrayUpdate();
     
-    setTimeout(() => {
+    function bottomBarContentUpdateNoAnimation() {
         if (bottomBarContent == 2) {
             menuTitle.innerHTML = bottomBarArray[2];
         } else if (bottomBarContent == 3) {
@@ -390,7 +390,11 @@ function bottomBarContentUpdate(animation = false) {
         } else if (bottomBarContent == 4) {
             menuTitle.innerHTML = bottomBarArray[4];
         }
-    }, animation ? bottomBarContentAnimationDuration : 0);
+    }
+
+    setTimeout(() => {
+        bottomBarContentUpdateNoAnimation();
+    }, bottomBarContentAnimationDuration / 2);
     
     if (animation) {
         if (bottomBarContent == 2) {
@@ -1793,12 +1797,9 @@ function retry() {
         stepsInfoDisplay.innerText = "";
     }, 500);
     blockShuffle();
-    setTimeout(() => {
-        topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
-        timerReset();
-        bottomBarContentUpdate();
-    }, 200);
     bottomBarContentUpdate(true);
+    topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
+    timerReset();
     timerStop();
     popupHidden();
     opacityMitigation(retryBtn);
