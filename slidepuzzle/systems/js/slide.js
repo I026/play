@@ -907,28 +907,28 @@ blocks.addEventListener("click", () => {
 function challengesJudgeAndDisplayUpdate() {
     formattedTimes();
     const challengesArray = [
-        [3, 3,   0, 0, 20],
+        [3, 3,   0, 0, 10],
         [3, 3,   40],
-        [3, 4,   0, 0, 30],
-        [3, 4,   60],
-        [4, 4,   0, 1, 20],
+        [3, 4,   0, 0, 20],
+        [3, 4,   35],
+        [4, 4,   0, 0, 40],
         [4, 4,   80],
-        [5, 5,   0, 2, 30],
+        [5, 5,   0, 0, 50],
         [5, 5,   150],
-        [6, 6,   0, 4, 0],
+        [6, 6,   0, 1, 30],
         [6, 6,   250],
-        [7, 7,   0, 6, 0],
-        [7, 7,   350],
-        [8, 8,   0, 8, 0],
-        [8, 8,   1200],
-        [10, 10, 0, 15, 0],
-        [10, 10, 2500],
-        [12, 12, 0, 25, 0],
-        [12, 12, 5000],
-        [15, 15, 0, 30, 0],
-        [15, 15, 7500],
-        [20, 20, 0, 40, 0],
-        [20, 20, 10000]
+        [7, 7,   0, 3, 0],
+        [7, 7,   400],
+        [8, 8,   0, 4, 0],
+        [8, 8,   500],
+        [10, 10, 0, 12, 0],
+        [10, 10, 1000],
+        [12, 12, 0, 17, 30],
+        [12, 12, 2000],
+        [15, 15, 0, 25, 0],
+        [15, 15, 3000],
+        [20, 20, 0, 35, 0],
+        [20, 20, 5000]
                         ];
     const challengesListTable = challengesListPopup.querySelector(".table");
     challengesListTable.querySelectorAll(".challenge").forEach(challenge => {
@@ -1277,6 +1277,7 @@ let shuffleRoop;
 function recordDisplay() {
     timerStop();
     if (timerNumberIsZero()) {
+        // タイマー停止時
         topTitle.innerText = `${blockCaseWidth} × ${blockCaseHeight}`;
         localStorageKey1   = (`slidePuzzlePlayLog_Time${blockCaseWidth} × ${blockCaseHeight}`)
         localStorageKey2   = (`slidePuzzlePlayLog_Steps${blockCaseWidth} × ${blockCaseHeight}`)
@@ -1317,6 +1318,7 @@ function recordDisplay() {
         }
         imgUserOperationLock();
     } else {
+        // タイマー動作時
         topTitle.innerHTML = `${blockCaseWidth} × ${blockCaseHeight} <span class="subText">${isSortAssistValid ? sortAssistShortNameMessage : ""}</span>`;
         timeDisplay.innerHTML = `${timerIconImg} ${formattedTimes()}`;
         stepsDisplay.innerHTML = `${stepsIconImg} ${steps}`;
