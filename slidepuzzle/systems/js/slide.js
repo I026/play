@@ -230,14 +230,17 @@ widthNumber.innerText = blockCaseWidth;
 heightNumber.innerText = blockCaseHeight;
 
 function notificationPositionUpdate() {
+    if (popup[0].classList.contains("popupDisplayAnimation")) {
+        notification.style.transition = ".5s";
+    }
     if (bottomBarContent == 0) {
         notification.style.bottom = "10px";
     } else {
         notification.style.bottom = "60px";
     }
-    notification.style.transition = ".5s";
-    setTimeout(() => {
+    const notificationTransitionTimeout = setTimeout(() => {
         notification.style.transition = "0s";
+        clearTimeout(notificationTransitionTimeout);
     }, 500);
 }
 
