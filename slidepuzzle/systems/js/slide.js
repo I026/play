@@ -1436,13 +1436,15 @@ function blockShuffle() {
                     isOperated = true;
                     blockswipeDuration(blockswipeDurationDefault);
                     notificationDisplay(shuffleCompletionMassage(), 0);
-                    waitForElementContent(notificationText, shuffleCompletionMassage(), () => {
-                        notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "auto";
-                        notificationText.querySelector(".shuffle_Undo").addEventListener("click", () => {
-                            recoverFromLocalStorage();
-                            notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "none";
+                    if (notificationText.querySelector(".shuffle_Undo")) {
+                        waitForElementContent(notificationText, shuffleCompletionMassage(), () => {
+                            notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "auto";
+                            notificationText.querySelector(".shuffle_Undo").addEventListener("click", () => {
+                                recoverFromLocalStorage();
+                                notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "none";
+                            });
                         });
-                    });
+                    }
                     steps = 0;
                     if (!(popup[0].classList.contains("popupDisplayAnimation"))) {
                         opacityUndo();
