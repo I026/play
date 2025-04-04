@@ -103,6 +103,7 @@ button:focus {
     right: 15px;
     transform: translateY(-4px);
     background-color: transparent;
+    z-index: 120;
 }
 .topMenu .expandableMenuBtn div {
     user-select: none;
