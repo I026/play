@@ -153,7 +153,7 @@ function vibration(v) {
 const appNameMessage                 = `SlidePuzzle`;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフル :`;
-const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します <span>タップでシャッフルを取り消します</span></span>`;
+const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します<br>タップでシャッフルを取り消します</span>`;
 const timerStartMassage              = `タイマーを開始しました`;
 const timerRestartMassage            = `タイマーを再開しました`;
 const timerStopMassage               = `タイマーを停止しました`;
