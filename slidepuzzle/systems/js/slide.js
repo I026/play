@@ -89,6 +89,8 @@ function formattedTimes(h, m, s) {
     }
 }
 
+let isRetryAfterGameClear = false;
+
 let steps             = 0;
 let isOperated        = true;
 let isTimerActive     = false;
@@ -149,11 +151,13 @@ function vibration(v) {
 //     alert(`エラーが発生しました : ${message} source : ${source} lineno : ${lineno} colno : ${colno}`, 0);
 //     return true;
 //   };
-  
+
 const appNameMessage                 = `SlidePuzzle`;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
 const shuffleStartMassage            = `シャッフル :`;
-const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します<br>タップでシャッフルを取り消します</span>`;
+function shuffleCompletionMassage() {
+    return `動かすとタイマーを開始します${isRetryAfterGameClear ? `<br><button class="shuffle_Undo">シャッフルを取り消す</button>` : ""}`;
+}
 const timerStartMassage              = `タイマーを開始しました`;
 const timerRestartMassage            = `タイマーを再開しました`;
 const timerStopMassage               = `タイマーを停止しました`;
@@ -491,6 +495,7 @@ function timerIconHandsUpdate() {
 }
 
 function timerStart(h = 0, m = 0, s = 0) { 
+    isRetryAfterGameClear = false;
     timerStartDate = performance.now() - (h * 1000 * 60 * 60) - (m * 1000 * 60) - (s * 1000);
     if (!isTimerActive) {
         isTimerActive = true;
@@ -1430,8 +1435,8 @@ function blockShuffle() {
                     aim_DownRightAir = false;
                     isOperated = true;
                     blockswipeDuration(blockswipeDurationDefault);
-                    notificationDisplay(shuffleCompletionMassage, 0);
-                    waitForElementContent(notificationText, shuffleCompletionMassage, () => {
+                    notificationDisplay(shuffleCompletionMassage(), 0);
+                    waitForElementContent(notificationText, shuffleCompletionMassage(), () => {
                         notificationText.querySelector(".shuffle_Undo").style.pointerEvents = "auto";
                         notificationText.querySelector(".shuffle_Undo").addEventListener("click", () => {
                             recoverFromLocalStorage();
@@ -1825,6 +1830,9 @@ expandableMenuBtn.addEventListener("click", () => {
 });
 
 function retry() {
+    if (!isGameClear && !timerNumberIsZero()) {
+        isRetryAfterGameClear = true;
+    }
     isGameClear = false;
     isOperated = false;
     setTimeout(() => {

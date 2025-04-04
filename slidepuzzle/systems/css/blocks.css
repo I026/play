@@ -901,6 +901,20 @@ img {
     max-width: min-content;
     text-align: left;
 }
+.notification span button {
+    --backgroundColor: rgba(60, 60, 60, 0.5);
+    color: white;
+    background-color: var(--backgroundColor);
+    /* box-shadow: 0 0 50px 1px var(--backgroundColor); */
+    font-size: 1.025em;
+    border: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding: 3.5px;
+    margin: 5px;
+    margin-left: -5px;
+    border-radius: 100vh;
+}
 .notification span span {
     white-space: normal;
     text-align: center;
