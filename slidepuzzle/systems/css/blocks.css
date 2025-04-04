@@ -84,9 +84,9 @@ button:focus {
     background-color: white;
 }
 .topMenu .menuTitle {
+    z-index: 120;
     font-size: .9em;
     position: absolute;
-    z-index: 100;
     color: var(--documentBaseColor);
     transition: 1s;
 }
@@ -97,7 +97,6 @@ button:focus {
     text-align: right;
 }
 .topMenu .expandableMenuBtn {
-    z-index: 100;
     position: absolute;
     height: 40px;
     width: 40px;
@@ -360,6 +359,7 @@ button:focus {
     animation: opacityUndo .5s ease-in-out forwards;
 }
 .popup {
+    z-index: 110;
     position: fixed;
     color: black;
     overflow-Y: scroll;
@@ -860,10 +860,13 @@ img {
 .notification {
     --fontSize: 1.05em;
     --padding: .5em;
+    z-index: 100;
     padding: var(--padding);
-    padding-left: calc(var(--padding) * 1.25);
-    padding-right: calc(var(--padding) * 1.25);
+    padding-left: calc(var(--padding) * 1.5);
+    padding-right: calc(var(--padding) * 2);
     border-radius: calc(var(--fontSize) + var(--padding));
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     font-size: var(--fontSize);
     position: fixed;
     pointer-events: none;
@@ -872,42 +875,46 @@ img {
     background-color: rgba(225, 225, 225, 0.75);
     backdrop-filter: blur(4px);
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
-    text-align: center;
-    left: 50%;
-    /* bottom: 60px; */
-    bottom: 10px;
+    text-align: left;
     margin: 0;
-    width: max-content;
-    max-width: 90vw;
-    transform: translateX(-50%);
-    transform: translate(-50%, 3em);
     opacity: 0;
+    bottom: 10px;
+    max-width: 90vw;
+    width: fit-content;
+    min-width: min-content;
+    bottom: 60px;
+}
+.notification div {
+    display: flex;
+    align-items: center;
+    max-width: 90vw;
 }
 .notification span {
     color: black;
     opacity: 1;
-    text-align: center;
-    /* display: inline-block; */
-    /* width: 100%; */
-    /* white-space: normal; */
-    /* word-wrap: break-word; */
+    white-space: nowrap;
+    display: inline-block;
+    word-break: keep-all;
+    max-width: min-content;
+    text-align: left;
 }
 .notification span span {
-    display: inline-block;
-    white-space: nowrap;
+    white-space: normal;
     text-align: center;
-    /* white-space: nowrap; */
-    /* width: fit-content; */
+    word-break: keep-all;
+    text-align: left;
+    width: 100%;
 }
 @keyframes notificationDisplay {
     0% {
-        transform: translate(-50%, 4em);
+        /* transform: translate(-50%, 4em); */
+        transform: translate(-50%, 0);
         opacity: 0;
     }
     100% {
-        transform: translate(-50%, 0);
+        transform: translate(0, 0);
         opacity: 1;
     }
 }
@@ -916,11 +923,12 @@ img {
 }
 @keyframes notificationHidden {
     0% {
-        transform: translate(-50%, 0);
+        transform: translate(0, 0);
         opacity: 1;
     }
     100% {
-        transform: translate(-50%, 4em);
+        /* transform: translate(-50%, 4em); */
+        transform: translate(-50%, 0);
         opacity: 0;
     }
 }
@@ -928,12 +936,6 @@ img {
     animation: notificationHidden .25s ease-out both;
 }
 @media screen and (max-height: 500px), screen and (max-width: 450px) {
-    .notification {
-        /* bottom: 10px; */
-        /* width: max-content; */
-        max-width: 70vw;
-        /* left: calc(50% - 30px); */
-    }
     .popup #topTitles {
         font-size: 1em;
     }

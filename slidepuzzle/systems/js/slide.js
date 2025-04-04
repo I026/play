@@ -152,8 +152,8 @@ function vibration(v) {
   
 const appNameMessage                 = `SlidePuzzle`;
 const recoverFromLocalStorageMessage = `最新のデータから復元しました`;
-const shuffleStartMassage            = `シャッフルを開始します`;
-const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します<br>タップでシャッフルを取り消します</span>`;
+const shuffleStartMassage            = `シャッフル :`;
+const shuffleCompletionMassage       = `<span class="shuffle_Undo">動かすとタイマーを開始します <span>タップでシャッフルを取り消します</span></span>`;
 const timerStartMassage              = `タイマーを開始しました`;
 const timerRestartMassage            = `タイマーを再開しました`;
 const timerStopMassage               = `タイマーを停止しました`;
@@ -233,7 +233,7 @@ function notificationPositionUpdate() {
     }
     notification.style.transition = ".5s";
     setTimeout(() => {
-        notification.style.transition = "0";
+        notification.style.transition = "0s";
     }, 500);
 }
 
@@ -1374,7 +1374,7 @@ function blockShuffle() {
     document.documentElement.style.setProperty("--swipeAnimetionDuration", "0s");
     let MaxClearJudge    = 0;
     let aim_DownRightAir = false;
-    notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
+    notificationDisplay(`${blockCaseWidth} × ${blockCaseHeight} ${shuffleStartMassage} ${Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 101)} %`, 0);
     setTimeout(() => {
         shuffleRoop = setInterval(() => {
             if (steps !== 0) {
@@ -1382,7 +1382,9 @@ function blockShuffle() {
             } else {
                 MaxClearJudge = 0;
             }
-            notificationText.innerText = `${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %`;
+            notificationText.innerHTML = `
+                ${blockCaseWidth} × ${blockCaseHeight} シャッフル : ${Math.min(Math.floor(MaxClearJudge / (blockCaseWidth * blockCaseHeight) * 111.11111111), 100)} %
+            `;
             let swipeableArray = [];
             if (rightSwipeableJudge()) {
                 swipeableArray.push(rightSwipe);
@@ -1563,7 +1565,7 @@ recordResetOp.addEventListener("click", () => {
 colorThemeChangeOp.addEventListener("click", () => {
     document.body.style.transition = "1s";
     setTimeout(() => {
-        document.body.style.transition = "0";
+        document.body.style.transition = "0s";
     }, 1000);
     if (darkThemeChange()) {
         darkThemeChange(false);
